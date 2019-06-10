@@ -104,17 +104,17 @@ $warn: mat-palette($md-red);
 $theme-light: mat-light-theme($primary, $accent, $warn);
 $theme-dark: mat-dark-theme($primary, $accent, $warn);
 
-$foreground: map-get($theme-light, foreground);
-$background: map-get($theme-light, background);
+$foreground: map-get($theme-dark, foreground);
+$background: map-get($theme-dark, background);
 .default-bg-color {
-  background-color: #fafafa;
+  background-color: #333;
 }
 
-@include angular-material-theme($theme-light);
-.dark-theme {
-  @include angular-material-theme($theme-dark);
+@include angular-material-theme($theme-dark);
+.light-theme {
+  @include angular-material-theme($theme-light);
   &.default-bg-color {
-    background-color: #333;
+    background-color: #fafafa;
   }
 }
 .area-primary, .area-primary:hover, .area-primary:focus, .area-primary:visited {

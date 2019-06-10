@@ -2,12 +2,13 @@
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="false">
-    <mat-toolbar>Menu</mat-toolbar>
+      [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>Mes patients</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#">Link 1</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
+      <a *ngFor="let hero of heroes" mat-list-item routerLink="/detail/{{hero.id}}">
+        <h4>{{hero.name}}</h4>
+      </a>
+      <a mat-raised-button color="warn" class="disc-button" routerLink="/signinup">Déconnecter</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
