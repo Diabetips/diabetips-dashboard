@@ -1,0 +1,37 @@
+.full-width {
+  width: 100%;
+}
+
+.sign-in-up {
+  width: 50%;
+  min-width: 120px;
+  margin: 20% auto;
+  align-self: center;
+}
+
+.mat-radio-button {
+  display: block;
+  margin: 5px 0;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.col:last-child {
+  margin-right: 0;
+}
+
+.submit-card {
+  margin-bottom: 0;
+}
+
+.submit-buttons {
+  padding: 0 0;
+}

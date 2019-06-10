@@ -1,0 +1,41 @@
+<form style="height: 100%" [formGroup]="addressForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="sign-in-up">
+    <mat-card-header>
+      <mat-card-title>Sign In</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="submit-card">
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Pseudonyme" formControlName="pseudonym">
+            <mat-error *ngIf="addressForm.controls['pseudonym'].hasError('required')">
+              Veuillez entrer un pseudonyme
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Password" formControlName="password">
+            <mat-error *ngIf="addressForm.controls['password'].hasError('required')">
+              Veuillez entrer un mot de passe
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Confirmation" formControlName="confirmation">
+            <mat-error *ngIf="addressForm.controls['confirmation'].hasError('required')">
+              Veuillez confirmer votre mot de passe
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="submit-buttons">
+        <button mat-raised-button color="primary" type="connect">Connect</button>
+        <button mat-stroked-button color="primary" type="create" class="">Create account</button>
+      </mat-card-actions>
+  </mat-card>
+</form>
