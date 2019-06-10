@@ -1,7 +1,7 @@
 <form style="height: 100%" [formGroup]="addressForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="sign-in-up">
     <mat-card-header>
-      <mat-card-title>Sign In</mat-card-title>
+      <mat-card-title>Connection</mat-card-title>
     </mat-card-header>
     <mat-card-content class="submit-card">
       <div class="row">
@@ -34,8 +34,9 @@
       </div>
     </mat-card-content>
     <mat-card-actions class="submit-buttons">
+        <a mat-button routerLink="/informations">Informations</a>
         <button mat-raised-button color="primary" type="connect">Connect</button>
-        <button mat-stroked-button color="primary" type="create" class="">Create account</button>
+        <button mat-stroked-button color="primary" type="create">Create account</button>
       </mat-card-actions>
   </mat-card>
 </form>
