@@ -1,0 +1,128 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$md-blue: (
+  50 : #e0f4fb,
+  100 : #b3e3f6,
+  200 : #80d0f0,
+  300 : #4dbdea,
+  400 : #26afe6,
+  500 : #00a1e1,
+  600 : #0099dd,
+  700 : #008fd9,
+  800 : #0085d5,
+  900 : #0074cd,
+  A100 : #f5faff,
+  A200 : #c2e1ff,
+  A400 : #8fc8ff,
+  A700 : #75bbff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+$md-red: (
+  50 : #fae8e7,
+  100 : #f4c5c2,
+  200 : #ec9e9a,
+  300 : #e47771,
+  400 : #df5952,
+  500 : #d93c34,
+  600 : #d5362f,
+  700 : #cf2e27,
+  800 : #ca2721,
+  900 : #c01a15,
+  A100 : #fff2f1,
+  A200 : #ffc0be,
+  A400 : #ff8e8b,
+  A700 : #ff7572,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+$md-yellow: (
+  50 : #fff6e0,
+  100 : #ffe8b3,
+  200 : #ffd980,
+  300 : #ffc94d,
+  400 : #ffbe26,
+  500 : #ffb200,
+  600 : #ffab00,
+  700 : #ffa200,
+  800 : #ff9900,
+  900 : #ff8a00,
+  A100 : #ffffff,
+  A200 : #fff8f2,
+  A400 : #ffdebf,
+  A700 : #ffd1a6,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #000000,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$primary: mat-palette($md-blue);
+$accent: mat-palette($md-yellow);
+$warn: mat-palette($md-red);
+$theme-light: mat-light-theme($primary, $accent, $warn);
+$theme-dark: mat-dark-theme($primary, $accent, $warn);
+
+$foreground: map-get($theme-light, foreground);
+$background: map-get($theme-light, background);
+.default-bg-color {
+  background-color: #fafafa;
+}
+
+@include angular-material-theme($theme-light);
+.dark-theme {
+  @include angular-material-theme($theme-dark);
+  &.default-bg-color {
+    background-color: #333;
+  }
+}
+.area-primary, .area-primary:hover, .area-primary:focus, .area-primary:visited {
+  color: mat-color($primary);
+}
+.area-accent, .area-accent:hover, .area-accent:focus, .area-accent:visited {
+  color: mat-color($accent);
+}
+.area-warn, .area-warn:hover, .area-warn:focus, .area-warn:visited {
+  color: mat-color($warn);
+}

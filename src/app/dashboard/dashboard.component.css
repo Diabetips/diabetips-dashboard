@@ -1,0 +1,43 @@
+.full-width {
+  width: 98%;
+}
+
+.mid-width {
+  width: 48%;
+}
+
+.quart-width {
+  width: 23%;
+}
+
+.mat-radio-button {
+  display: block;
+  margin: 5px 0;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.mat-card {
+  margin: 1%;
+}
+
+.sub-div {
+  margin: 1%;
+}
+
+.sub-card {
+  margin: 0 0 0.7%;
+}
+
+.sub-info {
+  margin-bottom: 10px;
+}
