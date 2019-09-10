@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-  website-diabelogue-prod:
+  app:
     container_name: "website-diabelogue-prod"
     volumes:
       - ./:/usr/app
