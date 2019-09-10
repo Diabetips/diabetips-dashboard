@@ -17,7 +17,7 @@
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
-            <input matInput placeholder="Password" formControlName="password">
+            <input matInput placeholder="Mot de passe" formControlName="password">
             <mat-error *ngIf="addressForm.controls['password'].hasError('required')">
               Veuillez entrer un mot de passe
             </mat-error>
@@ -25,7 +25,7 @@
         </div>
         <div class="col">
           <mat-form-field class="full-width">
-            <input matInput placeholder="Confirmation" formControlName="confirmation">
+            <input matInput placeholder="Confirmation du mot de passe" formControlName="confirmation">
             <mat-error *ngIf="addressForm.controls['confirmation'].hasError('required')">
               Veuillez confirmer votre mot de passe
             </mat-error>
