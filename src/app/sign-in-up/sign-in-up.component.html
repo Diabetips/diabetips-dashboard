@@ -23,14 +23,6 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="Confirmation du mot de passe" formControlName="confirmation">
-            <mat-error *ngIf="addressForm.controls['confirmation'].hasError('required')">
-              Veuillez confirmer votre mot de passe
-            </mat-error>
-          </mat-form-field>
-        </div>
       </div>
     </mat-card-content>
     <mat-card-actions class="submit-buttons">

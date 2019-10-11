@@ -1,0 +1,20 @@
+<div *ngIf="patient">
+
+  <h2>Détails de {{patient.last_name | uppercase}} {{patient.first_name}}</h2>
+  <div>
+    <label>UID IS: {{patient.uid}}</label>
+  </div>
+  <br>
+  <div>
+    <label>prénom:
+      <input [(ngModel)]="patient.first_name" placeholder="name"/>
+    </label>
+  </div>
+  <div>
+    <label>nom:
+      <input [(ngModel)]="patient.last_name" placeholder="name"/>
+    </label>
+  </div>
+  <button (click)="goBack()">Retour</button>
+
+</div>

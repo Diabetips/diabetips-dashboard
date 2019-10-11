@@ -19,5 +19,13 @@
 
 .disc-button {
   align-self: center;
-  margin: 5% 22% 0;
+  margin: 5% 18% 0;
+}
+
+.patient-name {
+  height: 100%;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
 }

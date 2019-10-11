@@ -5,10 +5,22 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Mes patients</mat-toolbar>
     <mat-nav-list>
-      <a *ngFor="let hero of heroes" mat-list-item routerLink="/detail/{{hero.id}}">
-        <h4>{{hero.name}}</h4>
+      <a *ngFor="let patient of patients" mat-list-item >
+        <h4 routerLink="/detail/{{patient.uid}}" class="patient-name">
+          {{patient.first_name}}
+          {{patient.last_name}}
+        </h4>
+        <button
+          type="button"
+          mat-icon-button
+          (click)="delete(patient)"
+        >
+          <mat-icon>
+            clear
+          </mat-icon>
+        </button>
       </a>
-      <a mat-raised-button color="warn" class="disc-button" routerLink="/signinup">Déconnecter</a>
+      <a mat-raised-button color="warn" class="disc-button" routerLink="/signinup">Me déconnecter</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -17,10 +29,14 @@
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
-        (click)="drawer.toggle()" >
+        (click)="drawer.toggle()"
+        style="margin-right: 17px" >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Diabetips</span>
+      <span style='height: 100%; width: 100%; flex: 1; display: flex; align-items: center'>
+        <img src="../../assets/logo_full_white.png"
+          style='height: 80%; object-fit: contain' />
+      </span>
     </mat-toolbar>
     <app-dashboard></app-dashboard>
   </mat-sidenav-content>
