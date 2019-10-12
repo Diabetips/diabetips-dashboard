@@ -8,11 +8,11 @@ import { Patient } from '../patients-service/patient';
 })
 export class DashboardComponent implements OnInit {
   patients: Patient[] = [];
+  token: string = localStorage.getItem('token');
 
   constructor() { }
 
   ngOnInit() {
-    console.log(localStorage.getItem('token'));
   }
 
 }
