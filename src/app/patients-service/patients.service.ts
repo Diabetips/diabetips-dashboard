@@ -11,9 +11,8 @@ import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type':  'application/json',
-    Authorization: 'my-auth-token'
-  })
+    'Content-Type': 'application/json'
+  }),
 };
 
 @Injectable()
@@ -25,6 +24,15 @@ export class PatientsService {
     private http: HttpClient,
     httpErrorHandler: HttpErrorHandler) {
     this.handleError = httpErrorHandler.createHandleError('PatientsService');
+  }
+
+  getMe(): Observable<any> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    return this.http.get<any>(this.patientsUrl + '/me', httpOptions)
+     .pipe(
+       catchError(this.handleError('getMe', []))
+     );
   }
 
   /** GET patients from the server */
@@ -66,7 +74,6 @@ export class PatientsService {
   /** DELETE: delete the patient from the server */
   deletePatient(id: number): Observable<{}> {
     const url = `${this.patientsUrl}/${id}`;
-    console.log('Deleting patient uid ' + id);
     return this.http.delete(url, httpOptions)
       .pipe(
         catchError(this.handleError('deletePatient'))
@@ -74,11 +81,11 @@ export class PatientsService {
   }
 
   /** PUT: update the patient on the server. Returns the updated patient upon success. */
-  updatePatient(patient: Patient): Observable<Patient> {
+  updatePatient(patient: any, uid: number): Observable<any> {
     httpOptions.headers =
-      httpOptions.headers.set('Authorization', 'my-new-auth-token');
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
 
-    return this.http.put<Patient>(this.patientsUrl, patient, httpOptions)
+    return this.http.put<any>(this.patientsUrl + '/' + uid, patient, httpOptions)
       .pipe(
         catchError(this.handleError('updatePatient', patient))
       );

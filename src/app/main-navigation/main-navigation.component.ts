@@ -31,7 +31,14 @@ export class MainNavigationComponent implements OnInit {
 
     getPatients(): void {
       this.patientsService.getPatients()
-        .subscribe(patients => (this.patients = patients));
+        .subscribe(patients => {
+          this.patients = patients;
+          this.patientsService.getMe().subscribe(me => {
+            this.patients = this.patients.filter((value, index, array) => {
+              return value.uid !== me.uid;
+            });
+          });
+        });
     }
 
     add(first_name: string): void {

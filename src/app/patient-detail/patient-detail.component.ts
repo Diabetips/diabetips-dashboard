@@ -33,6 +33,21 @@ export class PatientDetailComponent implements OnInit {
       .subscribe(patient => this.patient = patient);
   }
 
+  updatePatient(): void {
+    console.log(this.patient.email);
+    const newPatient = {
+      email: this.patient.email,
+      first_name: this.patient.first_name,
+      last_name: this.patient.last_name
+    };
+    this.patientsService.updatePatient(newPatient, this.patient.uid)
+      .subscribe(resp => {
+        console.log(resp)
+        const keys = resp.headers.keys();
+        const headers = keys.map(key => `${key}: ${resp.headers.get(key)}`);
+      });
+  }
+
   goBack(): void {
     this.location.back();
   }

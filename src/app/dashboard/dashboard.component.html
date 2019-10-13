@@ -1,59 +1,45 @@
-<div class="row">
-  <mat-card class="mid-width" style="height: 100%">
+<div class="col">
+  <mat-card class="full-width col" style="height: 100%">
     <mat-card-header>
-      <mat-card-title>Votre token est</mat-card-title>
+      <mat-card-title>Bonjour, {{ me.first_name }} {{ me.last_name | uppercase }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="row sub-info">
         <div class="col">
-          <span style="word-break: break-all">{{ token }}</span>
-        </div>
-      </div>
-      <div class="row sub-info">
-        <div class="col">
-          <span>
-            et c'est tout
-          </span>
+          <span>email: {{ me.email }}</span>
         </div>
       </div>
     </mat-card-content>
   </mat-card>
-  <div class="row sub-div mid-width">
-    <div class="col">
-      <mat-card class="sub-card">
-        <mat-card-header>
-          <mat-card-title>Une courbe</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
+  <div class="row sub-div full-width">
+    <mat-card class="sub-card mid-width col" style="margin-right: 0.5%">
+      <mat-card-header>
+        <mat-card-title>Votre token est</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row sub-info">
+          <div class="col">
+            <span style="word-break: break-all">{{ token }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="sub-card mid-width col" style="margin-left: 0.5%">
+      <mat-card-header>
+        <mat-card-title>Des calculs ?</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
           <div class="row sub-info">
             <div class="col">
-              <span>_____________________________________</span>
+              <span>1+1 = 3</span>
             </div>
           </div>
           <div class="row sub-info">
             <div class="col">
-              <span>cette courbe est plate</span>
+              <span>euh attendez</span>
             </div>
           </div>
-        </mat-card-content>
-      </mat-card>
-      <mat-card class="sub-card">
-        <mat-card-header>
-          <mat-card-title>Des calculs ?</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <div class="row sub-info">
-              <div class="col">
-                <span>1+1 = 3</span>
-              </div>
-            </div>
-            <div class="row sub-info">
-              <div class="col">
-                <span>euh attendez</span>
-              </div>
-            </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

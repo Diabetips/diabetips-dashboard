@@ -11,15 +11,26 @@
   background: inherit;
 }
 
+.mat-drawer-inner-container {
+  flex: 1;
+}
+
+.mat-sidenav {
+  display: flex;
+}
+
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
   z-index: 1;
 }
 
+.mat-nav-list {
+  flex: 1
+}
+
 .disc-button {
   align-self: center;
-  margin: 5% 18% 0;
 }
 
 .patient-name {

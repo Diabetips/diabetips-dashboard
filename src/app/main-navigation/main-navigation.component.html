@@ -20,7 +20,6 @@
           </mat-icon>
         </button>
       </a>
-      <a mat-raised-button color="warn" class="disc-button" routerLink="/signinup">Me déconnecter</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -37,6 +36,9 @@
         <img src="../../assets/logo_full_white.png"
           style='height: 80%; object-fit: contain' />
       </span>
+      <a mat-icon-button class="disc-button" routerLink="/signinup">
+        <mat-icon aria-label="Side nav toggle icon">power_settings_new</mat-icon>
+      </a>
     </mat-toolbar>
     <app-dashboard></app-dashboard>
   </mat-sidenav-content>
