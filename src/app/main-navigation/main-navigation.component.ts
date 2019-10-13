@@ -74,19 +74,4 @@ export class MainNavigationComponent implements OnInit {
           .subscribe(patients => (this.patients = patients));
       }
     }
-
-    update() {
-      if (this.editPatient) {
-        this.patientsService
-          .updatePatient(this.editPatient)
-          .subscribe(patient => {
-          // replace the patient in the patients list with update from server
-          const ix = patient ? this.patients.findIndex(h => h.uid === patient.uid) : -1;
-          if (ix > -1) {
-            this.patients[ix] = patient;
-          }
-        });
-        this.editPatient = undefined;
-      }
-    }
   }
