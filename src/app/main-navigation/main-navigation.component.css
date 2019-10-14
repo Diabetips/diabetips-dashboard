@@ -4,15 +4,11 @@
 }
 
 .sidenav {
-  width: 200px;
+  width: 300px;
 }
 
 .sidenav .mat-toolbar {
   background: inherit;
-}
-
-.mat-drawer-inner-container {
-  flex: 1;
 }
 
 .mat-sidenav {
@@ -39,4 +35,6 @@
   flex: 1;
   display: flex;
   align-items: center;
+  color: white;
+  font-size: 15px;
 }
