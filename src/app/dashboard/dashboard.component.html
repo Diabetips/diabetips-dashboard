@@ -1,12 +1,16 @@
 <div class="col">
   <mat-card class="full-width col" style="height: 100%">
     <mat-card-header>
-      <mat-card-title>Bonjour, {{ me.first_name }} {{ me.last_name | uppercase }}</mat-card-title>
+      <mat-card-title *ngIf="isMe">Mon profil</mat-card-title>
+      <mat-card-title *ngIf="!isMe">Profil de {{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="row sub-info">
         <div class="col">
-          <span>email: {{ me.email }}</span>
+          <span>email: {{ userInfo.email }}</span>
+          <div class="edit-button">
+            <a mat-raised-button color="primary" (click)="editProfile()">Edition</a>
+          </div>
         </div>
       </div>
     </mat-card-content>
@@ -14,12 +18,12 @@
   <div class="row sub-div full-width">
     <mat-card class="sub-card mid-width col" style="margin-right: 0.5%">
       <mat-card-header>
-        <mat-card-title>Votre token est</mat-card-title>
+        <mat-card-title>L'uid de ce profil est</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="row sub-info">
           <div class="col">
-            <span style="word-break: break-all">{{ token }}</span>
+            <span style="word-break: break-all">{{ userInfo.uid }}</span>
           </div>
         </div>
       </mat-card-content>

@@ -4,17 +4,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { PatientDetailComponent } from './patient-detail/patient-detail.component';
 import { AppRoutingModule } from './app-routing.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardComponent, EditUserModalComponent } from './dashboard/dashboard.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material';
 import { SignInUpComponent } from './sign-in-up/sign-in-up.component';
-import { MainNavigationComponent } from './main-navigation/main-navigation.component';
+import { MainNavigationComponent, InvitePatientComponent } from './main-navigation/main-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { HttpClientModule } from '@angular/common/http';
 import { HttpErrorHandler } from './http-error-handler.service';
 import { MessageService } from './message.service';
+import { DashboardDiabetoComponent } from './dashboard-diabeto/dashboard-diabeto.component';
+import { DashboardPatientComponent } from './dashboard-patient/dashboard-patient.component';
 
 @NgModule({
   declarations: [
@@ -22,9 +25,14 @@ import { MessageService } from './message.service';
     PatientDetailComponent,
     DashboardComponent,
     SignInUpComponent,
-    MainNavigationComponent
+    MainNavigationComponent,
+    DashboardDiabetoComponent,
+    DashboardPatientComponent,
+    EditUserModalComponent,
+    InvitePatientComponent
   ],
   imports: [
+    MatDialogModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule,
@@ -47,6 +55,10 @@ import { MessageService } from './message.service';
     HttpErrorHandler,
     MessageService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    EditUserModalComponent,
+    InvitePatientComponent
+  ]
 })
 export class AppModule { }

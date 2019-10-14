@@ -44,3 +44,8 @@
 .sub-info {
   margin-bottom: 10px;
 }
+
+.edit-button {
+  width: 25%;
+  margin-top: 15px;
+}
