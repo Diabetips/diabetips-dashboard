@@ -85,4 +85,11 @@ export class MainNavigationComponent implements OnInit {
         console.log(result);
       });
     }
+
+    deletePatient(patient: Patient): void {
+      this.patients = this.patients.filter(h => h !== patient);
+      this.patientsService
+        .deletePatient(patient.uid)
+        .subscribe();
+    }
   }
