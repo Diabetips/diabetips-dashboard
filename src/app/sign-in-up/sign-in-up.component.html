@@ -1,34 +1,3 @@
-<form style="height: 100%" [formGroup]="addressForm" novalidate (ngSubmit)="onSubmit()">
-  <mat-card class="sign-in-up">
-    <mat-card-header>
-      <mat-card-title>Connection</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="submit-card">
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="Pseudonyme" formControlName="pseudonym">
-            <mat-error *ngIf="addressForm.controls['pseudonym'].hasError('required')">
-              Veuillez entrer un pseudonyme
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="Mot de passe" formControlName="password">
-            <mat-error *ngIf="addressForm.controls['password'].hasError('required')">
-              Veuillez entrer un mot de passe
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-    </mat-card-content>
-    <mat-card-actions class="submit-buttons">
-        <a mat-raised-button color="primary" routerLink="/informations">Connecter</a>
-        <!--<button mat-raised-button color="primary" type="connect">Connect</button>-->
-        <button mat-stroked-button color="primary" type="create">Créer un compte</button>
-      </mat-card-actions>
-  </mat-card>
-</form>
+<div class="valign-wrapper grey lighten-3" style="height: 100vh; justify-content: center;">
+  <img src="../../assets/loading.svg" alt="triangle with all three sides equal"/>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { Patient } from '../patients-service/patient';
 import { PatientsService } from '../patients-service/patients.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -36,6 +36,8 @@ export class DashboardComponent implements OnInit {
   @Input() newProfile: any;
   @Input() isMe: boolean;
 
+  @Output() refreshPatients = new EventEmitter();
+
   token: string = localStorage.getItem('token');
   editing: boolean = false;
 
@@ -63,6 +65,7 @@ export class DashboardComponent implements OnInit {
       .subscribe(resp => {
         this.userInfo = resp;
         this.newProfile = {email: resp.email, first_name: resp.first_name, last_name: resp.last_name};
+        this.refreshPatients.emit();
       });
     this.editProfile();
   }
