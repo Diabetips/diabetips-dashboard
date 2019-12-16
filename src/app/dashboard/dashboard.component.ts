@@ -11,21 +11,6 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-edit-profile',
-  templateUrl: 'edit-profile.html'
-})
-export class EditUserModalComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<EditUserModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
-
-@Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   providers: [PatientsService],

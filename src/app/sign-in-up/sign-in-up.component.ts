@@ -19,7 +19,7 @@ export class SignInUpComponent {
   });
 
   hasUnitNumber = false;
-  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize?response_type=token&redirect_uri=http://localhost:4200/signinup';
+  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize?response_type=token&redirect_uri=http://91.121.236.10/signinup';
   token = undefined;
 
   constructor(@Inject(DOCUMENT) private document: Document, private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {

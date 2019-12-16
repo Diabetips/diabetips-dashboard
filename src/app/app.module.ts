@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { PatientDetailComponent } from './patient-detail/patient-detail.component';
 import { AppRoutingModule } from './app-routing.module';
-import { DashboardComponent, EditUserModalComponent } from './dashboard/dashboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
@@ -28,7 +28,6 @@ import { DashboardPatientComponent } from './dashboard-patient/dashboard-patient
     MainNavigationComponent,
     DashboardDiabetoComponent,
     DashboardPatientComponent,
-    EditUserModalComponent,
     InvitePatientComponent
   ],
   imports: [
@@ -57,7 +56,6 @@ import { DashboardPatientComponent } from './dashboard-patient/dashboard-patient
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    EditUserModalComponent,
     InvitePatientComponent
   ]
 })

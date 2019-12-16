@@ -1,9 +1,13 @@
 <h1 mat-dialog-title>Inviter un patient</h1>
-<div mat-dialog-content>
-  <p>Email</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.email">
-  </mat-form-field>
+<div class="row" style="margin-bottom: 0;">
+  <form class="col s12">
+    <div class="row">
+      <div class="input-field col s12">
+        <input name="email" type="email" class="validate" [(ngModel)]="data.email">
+        <label for="email">Email</label>
+      </div>
+    </div>
+  </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Annuler</button>
