@@ -35,6 +35,7 @@ export class MainNavigationComponent implements OnInit {
   editPatient: Patient;
   isMe = true;
   selectedProfile: any;
+  newProfile: any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -66,11 +67,19 @@ export class MainNavigationComponent implements OnInit {
     switchPatient(uid: any, isMe: boolean): void {
       if (isMe) {
         this.patientsService.getMe()
-          .subscribe(patient => this.selectedProfile = patient);
+          .subscribe(patient => {
+            this.selectedProfile = patient;
+            this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name};
+          });
         this.isMe = isMe;
       } else {
         this.patientsService.getPatient(uid)
-          .subscribe(patient => this.selectedProfile = patient);
+          .subscribe(patient => {
+            this.selectedProfile = patient;
+            this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name};
+            console.log(this.selectedProfile)
+            console.log(this.newProfile)
+          });
         this.isMe = isMe;
       }
     }

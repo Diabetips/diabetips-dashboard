@@ -18,34 +18,3 @@
   margin: 5px 0;
 }
 
-.row {
-  display: flex;
-  flex-direction: row;
-}
-
-.col {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-}
-
-.mat-card {
-  margin: 0.5%;
-}
-
-.sub-div {
-  margin: 0.5%;
-}
-
-.sub-card {
-  margin: 0 0 0.7%;
-}
-
-.sub-info {
-  margin-bottom: 10px;
-}
-
-.edit-button {
-  width: 25%;
-  margin-top: 15px;
-}

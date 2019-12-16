@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import { Patient } from '../patients-service/patient';
 import { PatientsService } from '../patients-service/patients.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { $ } from 'protractor';
 
 export interface DialogData {
   email: any;
@@ -32,9 +33,11 @@ export class EditUserModalComponent {
 })
 export class DashboardComponent implements OnInit {
   @Input() userInfo: any;
+  @Input() newProfile: any;
   @Input() isMe: boolean;
 
   token: string = localStorage.getItem('token');
+  editing: boolean = false;
 
   constructor(
     private patientsService: PatientsService,
@@ -42,22 +45,26 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userInfo = {email: "ph", first_name: "ph", last_name: "ph"}
+    this.newProfile = {email: "ph", first_name: "ph", last_name: "ph"}
     this.patientsService.getMe()
-      .subscribe(patient => this.userInfo = patient);
+      .subscribe(patient => {
+        this.userInfo = patient;
+        this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name};
+      });
   }
 
   editProfile(): void {
-    const dialogRef = this.dialog.open(EditUserModalComponent, {
-      width: '50%',
-      data: {email: this.userInfo.email, first_name: this.userInfo.first_name, last_name: this.userInfo.last_name}
-    });
+    this.editing = !this.editing;
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.patientsService.updatePatient(result, this.userInfo.uid)
-        .subscribe(resp => {
-          console.log(resp);
-        });
-    });
+  saveChanges(): void {
+    this.patientsService.updatePatient(this.newProfile, this.userInfo.uid)
+      .subscribe(resp => {
+        this.userInfo = resp;
+        this.newProfile = {email: resp.email, first_name: resp.first_name, last_name: resp.last_name};
+      });
+    this.editProfile();
   }
 }
 
