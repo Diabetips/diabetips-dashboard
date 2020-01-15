@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { PatientsService } from '../patients-service/patients.service';
-import { getSyntheticPropertyName } from '@angular/compiler/src/render3/util';
 
 @Component({
   selector: 'app-patient-detail',
@@ -34,7 +33,6 @@ export class PatientDetailComponent implements OnInit {
   }
 
   updatePatient(): void {
-    console.log(this.patient.email);
     const newPatient = {
       email: this.patient.email,
       first_name: this.patient.first_name,
@@ -42,7 +40,6 @@ export class PatientDetailComponent implements OnInit {
     };
     this.patientsService.updatePatient(newPatient, this.patient.uid)
       .subscribe(resp => {
-        console.log(resp)
         const keys = resp.headers.keys();
         const headers = keys.map(key => `${key}: ${resp.headers.get(key)}`);
       });

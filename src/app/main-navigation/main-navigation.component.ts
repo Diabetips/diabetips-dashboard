@@ -36,6 +36,7 @@ export class MainNavigationComponent implements OnInit {
   isMe = true;
   selectedProfile: any;
   newProfile: any;
+  me: any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -49,18 +50,16 @@ export class MainNavigationComponent implements OnInit {
     );
 
     ngOnInit() {
-      this.getPatients();
+      this.patientsService.getMe().subscribe(me => {
+        this.me = me;
+        this.getConnections();
+      });
     }
 
-    getPatients(): void {
-      this.patientsService.getPatients()
+    getConnections(): void {
+      this.patientsService.getConnections(this.me.uid)
         .subscribe(patients => {
           this.patients = patients;
-          this.patientsService.getMe().subscribe(me => {
-            this.patients = this.patients.filter((value, index, array) => {
-              return value.uid !== me.uid;
-            });
-          });
         });
     }
 
@@ -77,8 +76,6 @@ export class MainNavigationComponent implements OnInit {
           .subscribe(patient => {
             this.selectedProfile = patient;
             this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name};
-            console.log(this.selectedProfile)
-            console.log(this.newProfile)
           });
         this.isMe = isMe;
       }
@@ -91,14 +88,13 @@ export class MainNavigationComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log(result);
+        this.patientsService.invitePatient(result.email, this.me.uid);
       });
     }
 
-    deletePatient(patient: Patient): void {
+    deleteConnection(patient: Patient): void {
       this.patients = this.patients.filter(h => h !== patient);
       this.patientsService
-        .deletePatient(patient.uid)
-        .subscribe();
+        .deleteConnection(this.me.uid, patient.uid);
     }
   }

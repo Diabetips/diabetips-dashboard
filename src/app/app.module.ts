@@ -16,8 +16,6 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpErrorHandler } from './http-error-handler.service';
 import { MessageService } from './message.service';
-import { DashboardDiabetoComponent } from './dashboard-diabeto/dashboard-diabeto.component';
-import { DashboardPatientComponent } from './dashboard-patient/dashboard-patient.component';
 
 @NgModule({
   declarations: [
@@ -26,8 +24,6 @@ import { DashboardPatientComponent } from './dashboard-patient/dashboard-patient
     DashboardComponent,
     SignInUpComponent,
     MainNavigationComponent,
-    DashboardDiabetoComponent,
-    DashboardPatientComponent,
     InvitePatientComponent
   ],
   imports: [

@@ -43,7 +43,7 @@ export class PatientsService {
       );
   }
 
-  getPatient(uid): Observable<Patient> {
+  getPatient(uid: string): Observable<Patient> {
     return this.http.get<Patient>(this.patientsUrl + '/' + uid);
   }
 
@@ -59,6 +59,30 @@ export class PatientsService {
       .pipe(
         catchError(this.handleError<Patient[]>('searchPatient', []))
       );
+  }
+
+  //////// Connections related methods //////////
+
+  /** GET connections to the user from the server */
+  getConnections(uid: string): Observable<Patient[]> {
+    return this.http.get<Patient[]>(this.patientsUrl + '/' + uid + '/connections')
+     .pipe(
+       catchError(this.handleError('getPatients', []))
+     );
+ }
+
+  invitePatient(email: string, uid: string) {
+    this.http.post(this.patientsUrl + uid + '/connections', { 'email': email }, { observe: 'response'})
+      .subscribe(response => {
+        console.log(response.status);
+      })
+  }
+
+  deleteConnection(userUid, patientUid) {
+    this.http.delete(this.patientsUrl + userUid + '/connections/' + patientUid, { observe: 'response'})
+      .subscribe(response => {
+        console.log(response.status);
+      })
   }
 
   //////// Save methods //////////
