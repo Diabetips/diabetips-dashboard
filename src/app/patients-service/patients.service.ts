@@ -72,7 +72,7 @@ export class PatientsService {
  }
 
   invitePatient(email: string, uid: string) {
-    this.http.post(this.patientsUrl + uid + '/connections', { 'email': email }, { observe: 'response'})
+    this.http.post(this.patientsUrl + '/' + uid + '/connections', { 'email': email }, { observe: 'response'})
       .subscribe(response => {
         console.log(response.status);
       })
