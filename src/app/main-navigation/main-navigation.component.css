@@ -38,3 +38,7 @@
   color: white;
   font-size: 15px;
 }
+
+.mat-dialog-container {
+  padding: 0;
+}

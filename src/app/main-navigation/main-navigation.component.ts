@@ -88,7 +88,9 @@ export class MainNavigationComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        this.patientsService.invitePatient(result.email, this.me.uid);
+        if (result && result.email) {
+          this.patientsService.invitePatient(result.email, this.me.uid);
+        }
       });
     }
 
