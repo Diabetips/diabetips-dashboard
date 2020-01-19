@@ -47,6 +47,10 @@ export class PatientsService {
     return this.http.get<Patient>(this.patientsUrl + '/' + uid);
   }
 
+  getPatientPicture(uid: string): Observable<Blob> {
+    return this.http.get(this.patientsUrl + '/' + uid + '/picture', { responseType: 'blob' });
+  }
+
   /* GET patients whose name contains search term */
   searchPatient(term: string): Observable<Patient[]> {
     term = term.trim();

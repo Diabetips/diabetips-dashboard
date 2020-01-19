@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
-import { PatientDetailComponent } from './patient-detail/patient-detail.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
@@ -20,7 +19,6 @@ import { MessageService } from './message.service';
 @NgModule({
   declarations: [
     AppComponent,
-    PatientDetailComponent,
     DashboardComponent,
     SignInUpComponent,
     MainNavigationComponent,

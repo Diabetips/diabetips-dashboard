@@ -18,7 +18,7 @@
         Mes patients
       </mat-toolbar>
       <a *ngFor="let patient of patients" mat-list-item >
-        <img src="../../assets/placeholder_pic.png" style="height: 65%; margin-right: 10px" />
+        <img src="{{patient.profile_picture}}" style="height: 65%; margin-right: 10px; border-radius: 50%;" />
         <h4 (click)="switchPatient(patient.uid, false)" class="patient-name">
           {{patient.first_name}}
           {{patient.last_name}}
@@ -42,7 +42,7 @@
         <mat-icon aria-label="Side nav toggle icon">power_settings_new</mat-icon>
       </a>
       <a mat-icon-button class="disc-button" style="margin-right: 10px" (click)="switchPatient(undefined, true)">
-        <img src="../../assets/placeholder_pic.png" style="height: 100%" />
+        <img src="{{this.me.profile_picture}}" style="height: 100%; border-radius: 50%;" />
       </a>
     </mat-toolbar>
     <app-dashboard [userInfo]="selectedProfile" [newProfile]="newProfile" [isMe]="isMe" (refreshPatients)='getConnections()'></app-dashboard>

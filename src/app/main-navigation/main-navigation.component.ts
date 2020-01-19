@@ -36,7 +36,7 @@ export class MainNavigationComponent implements OnInit {
   isMe = true;
   selectedProfile: any;
   newProfile: any;
-  me: any;
+  me: Patient = new Patient;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -52,6 +52,7 @@ export class MainNavigationComponent implements OnInit {
     ngOnInit() {
       this.patientsService.getMe().subscribe(me => {
         this.me = me;
+        this.getPictureForProfile(this.me)
         this.getConnections();
       });
     }
@@ -60,7 +61,24 @@ export class MainNavigationComponent implements OnInit {
       this.patientsService.getConnections(this.me.uid)
         .subscribe(patients => {
           this.patients = patients;
+          this.patients.forEach(patient => {
+            this.getPictureForProfile(patient)
+          });
         });
+    }
+
+    getPictureForProfile(profile: Patient) {
+      console.log(profile.uid)
+      this.patientsService.getPatientPicture(profile.uid).subscribe(picture => {
+        let reader = new FileReader();
+        reader.addEventListener("load", () => {
+          profile.profile_picture = reader.result
+        }, false);
+
+        if (picture) {
+          reader.readAsDataURL(picture);
+        }
+      })
     }
 
     switchPatient(uid: any, isMe: boolean): void {

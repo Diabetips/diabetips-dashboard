@@ -1,6 +1,7 @@
 export class Patient {
-    uid: number;
+    uid: string;
     email: string;
     first_name: string;
     last_name: string;
+    profile_picture: any;
 }
