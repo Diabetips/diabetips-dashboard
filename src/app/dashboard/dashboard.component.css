@@ -1,16 +1,21 @@
 .full-width {
   max-width: 100%;
-  display: flex;
 }
 
 .mid-width {
   width: 50%;
-  display: flex;
 }
 
 .quart-width {
   width: 25%;
+}
+
+.flex {
   display: flex;
+}
+
+.no-margin {
+  margin: 0;
 }
 
 .mat-radio-button {

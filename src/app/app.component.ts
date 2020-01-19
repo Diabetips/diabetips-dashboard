@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Diabetix 3000';
-  description = 'j\'ai baisé toute vos mères';
+  title = 'Diabetips';
+  description = 'Diabetips\' doctor dashboard';
 }
