@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
     this.patientsService.getMe()
       .subscribe(patient => {
         this.userInfo = patient;
-        this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name};
+        this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name, hba1c: patient.hba1c, insulin: patient.insulin};
       });
   }
 
@@ -49,7 +49,9 @@ export class DashboardComponent implements OnInit {
     this.patientsService.updatePatient(this.newProfile, this.userInfo.uid)
       .subscribe(resp => {
         this.userInfo = resp;
-        this.newProfile = {email: resp.email, first_name: resp.first_name, last_name: resp.last_name};
+        this.userInfo.hba1c = this.newProfile.hba1c
+        this.userInfo.insulin = this.newProfile.insulin
+        this.newProfile = {email: resp.email, first_name: resp.first_name, last_name: resp.last_name, hba1c: this.userInfo.hba1c, insulin: this.userInfo.insulin};
         this.refreshPatients.emit();
       });
     this.editProfile();
