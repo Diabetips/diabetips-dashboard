@@ -44,19 +44,23 @@ export class PatientsService {
   }
 
   getPatient(uid: string): Observable<Patient> {
-    return this.http.get<Patient>(this.patientsUrl + '/' + uid);
+    const url = `${this.patientsUrl}/${uid}`;
+    return this.http.get<Patient>(url);
   }
 
   getPatientPicture(uid: string): Observable<Blob> {
-    return this.http.get(this.patientsUrl + '/' + uid + '/picture', { responseType: 'blob' });
+    const url = `${this.patientsUrl}/${uid}/picture`;
+    return this.http.get(url, { responseType: 'blob' });
   }
 
   getPatientHb(uid: string): Observable<any> {
-    return this.http.get(this.patientsUrl + '/' + uid + '/hba1c')
+    const url = `${this.patientsUrl}/${uid}/hba1c`;
+    return this.http.get(url)
   }
 
   getPatientInsulin(uid: string): Observable<any> {
-    return this.http.get(this.patientsUrl + '/' + uid + '/insulin')
+    const url = `${this.patientsUrl}/${uid}/insulin`;
+    return this.http.get(url)
   }
 
   /* GET patients whose name contains search term */
@@ -77,21 +81,24 @@ export class PatientsService {
 
   /** GET connections to the user from the server */
   getConnections(uid: string): Observable<Patient[]> {
-    return this.http.get<Patient[]>(this.patientsUrl + '/' + uid + '/connections')
+    const url = `${this.patientsUrl}/${uid}/connections`;
+    return this.http.get<Patient[]>(url)
      .pipe(
        catchError(this.handleError('getPatients', []))
      );
  }
 
   invitePatient(email: string, uid: string) {
-    this.http.post(this.patientsUrl + '/' + uid + '/connections', { 'email': email }, { observe: 'response'})
+    const url = `${this.patientsUrl}/${uid}/connections`;
+    this.http.post(url, { 'email': email }, { observe: 'response'})
       .subscribe(response => {
         console.log(response.status);
       })
   }
 
   deleteConnection(userUid, patientUid) {
-    this.http.delete(this.patientsUrl + userUid + '/connections/' + patientUid, { observe: 'response'})
+    const url = `${this.patientsUrl}/${userUid}/connections/${patientUid}`;
+    this.http.delete(url, { observe: 'response'})
       .subscribe(response => {
         console.log(response.status);
       })
@@ -120,8 +127,9 @@ export class PatientsService {
   updatePatient(patient: any, uid: number): Observable<any> {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
-
-    return this.http.put<any>(this.patientsUrl + '/' + uid, patient, httpOptions)
+    
+    const url = `${this.patientsUrl}/${uid}`;
+    return this.http.put<any>(url, patient, httpOptions)
       .pipe(
         catchError(this.handleError('updatePatient', patient))
       );
