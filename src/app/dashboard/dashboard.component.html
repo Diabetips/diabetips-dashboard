@@ -52,7 +52,6 @@
         <mat-list>
           <span class="card-title">Mesures HbA1C</span>
           <mat-list-item *ngFor="let measure of newProfile.hba1c">
-            <h4 mat-line>{{measure.timestamp.toUtcString()}}</h4>
             <p mat-line> {{measure.value}} </p>
           </mat-list-item>
         </mat-list>
