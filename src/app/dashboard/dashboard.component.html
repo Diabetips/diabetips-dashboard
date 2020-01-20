@@ -30,15 +30,15 @@
           </div>
         </div>
         <div class="card-action">
-          <a *ngIf="!editing" class="waves-effect waves-light btn" (click)="editProfile()">
+          <a *ngIf="!editing" class="waves-effect waves-light btn yellow darken-2" (click)="editProfile()">
             <i class="material-icons left">create</i>
             Editer
           </a>
-          <a *ngIf="editing" class="waves-effect waves-light btn green" (click)="saveChanges()">
+          <a *ngIf="editing" class="waves-effect waves-light btn green darken-1" (click)="saveChanges()">
             <i class="material-icons left">check</i>
             Sauvegarder
           </a>
-          <a *ngIf="editing" class="waves-effect waves-light btn red" style="margin-left: 1rem;" (click)="editProfile()">
+          <a *ngIf="editing" class="waves-effect waves-light btn red darken-1" style="margin-left: 1rem;" (click)="editProfile()">
             <i class="material-icons left">close</i>
             Annuler
           </a>
