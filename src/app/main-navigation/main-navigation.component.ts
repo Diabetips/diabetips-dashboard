@@ -63,12 +63,13 @@ export class MainNavigationComponent implements OnInit {
           this.patients = patients;
           this.patients.forEach(patient => {
             this.getPictureForProfile(patient)
+            this.getPatientsHba1c(patient)
+            this.getPatientsInsulin(patient)
           });
         });
     }
 
     getPictureForProfile(profile: Patient) {
-      console.log(profile.uid)
       this.patientsService.getPatientPicture(profile.uid).subscribe(picture => {
         let reader = new FileReader();
         reader.addEventListener("load", () => {
@@ -81,7 +82,19 @@ export class MainNavigationComponent implements OnInit {
       })
     }
 
-    switchPatient(uid: any, isMe: boolean): void {
+    getPatientsHba1c(profile: Patient) {
+      this.patientsService.getPatientHb(profile.uid).subscribe(measures => {
+        profile.hba1c = measures
+      })
+    }
+
+    getPatientsInsulin(profile: Patient) {
+      this.patientsService.getPatientInsulin(profile.uid).subscribe(measures => {
+        profile.insulin = measures
+      })
+    }
+
+    switchPatient(selectedPatient: Patient, isMe: boolean): void {
       if (isMe) {
         this.patientsService.getMe()
           .subscribe(patient => {
@@ -90,10 +103,10 @@ export class MainNavigationComponent implements OnInit {
           });
         this.isMe = isMe;
       } else {
-        this.patientsService.getPatient(uid)
+        this.patientsService.getPatient(selectedPatient.uid)
           .subscribe(patient => {
             this.selectedProfile = patient;
-            this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name};
+            this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name, hba1c: selectedPatient.hba1c, insulin: selectedPatient.insulin};
           });
         this.isMe = isMe;
       }

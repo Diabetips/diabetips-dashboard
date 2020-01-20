@@ -51,6 +51,14 @@ export class PatientsService {
     return this.http.get(this.patientsUrl + '/' + uid + '/picture', { responseType: 'blob' });
   }
 
+  getPatientHb(uid: string): Observable<any> {
+    return this.http.get(this.patientsUrl + '/' + uid + '/hba1c')
+  }
+
+  getPatientInsulin(uid: string): Observable<any> {
+    return this.http.get(this.patientsUrl + '/' + uid + '/insulin')
+  }
+
   /* GET patients whose name contains search term */
   searchPatient(term: string): Observable<Patient[]> {
     term = term.trim();

@@ -46,17 +46,26 @@
       </div>
     </div>
   </div>
-  <div class="row flex">
+  <div class="row flex" *ngIf="!isMe">
     <div class="card white mid-width no-margin" style="margin-right: .5%;">
       <div class="card-content black-text">
-        <span class="card-title">Mon UID</span>
-        <p>{{ userInfo.uid }}</p>
+        <mat-list>
+          <span class="card-title">Mesures HbA1C</span>
+          <mat-list-item *ngFor="let measure of newProfile.hba1c">
+            <h4 mat-line>{{measure.timestamp.toUtcString()}}</h4>
+            <p mat-line> {{measure.value}} </p>
+          </mat-list-item>
+        </mat-list>
       </div>
     </div>
     <div class="card white mid-width no-margin" style="margin-left: .5%;">
       <div class="card-content black-text">
-        <span class="card-title">Autres</span>
-        <span>1+1 = 3</span>
+        <mat-list>
+          <span class="card-title">Mesures Insuline</span>
+          <mat-list-item *ngFor="let measure of newProfile.insulin">
+            {{measure.id}} {{measure.value}}
+          </mat-list-item>
+        </mat-list>
       </div>
     </div>
   </div>

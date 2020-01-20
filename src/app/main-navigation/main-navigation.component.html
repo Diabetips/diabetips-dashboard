@@ -19,7 +19,7 @@
       </mat-toolbar>
       <a *ngFor="let patient of patients" mat-list-item >
         <img src="{{patient.profile_picture}}" class="circle responsive-img" style="height: 65%; margin-right: 10px;"/>
-        <h4 (click)="switchPatient(patient.uid, false)" class="patient-name">
+        <h4 (click)="switchPatient(patient, false)" class="patient-name">
           {{patient.first_name}}
           {{patient.last_name}}
         </h4>
