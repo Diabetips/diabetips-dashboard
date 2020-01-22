@@ -3,12 +3,15 @@ import { Patient } from '../patients-service/patient';
 import { PatientsService } from '../patients-service/patients.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { $ } from 'protractor';
+import * as moment from 'moment';
 
 export interface DialogData {
   email: any;
   first_name: any;
   last_name: any;
 }
+
+moment.locale('fr')
 
 @Component({
   selector: 'app-dashboard',
@@ -59,15 +62,7 @@ export class DashboardComponent implements OnInit {
 
   timestampAsDate(ts: number) {
     var a = new Date(ts * 1000);
-    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-    return time;
+    return moment(a).fromNow();
   }
 }
 
