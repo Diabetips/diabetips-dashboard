@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material';
 import { SignInUpComponent } from './sign-in-up/sign-in-up.component';
-import { MainNavigationComponent, InvitePatientComponent } from './main-navigation/main-navigation.component';
+import { MainNavigationComponent, InvitePatientComponent, ConfirmDeletionComponent } from './main-navigation/main-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -22,7 +22,8 @@ import { MessageService } from './message.service';
     DashboardComponent,
     SignInUpComponent,
     MainNavigationComponent,
-    InvitePatientComponent
+    InvitePatientComponent,
+    ConfirmDeletionComponent
   ],
   imports: [
     MatDialogModule,
@@ -50,7 +51,8 @@ import { MessageService } from './message.service';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    InvitePatientComponent
+    InvitePatientComponent,
+    ConfirmDeletionComponent
   ]
 })
 export class AppModule { }

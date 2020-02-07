@@ -14,6 +14,7 @@ export interface DialogData {
   selector: 'app-invite-patient',
   templateUrl: 'invite-patient.html'
 })
+
 export class InvitePatientComponent {
 
   constructor(
@@ -24,6 +25,23 @@ export class InvitePatientComponent {
     this.dialogRef.close();
   }
 }
+
+@Component({
+  selector: 'app-confirm-deletion',
+  templateUrl: 'confirm-deletion.html'
+})
+
+export class ConfirmDeletionComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmDeletionComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
 @Component({
   selector: 'app-main-navigation',
   templateUrl: './main-navigation.component.html',
@@ -114,7 +132,7 @@ export class MainNavigationComponent implements OnInit {
 
     invitePatient(): void {
       const dialogRef = this.dialog.open(InvitePatientComponent, {
-        width: '50%',
+        width: '40%',
         data: {email: ''}
       });
 
@@ -126,8 +144,17 @@ export class MainNavigationComponent implements OnInit {
     }
 
     deleteConnection(patient: Patient): void {
-      this.patients = this.patients.filter(h => h !== patient);
-      this.patientsService
-        .deleteConnection(this.me.uid, patient.uid);
+      const dialogRef = this.dialog.open(ConfirmDeletionComponent, {
+        width: '25%',
+        data: {email: ''}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result && result.confirm) {
+          this.patients = this.patients.filter(h => h !== patient);
+          this.patientsService
+            .deleteConnection(this.me.uid, patient.uid);
+        }
+      });
     }
   }
