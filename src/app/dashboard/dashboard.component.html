@@ -49,6 +49,7 @@
   <div class="row flex" *ngIf="!isMe">
     <div class="card white mid-width no-margin" style="margin-right: .5%;">
       <div class="card-content black-text">
+        <canvas #myChart width="400" height="400"></canvas>
         <mat-list>
           <span class="card-title">Mesures HbA1C</span>
           <mat-list-item *ngFor="let measure of newProfile.hba1c">

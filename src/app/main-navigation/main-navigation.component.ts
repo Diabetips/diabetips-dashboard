@@ -28,7 +28,8 @@ export class InvitePatientComponent {
 
 @Component({
   selector: 'app-confirm-deletion',
-  templateUrl: 'confirm-deletion.html'
+  templateUrl: 'confirm-deletion.html',
+  styleUrls: ['../app.component.css']
 })
 
 export class ConfirmDeletionComponent {

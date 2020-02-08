@@ -1,6 +1,11 @@
 <div class="card white" style="margin: 0;">
-  <div class="card-content black-text">
+  <div class="card-content black-text modal-confirm">
     <span class="card-title" style="display: flex; flex-direction: column;">Confirmer la suppression</span>
+    <span class="card-content" style="text-align: center; padding-top: 5px;">
+      Attention !<br>
+      Cette action est irreversible !<br>
+      Pour récuperer votre vision sur ce profil, vous devrez renvoyer une invitation.
+    </span>
     <form class="col s12">
       <div style="display: flex; justify-content: center;">
         <button class="btn waves-effect waves-light green darken-1" [mat-dialog-close]="{confirm: true}" style="margin-right: 10px">
