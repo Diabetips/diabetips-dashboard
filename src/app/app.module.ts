@@ -8,7 +8,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material';
-import { SignInUpComponent } from './sign-in-up/sign-in-up.component';
 import { MainNavigationComponent, InvitePatientComponent, ConfirmDeletionComponent } from './main-navigation/main-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
@@ -20,10 +19,9 @@ import { MessageService } from './message.service';
   declarations: [
     AppComponent,
     DashboardComponent,
-    SignInUpComponent,
     MainNavigationComponent,
     InvitePatientComponent,
-    ConfirmDeletionComponent
+    ConfirmDeletionComponent,
   ],
   imports: [
     MatDialogModule,

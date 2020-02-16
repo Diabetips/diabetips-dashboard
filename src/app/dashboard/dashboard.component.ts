@@ -32,10 +32,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   
   @ViewChild('myChart', { static: false }) myChart;
 
-  constructor(
-    private patientsService: PatientsService,
-    public dialog: MatDialog ) {
-  }
+  constructor( private patientsService: PatientsService, public dialog: MatDialog ) {}
 
   ngOnInit() {
     this.userInfo = {email: "ph", first_name: "ph", last_name: "ph"}
