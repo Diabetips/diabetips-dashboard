@@ -64,7 +64,7 @@ export class MainNavigationComponent implements OnInit {
   token;
   myRoute
 
-  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize?response_type=token&redirect_uri=http://localhost:4200';
+  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize?response_type=token&redirect_uri=http://91.121.236.10';
   isLoading = true;
 
   constructor(

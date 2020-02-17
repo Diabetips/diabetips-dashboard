@@ -3,7 +3,7 @@
       <div class="col s12" style="padding-bottom: 10px;">
         <div class="container s6">
           <div class="name-container">
-            <span class="profile-name">Mon profil</span>
+            <span class="section-title">Informations de base</span>
           </div>
           <div class="row" style="margin-bottom: 0;">
             <form class="col s12">
@@ -28,7 +28,7 @@
               </div>
             </form>
           </div>
-          <div style="margin: 20px;">
+          <div style="margin: 20px; display: flex; justify-content: flex-end;">
             <a *ngIf="!editing" class="waves-effect waves-light btn yellow darken-2" (click)="editProfile()">
               <i class="material-icons left">create</i>
               Editer
@@ -41,6 +41,14 @@
               <i class="material-icons left">close</i>
               Annuler
             </a>
+          </div>
+          <div class="name-container">
+            <span class="section-title">Photo de profil</span>
+          </div>
+          <div class="name-container">
+            <span class="section-title">Ajouter des informations médecin</span>
+          </div>
+          <div class="row" style="margin-bottom: 0;">
           </div>
         </div>
       </div>
