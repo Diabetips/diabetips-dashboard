@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, ViewChildren } from '@angular/core';
-import { Patient } from '../patients-service/patient';
+import { Patient } from '../patients-service/profile-classes';
 import { PatientsService } from '../patients-service/patients.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { $ } from 'protractor';
 import * as moment from 'moment';
 import { Chart } from 'chart.js';
+import { Router, ActivatedRoute } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 
 export interface DialogData {
   email: any;
@@ -21,26 +23,38 @@ moment.locale('fr')
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  @Input() userInfo: any;
-  @Input() newProfile: any;
-  @Input() isMe: boolean;
+  userInfo: Patient;
+  newProfile: Patient;
+  isMe: boolean;
 
+  // FIX: REFRESH NOT WORKING ANYMORE
   @Output() refreshPatients = new EventEmitter();
 
   token: string = localStorage.getItem('token');
+  uid: string;
   editing: boolean = false;
   
   @ViewChild('myChart', { static: false }) myChart;
 
-  constructor( private patientsService: PatientsService, public dialog: MatDialog ) {}
+  constructor( private patientsService: PatientsService, public dialog: MatDialog, private route: ActivatedRoute ) {
+    this.userInfo = new Patient
+    this.newProfile = new Patient
+  }
 
-  ngOnInit() {
-    this.userInfo = {email: "ph", first_name: "ph", last_name: "ph"}
-    this.newProfile = {email: "ph", first_name: "ph", last_name: "ph"}
-    this.patientsService.getMe()
+  async ngOnInit() {
+    await this.getTokenFromUrl()
+    this.patientsService.getPatient(this.uid)
       .subscribe(patient => {
         this.userInfo = patient;
-        this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name, hba1c: patient.hba1c, insulin: patient.insulin};
+        this.newProfile = patient;
+      });
+  }
+
+  async getTokenFromUrl() {
+    this.route.queryParams
+      .subscribe(params => {
+        // Get token from parsed fragment
+        this.uid = params.patient
       });
   }
 
@@ -93,7 +107,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.userInfo = resp;
         this.userInfo.hba1c = this.newProfile.hba1c
         this.userInfo.insulin = this.newProfile.insulin
-        this.newProfile = {email: resp.email, first_name: resp.first_name, last_name: resp.last_name, hba1c: this.userInfo.hba1c, insulin: this.userInfo.insulin};
+        this.newProfile = resp;
         this.refreshPatients.emit();
       });
     this.editProfile();

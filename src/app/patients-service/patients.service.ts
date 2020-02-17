@@ -6,7 +6,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { Patient } from './patient';
+import { Patient } from './profile-classes';
 import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
 
 const httpOptions = {
@@ -124,7 +124,7 @@ export class PatientsService {
   }
 
   /** PUT: update the patient on the server. Returns the updated patient upon success. */
-  updatePatient(patient: any, uid: number): Observable<any> {
+  updatePatient(patient: any, uid: string): Observable<any> {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
     

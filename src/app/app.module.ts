@@ -14,6 +14,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpErrorHandler } from './http-error-handler.service';
 import { MessageService } from './message.service';
+import { MyProfileComponent } from './my-profile/my-profile.component';
+import { OptionsComponent } from './options/options.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { MessageService } from './message.service';
     MainNavigationComponent,
     InvitePatientComponent,
     ConfirmDeletionComponent,
+    MyProfileComponent,
+    OptionsComponent,
   ],
   imports: [
     MatDialogModule,

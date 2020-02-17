@@ -3,8 +3,7 @@
     <div class="col s12">
       <div class="card white">
         <div class="card-content black-text">
-          <span class="card-title" *ngIf="isMe">Mon profil</span>
-          <span class="card-title" *ngIf="!isMe">Profil de {{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
+          <span class="card-title">Mon profil</span>
           <div class="row" style="margin-bottom: 0;">
             <form class="col s12">
               <div class="row" style="margin-bottom: 0;">
@@ -22,7 +21,7 @@
               <div>
                 <div class="input-field col s12" style="padding: 0; margin-bottom: 0;">
                   <input [(ngModel)]="userInfo.email" value="{{ userInfo.email }}" name="email" type="text" class="validate" *ngIf="!editing" disabled>
-                  <input [(ngModel)]="newProfile.email" value="{{ newProfile.email }}" name="email_tmp" type="text" class="validate" *ngIf="editing" >
+                  <input [(ngModel)]="newProfile.email" value="{{ newProfile.email }}" name="email_tmp" type="text" class="validate" *ngIf="editing">
                   <label class="active" for="email">Email</label>
                 </div>
               </div>
@@ -43,32 +42,6 @@
             Annuler
           </a>
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="row flex" *ngIf="!isMe">
-    <div class="card white mid-width no-margin" style="margin-right: .5%;">
-      <div class="card-content black-text">
-        <canvas #myChart width="400" height="400"></canvas>
-        <mat-list>
-          <span class="card-title">Mesures HbA1C</span>
-          <mat-list-item *ngFor="let measure of newProfile.hba1c">
-            <h4 mat-line>{{measure.value}} %</h4>
-            <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </div>
-    <div class="card white mid-width no-margin" style="margin-left: .5%;">
-      <div class="card-content black-text">
-        <mat-list>
-          <span class="card-title">Mesures Insuline</span>
-          <mat-list-item *ngFor="let measure of newProfile.insulin">
-            <h4 mat-line>{{measure.quantity}} mg</h4>
-            <p mat-line>{{measure.description}}</p>
-            <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
-          </mat-list-item>
-        </mat-list>
       </div>
     </div>
   </div>
