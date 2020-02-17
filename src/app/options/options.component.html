@@ -1,3 +1,49 @@
-<p>
-  options works!
-</p>
+<div class="container" style="width: 98%; max-width: 9999px" >
+    <div>
+      <div class="col s12" style="padding-bottom: 10px;">
+        <div class="container s6">
+          <div class="name-container">
+            <span class="profile-name">Mon profil</span>
+          </div>
+          <div class="row" style="margin-bottom: 0;">
+            <form class="col s12">
+              <div class="row" style="margin-bottom: 0;">
+                <div class="input-field col s6">
+                  <input [(ngModel)]="userInfo.first_name" value="{{ userInfo.first_name }}" name="first_name" type="text" class="validate" *ngIf="!editing" disabled>
+                  <input [(ngModel)]="newProfile.first_name" value="{{ newProfile.first_name }}" name="first_name_tmp" type="text" class="validate" *ngIf="editing">
+                  <label class="active" for="first_name">Prenom</label>
+                </div>
+                <div class="input-field col s6">
+                  <input [(ngModel)]="userInfo.last_name" value="{{ userInfo.last_name }}" name="last_name" type="text" class="validate" *ngIf="!editing" disabled>
+                  <input [(ngModel)]="newProfile.last_name" value="{{ newProfile.last_name }}" name="last_name_tmp" type="text" class="validate" *ngIf="editing">
+                  <label class="active" for="last_name">Nom</label>
+                </div>
+              </div>
+              <div>
+                <div class="input-field col s12" style="padding: 0; margin-bottom: 0;">
+                  <input [(ngModel)]="userInfo.email" value="{{ userInfo.email }}" name="email" type="text" class="validate" *ngIf="!editing" disabled>
+                  <input [(ngModel)]="newProfile.email" value="{{ newProfile.email }}" name="email_tmp" type="text" class="validate" *ngIf="editing">
+                  <label class="active" for="email">Email</label>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div style="margin: 20px;">
+            <a *ngIf="!editing" class="waves-effect waves-light btn yellow darken-2" (click)="editProfile()">
+              <i class="material-icons left">create</i>
+              Editer
+            </a>
+            <a *ngIf="editing" class="waves-effect waves-light btn green darken-1" (click)="saveChanges()">
+              <i class="material-icons left">check</i>
+              Sauvegarder
+            </a>
+            <a *ngIf="editing" class="waves-effect waves-light btn red darken-1" style="margin-left: 1rem;" (click)="editProfile()">
+              <i class="material-icons left">close</i>
+              Annuler
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

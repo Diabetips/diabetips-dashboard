@@ -3,8 +3,7 @@
     <div class="col s12">
       <div class="card white">
         <div class="card-content black-text">
-          <span class="card-title" *ngIf="isMe">Mon profil</span>
-          <span class="card-title" *ngIf="!isMe">Profil de {{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
+          <span class="card-title">Profil de {{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
           <div class="row" style="margin-bottom: 0;">
             <form class="col s12">
               <div class="row" style="margin-bottom: 0;">
@@ -46,7 +45,7 @@
       </div>
     </div>
   </div>
-  <div class="row flex" *ngIf="!isMe">
+  <div class="row flex">
     <div class="card white mid-width no-margin" style="margin-right: .5%;">
       <div class="card-content black-text">
         <canvas #myChart width="400" height="400"></canvas>
@@ -61,6 +60,7 @@
     </div>
     <div class="card white mid-width no-margin" style="margin-left: .5%;">
       <div class="card-content black-text">
+        <canvas #myChart width="400" height="400"></canvas>
         <mat-list>
           <span class="card-title">Mesures Insuline</span>
           <mat-list-item *ngFor="let measure of newProfile.insulin">
