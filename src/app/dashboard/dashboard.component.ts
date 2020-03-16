@@ -97,6 +97,7 @@ export class DashboardComponent implements OnInit {
       this.patientsService.getPatientMeals(this.uid).subscribe(meals => {
         this.userInfo.meals = meals;
       });
+      this.userInfo.profile_picture = this.patientsService.getPatientPicture(this.uid)
     })
   }
 

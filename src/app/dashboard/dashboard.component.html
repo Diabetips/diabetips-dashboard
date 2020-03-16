@@ -1,12 +1,12 @@
-<div class="container" style="width: 98%; max-width: 9999px" >
-  <div>
-    <div class="col">
-      <div class="card white">
+<div class="flex">
+  <div class="container mid-width" style="max-width: 9999px">
+    <div class="column flex">
+      <div class="card white no-margin">
         <div class="card-content black-text">
           <span class="card-title">Profil de {{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
-          <div class="row" style="margin-bottom: 0;">
-            <form class="col s12">
-              <div class="row" style="margin-bottom: 0;">
+          <div class="row flex" style="margin-bottom: 0;">
+            <div class="column flex">
+              <div class="row flex" style="margin-bottom: 0;">
                 <div class="input-field col s6">
                   <input [(ngModel)]="userInfo.first_name" value="{{ userInfo.first_name }}" name="first_name" type="text" class="validate" *ngIf="!editing" disabled>
                   <label class="active" for="first_name">Prenom</label>
@@ -16,58 +16,63 @@
                   <label class="active" for="last_name">Nom</label>
                 </div>
               </div>
-              <div>
-                <div class="input-field col s12" style="padding: 0; margin-bottom: 0;">
+              <div class="flex">
+                <div class="input-field col s12">
                   <input [(ngModel)]="userInfo.email" value="{{ userInfo.email }}" name="email" type="text" class="validate" *ngIf="!editing" disabled>
                   <label class="active" for="email">Email</label>
                 </div>
               </div>
-            </form>
+            </div>
+            <div class="flex">
+              <img src="{{userInfo.profile_picture}}" class="circle responsive-img" style=""/>
+            </div>
           </div>
+        </div>
+      </div>
+      <div class="card white no-margin" style="height: 0%;">
+        <div class="card-content black-text">
+          <div class="row no-margin flex">
+            <mat-select class="card-title data-card-title"  [(ngModel)]="selectedData" style="width: 35%">
+              <mat-option value="hba1c">Hb A1c</mat-option>
+              <mat-option value="insulin">Injections d'insuline</mat-option>
+              <mat-option value="bloodsugar">Glycémie</mat-option>
+            </mat-select>
+          </div>
+          <mat-list *ngIf="userInfo.hba1c && selectedData == 'hba1c'">
+            <mat-list-item *ngFor="let measure of userInfo.hba1c">
+              <h4 mat-line>{{measure.value}} %</h4>
+              <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
+            </mat-list-item>
+          </mat-list>
+          <mat-list *ngIf="userInfo.blood_sugar && selectedData == 'bloodsugar'">
+            <mat-list-item *ngFor="let measure of userInfo.blood_sugar">
+              <h4 mat-line>{{measure.value}} mg/dL</h4>
+              <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
+            </mat-list-item>
+          </mat-list>
+          <mat-list *ngIf="userInfo.insulin && selectedData == 'insulin'">
+            <mat-list-item *ngFor="let measure of userInfo.insulin">
+              <h4 mat-line>{{measure.quantity}} mg</h4>
+              <p mat-line>{{measure.description}}</p>
+              <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
+            </mat-list-item>
+          </mat-list>
         </div>
       </div>
     </div>
   </div>
-  <div class="row flex">
-    <div class="card white mid-width no-margin" style="margin-right: .5%;">
-      <div class="card-content black-text">
-        <div class="row no-margin flex">
-          <mat-select class="card-title data-card-title"  [(ngModel)]="selectedData" style="width: 35%">
-            <mat-option value="hba1c">Hb A1c</mat-option>
-            <mat-option value="insulin">Injections d'insuline</mat-option>
-            <mat-option value="bloodsugar">Glycémie</mat-option>
-          </mat-select>
+  <div class="container mid-width" style="max-width: 9999px">
+    <div class="column flex">
+      <div class="card white no-margin" style="height: 0%; margin-bottom: 10px;">
+        <div class="card-content black-text">
+          <span class="card-title">Repas</span>
+          <mat-list *ngIf="userInfo.meals">
+            <a *ngFor="let meal of userInfo.meals" mat-list-item (click)="displayMeals(meal)">
+              <h4 mat-line>{{meal.total_sugar.toFixed(2)}} g</h4>
+              <p mat-line>{{this.timestampAsDate(meal.timestamp)}}</p>
+            </a>
+          </mat-list>
         </div>
-        <mat-list *ngIf="userInfo.hba1c && selectedData == 'hba1c'">
-          <mat-list-item *ngFor="let measure of userInfo.hba1c">
-            <h4 mat-line>{{measure.value}} %</h4>
-            <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
-          </mat-list-item>
-        </mat-list>
-        <mat-list *ngIf="userInfo.blood_sugar && selectedData == 'bloodsugar'">
-          <mat-list-item *ngFor="let measure of userInfo.blood_sugar">
-            <h4 mat-line>{{measure.value}} mg/dL</h4>
-            <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
-          </mat-list-item>
-        </mat-list>
-        <mat-list *ngIf="userInfo.insulin && selectedData == 'insulin'">
-          <mat-list-item *ngFor="let measure of userInfo.insulin">
-            <h4 mat-line>{{measure.quantity}} mg</h4>
-            <p mat-line>{{measure.description}}</p>
-            <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </div>
-    <div class="card white mid-width no-margin" style="margin-left: .5%;">
-      <div class="card-content black-text">
-        <span class="card-title">Repas</span>
-        <mat-list *ngIf="userInfo.meals">
-          <a *ngFor="let meal of userInfo.meals" mat-list-item (click)="displayMeals(meal)">
-            <h4 mat-line>{{meal.total_sugar.toFixed(2)}} g</h4>
-            <p mat-line>{{this.timestampAsDate(meal.timestamp)}}</p>
-          </a>
-        </mat-list>
       </div>
     </div>
   </div>
