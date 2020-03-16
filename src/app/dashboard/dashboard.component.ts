@@ -32,9 +32,7 @@ export class DisplayMealsComponent {
     public dialogRef: MatDialogRef<DisplayMealsComponent>,
     @Inject(MAT_DIALOG_DATA) public meal: any) { }
 
-  ngOnInit() {
-    console.log(JSON.stringify(this.meal.meal))
-  }
+  ngOnInit() { }
 
   onNoClick(): void {
     this.dialogRef.close();

@@ -146,22 +146,9 @@ export class MainNavigationComponent implements OnInit {
     })
   }
 
-  switchPatient(selectedPatient: Patient, isMe: boolean): void {
-    if (isMe) {
-      this.patientsService.getMe()
-        .subscribe(patient => {
-          this.selectedProfile = patient;
-          this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name};
-        });
-      this.isMe = isMe;
-    } else {
-      this.patientsService.getPatient(selectedPatient.uid)
-        .subscribe(patient => {
-          this.selectedProfile = patient;
-          this.newProfile = {email: patient.email, first_name: patient.first_name, last_name: patient.last_name, hba1c: selectedPatient.hba1c, insulin: selectedPatient.insulin};
-        });
-      this.isMe = isMe;
-    }
+  signOut(): void {
+    localStorage.removeItem('token');
+    this.ngOnInit();
   }
 
   invitePatient(): void {
