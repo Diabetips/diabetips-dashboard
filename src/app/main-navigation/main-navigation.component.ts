@@ -39,9 +39,7 @@ export class InvitePatientComponent {
 
 export class ConfirmDeletionComponent {
 
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmDeletionComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+  constructor(public dialogRef: MatDialogRef<ConfirmDeletionComponent>) { }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -64,7 +62,7 @@ export class MainNavigationComponent implements OnInit {
   token;
   myRoute
 
-  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize?response_type=token&redirect_uri=http://91.121.236.10';
+  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize?response_type=token&redirect_uri=http://localhost:4200';
   isLoading = true;
 
   constructor(
@@ -98,8 +96,6 @@ export class MainNavigationComponent implements OnInit {
         this.patients = patients;
         this.patients.forEach(patient => {
           this.getPictureForProfile(patient)
-          this.getPatientsHba1c(patient)
-          this.getPatientsInsulin(patient)
         });
       });
   }
@@ -141,24 +137,12 @@ export class MainNavigationComponent implements OnInit {
     this.patientsService.getPatientPicture(profile.uid).subscribe(picture => {
       let reader = new FileReader();
       reader.addEventListener("load", () => {
-        profile.profile_picture = reader.result
+        //profile.profile_picture = reader.result
       }, false);
 
       if (picture) {
         reader.readAsDataURL(picture);
       }
-    })
-  }
-
-  getPatientsHba1c(profile: Patient) {
-    this.patientsService.getPatientHb(profile.uid).subscribe(measures => {
-      profile.hba1c = measures
-    })
-  }
-
-  getPatientsInsulin(profile: Patient) {
-    this.patientsService.getPatientInsulin(profile.uid).subscribe(measures => {
-      profile.insulin = measures
     })
   }
 
@@ -195,8 +179,7 @@ export class MainNavigationComponent implements OnInit {
 
   deleteConnection(patient: Patient): void {
     const dialogRef = this.dialog.open(ConfirmDeletionComponent, {
-      width: '25%',
-      data: {email: ''}
+      width: '25%'
     });
 
     dialogRef.afterClosed().subscribe(result => {

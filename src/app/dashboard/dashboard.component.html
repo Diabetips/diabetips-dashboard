@@ -1,6 +1,6 @@
 <div class="container" style="width: 98%; max-width: 9999px" >
   <div>
-    <div class="col s12">
+    <div class="col">
       <div class="card white">
         <div class="card-content black-text">
           <span class="card-title">Profil de {{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
@@ -9,38 +9,21 @@
               <div class="row" style="margin-bottom: 0;">
                 <div class="input-field col s6">
                   <input [(ngModel)]="userInfo.first_name" value="{{ userInfo.first_name }}" name="first_name" type="text" class="validate" *ngIf="!editing" disabled>
-                  <input [(ngModel)]="newProfile.first_name" value="{{ newProfile.first_name }}" name="first_name_tmp" type="text" class="validate" *ngIf="editing">
                   <label class="active" for="first_name">Prenom</label>
                 </div>
                 <div class="input-field col s6">
                   <input [(ngModel)]="userInfo.last_name" value="{{ userInfo.last_name }}" name="last_name" type="text" class="validate" *ngIf="!editing" disabled>
-                  <input [(ngModel)]="newProfile.last_name" value="{{ newProfile.last_name }}" name="last_name_tmp" type="text" class="validate" *ngIf="editing">
                   <label class="active" for="last_name">Nom</label>
                 </div>
               </div>
               <div>
                 <div class="input-field col s12" style="padding: 0; margin-bottom: 0;">
                   <input [(ngModel)]="userInfo.email" value="{{ userInfo.email }}" name="email" type="text" class="validate" *ngIf="!editing" disabled>
-                  <input [(ngModel)]="newProfile.email" value="{{ newProfile.email }}" name="email_tmp" type="text" class="validate" *ngIf="editing" >
                   <label class="active" for="email">Email</label>
                 </div>
               </div>
             </form>
           </div>
-        </div>
-        <div class="card-action">
-          <a *ngIf="!editing" class="waves-effect waves-light btn yellow darken-2" (click)="editProfile()">
-            <i class="material-icons left">create</i>
-            Editer
-          </a>
-          <a *ngIf="editing" class="waves-effect waves-light btn green darken-1" (click)="saveChanges()">
-            <i class="material-icons left">check</i>
-            Sauvegarder
-          </a>
-          <a *ngIf="editing" class="waves-effect waves-light btn red darken-1" style="margin-left: 1rem;" (click)="editProfile()">
-            <i class="material-icons left">close</i>
-            Annuler
-          </a>
         </div>
       </div>
     </div>
@@ -48,11 +31,29 @@
   <div class="row flex">
     <div class="card white mid-width no-margin" style="margin-right: .5%;">
       <div class="card-content black-text">
-        <canvas #myChart width="400" height="400"></canvas>
-        <mat-list>
-          <span class="card-title">Mesures HbA1C</span>
-          <mat-list-item *ngFor="let measure of newProfile.hba1c">
+        <div class="row no-margin flex">
+          <mat-select class="card-title data-card-title"  [(ngModel)]="selectedData" style="width: 35%">
+            <mat-option value="hba1c">Hb A1c</mat-option>
+            <mat-option value="insulin">Injections d'insuline</mat-option>
+            <mat-option value="bloodsugar">Glycémie</mat-option>
+          </mat-select>
+        </div>
+        <mat-list *ngIf="userInfo.hba1c && selectedData == 'hba1c'">
+          <mat-list-item *ngFor="let measure of userInfo.hba1c">
             <h4 mat-line>{{measure.value}} %</h4>
+            <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
+          </mat-list-item>
+        </mat-list>
+        <mat-list *ngIf="userInfo.blood_sugar && selectedData == 'bloodsugar'">
+          <mat-list-item *ngFor="let measure of userInfo.blood_sugar">
+            <h4 mat-line>{{measure.value}} mg/dL</h4>
+            <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
+          </mat-list-item>
+        </mat-list>
+        <mat-list *ngIf="userInfo.insulin && selectedData == 'insulin'">
+          <mat-list-item *ngFor="let measure of userInfo.insulin">
+            <h4 mat-line>{{measure.quantity}} mg</h4>
+            <p mat-line>{{measure.description}}</p>
             <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
           </mat-list-item>
         </mat-list>
@@ -60,14 +61,12 @@
     </div>
     <div class="card white mid-width no-margin" style="margin-left: .5%;">
       <div class="card-content black-text">
-        <canvas #myChart width="400" height="400"></canvas>
-        <mat-list>
-          <span class="card-title">Mesures Insuline</span>
-          <mat-list-item *ngFor="let measure of newProfile.insulin">
-            <h4 mat-line>{{measure.quantity}} mg</h4>
-            <p mat-line>{{measure.description}}</p>
-            <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
-          </mat-list-item>
+        <span class="card-title">Repas</span>
+        <mat-list *ngIf="userInfo.meals">
+          <a *ngFor="let meal of userInfo.meals" mat-list-item (click)="displayMeals(meal)">
+            <h4 mat-line>{{meal.total_sugar.toFixed(2)}} g</h4>
+            <p mat-line>{{this.timestampAsDate(meal.timestamp)}}</p>
+          </a>
         </mat-list>
       </div>
     </div>

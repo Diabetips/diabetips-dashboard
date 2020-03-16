@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, Input, Inject, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { Patient } from '../patients-service/profile-classes';
 import { PatientsService } from '../patients-service/patients.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { Chart } from 'chart.js';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { resolve } from 'url';
 
 export interface DialogData {
   email: any;
@@ -14,7 +15,36 @@ export interface DialogData {
   last_name: any;
 }
 
+function trackByFn(index, item) {
+  console.log(index)
+  return index;
+}
+
 moment.locale('fr')
+
+@Component({
+  selector: 'app-display-meals',
+  templateUrl: 'display-meals.html'
+})
+export class DisplayMealsComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<DisplayMealsComponent>,
+    @Inject(MAT_DIALOG_DATA) public meal: any) { }
+
+  ngOnInit() {
+    console.log(JSON.stringify(this.meal.meal))
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  timestampAsDate(ts: number) {
+    var a = new Date(ts * 1000);
+    return moment(a).format('Do MMMM YYYY, hh:mm:ss');
+  }
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -22,13 +52,12 @@ moment.locale('fr')
   providers: [PatientsService],
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit {
   userInfo: Patient;
   newProfile: Patient;
   isMe: boolean;
 
-  // FIX: REFRESH NOT WORKING ANYMORE
-  @Output() refreshPatients = new EventEmitter();
+  public selectedData = 'bloodsugar'
 
   token: string = localStorage.getItem('token');
   uid: string;
@@ -36,18 +65,39 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   
   @ViewChild('myChart', { static: false }) myChart;
 
-  constructor( private patientsService: PatientsService, public dialog: MatDialog, private route: ActivatedRoute ) {
+  constructor(
+    private patientsService: PatientsService,
+    public dialog: MatDialog,
+    private route: ActivatedRoute,
+    private cdRef: ChangeDetectorRef
+  ) {
     this.userInfo = new Patient
-    this.newProfile = new Patient
   }
 
   async ngOnInit() {
-    await this.getTokenFromUrl()
-    this.patientsService.getPatient(this.uid)
-      .subscribe(patient => {
-        this.userInfo = patient;
-        this.newProfile = patient;
-      });
+    this.getTokenFromUrl()
+    this.patientsService.getPatient(this.uid).subscribe(patient => {
+      this.userInfo.uid = patient.uid;
+      this.userInfo.email = patient.email;
+      this.userInfo.first_name = patient.first_name;
+      this.userInfo.last_name = patient.last_name;
+    });
+    this.patientsService.getPatientHb(this.uid).subscribe(hba1c => {
+      if (hba1c) {
+        this.userInfo.hba1c = hba1c;
+      } else {
+        this.userInfo.hba1c = [];
+      }
+    });
+    this.patientsService.getPatientBs(this.uid).subscribe(blood_sugar => {
+      this.userInfo.blood_sugar = blood_sugar
+    });
+    this.patientsService.getPatientInsulin(this.uid).subscribe(insulin => {
+      this.userInfo.insulin = insulin;
+    });
+    this.patientsService.getPatientMeals(this.uid).subscribe(meals => {
+      this.userInfo.meals = meals;
+    });
   }
 
   async getTokenFromUrl() {
@@ -58,59 +108,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       });
   }
 
-  ngAfterViewInit() {
-    // var myChart = new Chart(this.myChart.nativeElement.getContext('2d'), {
-    //   type: 'bar',
-    //   data: {
-    //       labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    //       datasets: [{
-    //           label: '# of Votes',
-    //           data: [12, 19, 3, 5, 2, 3],
-    //           backgroundColor: [
-    //               'rgba(255, 99, 132, 0.2)',
-    //               'rgba(54, 162, 235, 0.2)',
-    //               'rgba(255, 206, 86, 0.2)',
-    //               'rgba(75, 192, 192, 0.2)',
-    //               'rgba(153, 102, 255, 0.2)',
-    //               'rgba(255, 159, 64, 0.2)'
-    //           ],
-    //           borderColor: [
-    //               'rgba(255, 99, 132, 1)',
-    //               'rgba(54, 162, 235, 1)',
-    //               'rgba(255, 206, 86, 1)',
-    //               'rgba(75, 192, 192, 1)',
-    //               'rgba(153, 102, 255, 1)',
-    //               'rgba(255, 159, 64, 1)'
-    //           ],
-    //           borderWidth: 1
-    //       }]
-    //   },
-    //   options: {
-    //       scales: {
-    //           yAxes: [{
-    //               ticks: {
-    //                   beginAtZero: true
-    //               }
-    //           }]
-    //       }
-    //   }
-    // });
-  }
-
   editProfile(): void {
     this.editing = !this.editing;
   }
 
-  saveChanges(): void {
-    this.patientsService.updatePatient(this.newProfile, this.userInfo.uid)
-      .subscribe(resp => {
-        this.userInfo = resp;
-        this.userInfo.hba1c = this.newProfile.hba1c
-        this.userInfo.insulin = this.newProfile.insulin
-        this.newProfile = resp;
-        this.refreshPatients.emit();
-      });
-    this.editProfile();
+  displayMeals(meal: any): void {
+    const dialogRef = this.dialog.open(DisplayMealsComponent, {
+      width: '40%',
+      data: {meal: meal}
+    });
   }
 
   timestampAsDate(ts: number) {

@@ -24,7 +24,6 @@ export class MyProfileComponent implements OnInit {
   isMe: boolean;
 
   token: string = localStorage.getItem('token');
-  editing: boolean = false;
   
   @ViewChild('myChart', { static: false }) myChart;
 
@@ -39,18 +38,5 @@ export class MyProfileComponent implements OnInit {
         this.userInfo = patient;
         this.newProfile = patient;
       });
-  }
-  
-  editProfile(): void {
-    this.editing = !this.editing;
-  }
-
-  saveChanges(): void {
-    this.patientsService.updatePatient(this.newProfile, this.userInfo.uid)
-      .subscribe(resp => {
-        this.userInfo = resp;
-        this.newProfile = resp
-      });
-    this.editProfile();
   }
 }

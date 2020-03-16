@@ -58,8 +58,18 @@ export class PatientsService {
     return this.http.get(url)
   }
 
+  getPatientBs(uid: string): Observable<any> {
+    const url = `${this.patientsUrl}/${uid}/blood_sugar`;
+    return this.http.get(url)
+  }
+
   getPatientInsulin(uid: string): Observable<any> {
     const url = `${this.patientsUrl}/${uid}/insulin`;
+    return this.http.get(url)
+  }
+
+  getPatientMeals(uid: string): Observable<any> {
+    const url = `${this.patientsUrl}/${uid}/meals`;
     return this.http.get(url)
   }
 

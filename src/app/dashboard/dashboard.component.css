@@ -22,3 +22,8 @@
   display: block;
   margin: 5px 0;
 }
+
+.data-card-title {
+  display: flex;
+  flex: 1;
+}

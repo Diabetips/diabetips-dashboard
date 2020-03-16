@@ -5,7 +5,9 @@ export class Patient {
     last_name: string;
     profile_picture: any;
     hba1c: any;
+    blood_sugar: any;
     insulin: any;
+    meals: any;
 
     constructor() {
         this.uid = "ph"
@@ -13,8 +15,10 @@ export class Patient {
         this.first_name = "ph"
         this.last_name = "ph"
         this.profile_picture = undefined
-        this.hba1c = []
         this.insulin = []
+        this.hba1c = []
+        this.blood_sugar = []
+        this.meals = []
     }
 }
 
