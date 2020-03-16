@@ -134,16 +134,7 @@ export class MainNavigationComponent implements OnInit {
   }
 
   getPictureForProfile(profile: Patient) {
-    this.patientsService.getPatientPicture(profile.uid).subscribe(picture => {
-      let reader = new FileReader();
-      reader.addEventListener("load", () => {
-        //profile.profile_picture = reader.result
-      }, false);
-
-      if (picture) {
-        reader.readAsDataURL(picture);
-      }
-    })
+    profile.profile_picture = this.patientsService.getPatientPicture(profile.uid)
   }
 
   signOut(): void {

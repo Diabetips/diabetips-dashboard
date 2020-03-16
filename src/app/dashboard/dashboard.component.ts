@@ -67,43 +67,37 @@ export class DashboardComponent implements OnInit {
     private patientsService: PatientsService,
     public dialog: MatDialog,
     private route: ActivatedRoute,
-    private cdRef: ChangeDetectorRef
   ) {
     this.userInfo = new Patient
   }
 
   async ngOnInit() {
-    this.getTokenFromUrl()
-    this.patientsService.getPatient(this.uid).subscribe(patient => {
-      this.userInfo.uid = patient.uid;
-      this.userInfo.email = patient.email;
-      this.userInfo.first_name = patient.first_name;
-      this.userInfo.last_name = patient.last_name;
-    });
-    this.patientsService.getPatientHb(this.uid).subscribe(hba1c => {
-      if (hba1c) {
-        this.userInfo.hba1c = hba1c;
-      } else {
-        this.userInfo.hba1c = [];
-      }
-    });
-    this.patientsService.getPatientBs(this.uid).subscribe(blood_sugar => {
-      this.userInfo.blood_sugar = blood_sugar
-    });
-    this.patientsService.getPatientInsulin(this.uid).subscribe(insulin => {
-      this.userInfo.insulin = insulin;
-    });
-    this.patientsService.getPatientMeals(this.uid).subscribe(meals => {
-      this.userInfo.meals = meals;
-    });
-  }
+    this.route.queryParams.subscribe(params => {
+      this.uid = params.patient
 
-  async getTokenFromUrl() {
-    this.route.queryParams
-      .subscribe(params => {
-        // Get token from parsed fragment
-        this.uid = params.patient
+      this.patientsService.getPatient(this.uid).subscribe(patient => {
+        this.userInfo.uid = patient.uid;
+        this.userInfo.email = patient.email;
+        this.userInfo.first_name = patient.first_name;
+        this.userInfo.last_name = patient.last_name;
       });
+      this.patientsService.getPatientHb(this.uid).subscribe(hba1c => {
+        if (hba1c) {
+          this.userInfo.hba1c = hba1c;
+        } else {
+          this.userInfo.hba1c = [];
+        }
+      });
+      this.patientsService.getPatientBs(this.uid).subscribe(blood_sugar => {
+        this.userInfo.blood_sugar = blood_sugar
+      });
+      this.patientsService.getPatientInsulin(this.uid).subscribe(insulin => {
+        this.userInfo.insulin = insulin;
+      });
+      this.patientsService.getPatientMeals(this.uid).subscribe(meals => {
+        this.userInfo.meals = meals;
+      });
+    })
   }
 
   editProfile(): void {

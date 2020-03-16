@@ -48,9 +48,9 @@ export class PatientsService {
     return this.http.get<Patient>(url);
   }
 
-  getPatientPicture(uid: string): Observable<Blob> {
+  getPatientPicture(uid: string): string {
     const url = `${this.patientsUrl}/${uid}/picture`;
-    return this.http.get(url, { responseType: 'blob' });
+    return url;
   }
 
   getPatientHb(uid: string): Observable<any> {
