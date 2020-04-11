@@ -7,4 +7,20 @@
 .name-container {
     margin-top: 20px;
     margin-bottom: 15px;
+    flex-direction: column;
+    display: flex;
+}
+
+.picture-selector {
+    margin-top: 15px;
+}
+
+.profile-picture {
+    height: 130px;
+    width: 130px;
+    margin-top: 15px;
+}
+
+.btn {
+    width: 170px;
 }

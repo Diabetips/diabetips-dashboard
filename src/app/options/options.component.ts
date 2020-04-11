@@ -25,6 +25,8 @@ export class OptionsComponent implements OnInit {
 
   token: string = localStorage.getItem('token');
   editing: boolean = false;
+
+  newImage: any = null;
   
   @ViewChild('myChart', { static: false }) myChart;
 
@@ -38,6 +40,7 @@ export class OptionsComponent implements OnInit {
       .subscribe(patient => {
         this.userInfo = patient;
         this.newProfile = patient;
+        this.newProfile.profile_picture = this.patientsService.getPatientPicture(this.newProfile.uid)
       });
   }
   
@@ -52,5 +55,22 @@ export class OptionsComponent implements OnInit {
         this.newProfile = resp
       });
     this.editProfile();
+  }
+
+  onFileChanged(event) {
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      reader.onload = (event: any) => {
+          this.newImage = event.target.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+    console.log(event.target.result)
+    this.newProfile.profile_picture = event.target.files[0];
+  }
+
+  onUpload() {
+    console.log("uploading " + this.newProfile.profile_picture)
+    this.patientsService.updateNewPicture(this.newProfile.profile_picture);
   }
 }

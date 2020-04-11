@@ -8,13 +8,14 @@ import { catchError } from 'rxjs/operators';
 
 import { Patient } from './profile-classes';
 import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
+import { ɵNoopAnimationStyleNormalizer } from '@angular/animations/browser';
 
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
-  }),
+  })
 };
-
+                                                                                                                                                                             
 @Injectable()
 export class PatientsService {
   patientsUrl = 'https://api.diabetips.fr/v1/users';  // URL to web api
@@ -26,6 +27,8 @@ export class PatientsService {
     this.handleError = httpErrorHandler.createHandleError('PatientsService');
   }
 
+  //////// Me-related methods //////////
+
   getMe(): Observable<any> {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
@@ -35,13 +38,45 @@ export class PatientsService {
      );
   }
 
-  /** GET patients from the server */
-  getPatients(): Observable<Patient[]> {
-     return this.http.get<Patient[]>(this.patientsUrl)
-      .pipe(
-        catchError(this.handleError('getPatients', []))
-      );
+  updateNewPicture(newPicture: any) {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    const url = `${this.patientsUrl}/me/picture`;
+    
+    this.http.post(url, newPicture, {...httpOptions, observe: "response"})
+      .subscribe(response => {
+        console.log(response.status);
+      })
   }
+
+  //////// Connections-related methods //////////
+
+  /** GET connections to the user from the server */
+  getConnections(uid: string): Observable<Patient[]> {
+    const url = `${this.patientsUrl}/${uid}/connections`;
+    return this.http.get<Patient[]>(url)
+     .pipe(
+       catchError(this.handleError('getPatients', []))
+     );
+  }
+
+  invitePatient(email: string, uid: string) {
+    const url = `${this.patientsUrl}/${uid}/connections`;
+    this.http.post(url, { 'email': email }, { observe: 'response'})
+      .subscribe(response => {
+        console.log(response.status);
+      })
+  }
+
+  deleteConnection(userUid, patientUid) {
+    const url = `${this.patientsUrl}/${userUid}/connections/${patientUid}`;
+    this.http.delete(url, { observe: 'response'})
+      .subscribe(response => {
+        console.log(response.status);
+      })
+  }
+
+  //////// Patient-related methods //////////
 
   getPatient(uid: string): Observable<Patient> {
     const url = `${this.patientsUrl}/${uid}`;
@@ -71,66 +106,6 @@ export class PatientsService {
   getPatientMeals(uid: string): Observable<any> {
     const url = `${this.patientsUrl}/${uid}/meals`;
     return this.http.get(url)
-  }
-
-  /* GET patients whose name contains search term */
-  searchPatient(term: string): Observable<Patient[]> {
-    term = term.trim();
-
-    // Add safe, URL encoded search parameter if there is a search term
-    const options = term ?
-     { params: new HttpParams().set('name', term) } : {};
-
-    return this.http.get<Patient[]>(this.patientsUrl, options)
-      .pipe(
-        catchError(this.handleError<Patient[]>('searchPatient', []))
-      );
-  }
-
-  //////// Connections related methods //////////
-
-  /** GET connections to the user from the server */
-  getConnections(uid: string): Observable<Patient[]> {
-    const url = `${this.patientsUrl}/${uid}/connections`;
-    return this.http.get<Patient[]>(url)
-     .pipe(
-       catchError(this.handleError('getPatients', []))
-     );
- }
-
-  invitePatient(email: string, uid: string) {
-    const url = `${this.patientsUrl}/${uid}/connections`;
-    this.http.post(url, { 'email': email }, { observe: 'response'})
-      .subscribe(response => {
-        console.log(response.status);
-      })
-  }
-
-  deleteConnection(userUid, patientUid) {
-    const url = `${this.patientsUrl}/${userUid}/connections/${patientUid}`;
-    this.http.delete(url, { observe: 'response'})
-      .subscribe(response => {
-        console.log(response.status);
-      })
-  }
-
-  //////// Save methods //////////
-
-  /** POST: add a new patient to the database */
-  addPatient(patient: Patient): Observable<Patient> {
-    return this.http.post<Patient>(this.patientsUrl, patient, httpOptions)
-      .pipe(
-        catchError(this.handleError('addPatient', patient))
-      );
-  }
-
-  /** DELETE: delete the patient from the server */
-  deletePatient(id: number): Observable<{}> {
-    const url = `${this.patientsUrl}/${id}`;
-    return this.http.delete(url, httpOptions)
-      .pipe(
-        catchError(this.handleError('deletePatient'))
-      );
   }
 
   /** PUT: update the patient on the server. Returns the updated patient upon success. */
