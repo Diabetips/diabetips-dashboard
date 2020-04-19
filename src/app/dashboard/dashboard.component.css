@@ -14,10 +14,6 @@
   display: flex;
 }
 
-.flex-1 {
-  flex: 1;
-}
-
 .no-margin {
   margin: 0;
 }
@@ -39,4 +35,18 @@
 
 .card {
   margin-bottom: 10px;
+}
+
+.biometric-line {
+  display: flex;
+  flex-direction: row;
+}
+
+.biometric-info {
+  margin-bottom: 4px !important;
+  font-size: 16px;
+}
+
+.biometric-icon {
+  margin-right: 10px;
 }

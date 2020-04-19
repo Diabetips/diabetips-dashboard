@@ -108,6 +108,11 @@ export class PatientsService {
     return this.http.get(url)
   }
 
+  getPatientBiometrics(uid: string): Observable<any> {
+    const url = `${this.patientsUrl}/${uid}/biometrics`;
+    return this.http.get(url)
+  }
+
   /** PUT: update the patient on the server. Returns the updated patient upon success. */
   updatePatient(patient: any, uid: string): Observable<any> {
     httpOptions.headers =

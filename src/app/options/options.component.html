@@ -29,15 +29,15 @@
             </form>
           </div>
           <div style="margin: 10px 10px 15px 0px; display: flex; justify-content: flex-end;">
-            <a *ngIf="!editing" class="waves-effect waves-light btn yellow darken-2" (click)="editProfile()">
+            <a *ngIf="!editing" class="waves-effect waves-light btn medium-button yellow darken-2" (click)="editProfile()">
               <i class="material-icons left">create</i>
               Editer
             </a>
-            <a *ngIf="editing" class="waves-effect waves-light btn green darken-1" (click)="saveChanges()">
+            <a *ngIf="editing" class="waves-effect waves-light btn medium-button green darken-1" (click)="saveChanges()">
               <i class="material-icons left">check</i>
               Sauvegarder
             </a>
-            <a *ngIf="editing" class="waves-effect waves-light btn red darken-1" style="margin-left: 1rem;" (click)="editProfile()">
+            <a *ngIf="editing" class="waves-effect waves-light btn medium-button red darken-1" style="margin-left: 1rem;" (click)="editProfile()">
               <i class="material-icons left">close</i>
               Annuler
             </a>
@@ -47,15 +47,21 @@
             <img *ngIf="!newImage" src="{{this.newProfile.profile_picture}}" class="profile-picture"/>
             <img *ngIf="newImage" src="{{newImage}}" class="profile-picture"/>
             <input class="picture-selector" type="file" (change)="onFileChanged($event)">
-            <a class="waves-effect waves-light btn green darken-1" style="margin-top: 15px;" (click)="onUpload()">
+            <a class="waves-effect waves-light btn medium-button green darken-1" style="margin-top: 15px;" (click)="onUpload()">
               <i class="material-icons left">check</i>
               Sauvegarder
             </a>
           </div>
           <div class="name-container">
-            <span class="section-title">Ajouter des informations médecin</span>
-          </div>
-          <div class="row" style="margin-bottom: 0;">
+            <span class="section-title">Options avancées</span>
+            <a class="waves-effect waves-light btn large-button outline-red darken-1" style="margin-top: 15px;" (click)="onUpload()">
+              <i class="material-icons left">check</i>
+              Réinitialiser mon mot de passe
+            </a>
+            <a class="waves-effect waves-light btn large-button red darken-1" style="margin-top: 15px;" (click)="onUpload()">
+              <i class="material-icons left">check</i>
+              Clore mon compte
+            </a>
           </div>
         </div>
       </div>

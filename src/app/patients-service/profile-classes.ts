@@ -8,6 +8,7 @@ export class Patient {
     blood_sugar: any;
     insulin: any;
     meals: any;
+    biometrics: any;
 
     constructor() {
         this.uid = "ph"
@@ -19,6 +20,7 @@ export class Patient {
         this.hba1c = []
         this.blood_sugar = []
         this.meals = []
+        this.biometrics = {}
     }
 }
 

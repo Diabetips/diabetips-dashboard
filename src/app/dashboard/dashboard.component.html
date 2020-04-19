@@ -3,28 +3,28 @@
     <div class="column flex">
       <div class="card white no-margin">
         <div class="card-content black-text">
-          <span class="card-title">Profil de {{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
+          <div style="display: flex; flex-direction: row;">
+            <span class="card-title">{{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
+            <span class="card-title" style="font-size: 16px; font-style: italic; font-weight: lighter; margin: 3px 0 0 15px;">Homme</span>
+          </div>
           <div class="row flex" style="margin-bottom: 0;">
-            <div class="column flex">
-              <div class="row flex" style="margin-bottom: 0;">
-                <div class="input-field col s6">
-                  <input [(ngModel)]="userInfo.first_name" value="{{ userInfo.first_name }}" name="first_name" type="text" class="validate" *ngIf="!editing" disabled>
-                  <label class="active" for="first_name">Prenom</label>
-                </div>
-                <div class="input-field col s6">
-                  <input [(ngModel)]="userInfo.last_name" value="{{ userInfo.last_name }}" name="last_name" type="text" class="validate" *ngIf="!editing" disabled>
-                  <label class="active" for="last_name">Nom</label>
-                </div>
-              </div>
-              <div class="flex">
-                <div class="input-field col s12">
-                  <input [(ngModel)]="userInfo.email" value="{{ userInfo.email }}" name="email" type="text" class="validate" *ngIf="!editing" disabled>
-                  <label class="active" for="email">Email</label>
-                </div>
-              </div>
+            <div class="column flex" style="flex: 1">
+              <span class="biometric-line">
+                <mat-icon class="biometric-icon">event</mat-icon>
+                <p class="biometric-info">Né le:  {{userInfo.biometrics.date_of_birth}}</p>
+              </span>
+              <span class="biometric-line">
+                <mat-icon class="biometric-icon">av_timer</mat-icon>
+                <p class="biometric-info">Poids:  {{userInfo.biometrics.mass}} kg</p>
+              </span>
+              <span class="biometric-line">
+                <mat-icon class="biometric-icon">straighten</mat-icon>
+                <p class="biometric-info">Taille: {{userInfo.biometrics.height}} cm</p>
+              </span>
+              <br/><p class="biometric-info">Diabétique de type 1</p>
             </div>
             <div class="flex">
-              <img src="{{userInfo.profile_picture}}" class="circle responsive-img" style=""/>
+              <img src="{{userInfo.profile_picture}}" class="circle responsive-img" style="max-width: 150px; max-height: 150px;"/>
             </div>
           </div>
         </div>

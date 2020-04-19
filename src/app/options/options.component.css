@@ -21,6 +21,16 @@
     margin-top: 15px;
 }
 
-.btn {
+.medium-button {
     width: 170px;
+}
+
+.large-button {
+    width: 350px;
+}
+
+.outline-red {
+    color: darkred;
+    background-color: white;
+
 }
