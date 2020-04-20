@@ -15,7 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpErrorHandler } from './http-error-handler.service';
 import { MessageService } from './message.service';
 import { MyProfileComponent } from './my-profile/my-profile.component';
-import { OptionsComponent } from './options/options.component';
+import { OptionsComponent, ConfirmDeactivationComponent, ConfirmReinitialisationComponent } from './options/options.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +27,8 @@ import { OptionsComponent } from './options/options.component';
     ConfirmDeletionComponent,
     MyProfileComponent,
     OptionsComponent,
+    ConfirmReinitialisationComponent,
+    ConfirmDeactivationComponent
   ],
   imports: [
     MatDialogModule,
@@ -56,7 +58,9 @@ import { OptionsComponent } from './options/options.component';
   entryComponents: [
     InvitePatientComponent,
     DisplayMealsComponent,
-    ConfirmDeletionComponent
+    ConfirmDeletionComponent,
+    ConfirmReinitialisationComponent,
+    ConfirmDeactivationComponent
   ]
 })
 export class AppModule { }

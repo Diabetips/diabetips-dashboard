@@ -54,14 +54,16 @@
           </div>
           <div class="name-container">
             <span class="section-title">Options avancées</span>
-            <a class="waves-effect waves-light btn large-button outline-red darken-1" style="margin-top: 15px;" (click)="onUpload()">
-              <i class="material-icons left">check</i>
-              Réinitialiser mon mot de passe
-            </a>
-            <a class="waves-effect waves-light btn large-button red darken-1" style="margin-top: 15px;" (click)="onUpload()">
-              <i class="material-icons left">check</i>
-              Clore mon compte
-            </a>
+            <div>
+              <a class="waves-effect waves-light btn large-button outline-red darken-1" style="margin-top: 15px;" (click)="reinitialisePassword()">
+                <i class="material-icons left">check</i>
+                Réinitialiser mon mot de passe
+              </a>
+              <a class="waves-effect waves-light btn large-button red darken-1" style="margin-top: 15px; margin-left: 10px;" (click)="deactivateAccount()">
+                <i class="material-icons left">check</i>
+                Clore mon compte
+              </a>
+            </div>
           </div>
         </div>
       </div>

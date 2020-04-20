@@ -2,14 +2,34 @@ import { Component, OnInit, Input, Inject, Output, EventEmitter, ElementRef, Vie
 import { Diabetolog } from '../patients-service/profile-classes';
 import { PatientsService } from '../patients-service/patients.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { $ } from 'protractor';
 import * as moment from 'moment';
-import { Chart } from 'chart.js';
 
-export interface DialogData {
-  email: any;
-  first_name: any;
-  last_name: any;
+@Component({
+  selector: 'app-confirm-deactivation',
+  templateUrl: 'confirm-deactivation.html',
+  styleUrls: ['../app.component.css']
+})
+export class ConfirmDeactivationComponent {
+
+  constructor(public dialogRef: MatDialogRef<ConfirmDeactivationComponent>) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+@Component({
+  selector: 'app-confirm-reinitialisation',
+  templateUrl: 'confirm-reinitialisation.html',
+  styleUrls: ['../app.component.css']
+})
+export class ConfirmReinitialisationComponent {
+
+  constructor(public dialogRef: MatDialogRef<ConfirmReinitialisationComponent>) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 }
 
 @Component({
@@ -72,5 +92,29 @@ export class OptionsComponent implements OnInit {
   onUpload() {
     console.log("uploading " + this.newProfile.profile_picture)
     this.patientsService.updateNewPicture(this.newProfile.profile_picture);
+  }
+
+  reinitialisePassword(): void {
+    const dialogRef = this.dialog.open(ConfirmReinitialisationComponent, {
+      width: '25%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.confirm) {
+        this.patientsService.reinitialisePassword(this.userInfo.email);
+      }
+    });
+  }
+
+  deactivateAccount(): void {
+    const dialogRef = this.dialog.open(ConfirmDeactivationComponent, {
+      width: '25%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.confirm) {
+        this.patientsService.deactivateAccount(this.userInfo.uid);
+      }
+    });
   }
 }

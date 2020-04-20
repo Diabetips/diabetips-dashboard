@@ -19,6 +19,7 @@ const httpOptions = {
 @Injectable()
 export class PatientsService {
   patientsUrl = 'https://api.diabetips.fr/v1/users';  // URL to web api
+  authUrl = 'https://api.diabetips.fr/v1/auth';  // URL to web api
   private handleError: HandleError;
 
   constructor(
@@ -51,7 +52,6 @@ export class PatientsService {
 
   //////// Connections-related methods //////////
 
-  /** GET connections to the user from the server */
   getConnections(uid: string): Observable<Patient[]> {
     const url = `${this.patientsUrl}/${uid}/connections`;
     return this.http.get<Patient[]>(url)
@@ -113,6 +113,8 @@ export class PatientsService {
     return this.http.get(url)
   }
 
+  //////// Direct patient profile modification //////////
+
   /** PUT: update the patient on the server. Returns the updated patient upon success. */
   updatePatient(patient: any, uid: string): Observable<any> {
     httpOptions.headers =
@@ -124,10 +126,24 @@ export class PatientsService {
         catchError(this.handleError('updatePatient', patient))
       );
   }
+
+  reinitialisePassword(email: string) {
+    const url = `${this.authUrl}/reset-password`;
+    this.http.post(url, { 'email': email }, { observe: 'response'})
+      .subscribe(response => {
+        console.log(response.status);
+      })
+  }
+
+  deactivateAccount(uid: string) {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    
+    const url = `${this.patientsUrl}/${uid}`;
+    return this.http.delete<any>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError('deactivateAccount'))
+      );
+  }
 }
 
-/*
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at http://angular.io/license
-*/

@@ -19,7 +19,6 @@ export interface DialogData {
   selector: 'app-invite-patient',
   templateUrl: 'invite-patient.html'
 })
-
 export class InvitePatientComponent {
 
   constructor(
@@ -36,7 +35,6 @@ export class InvitePatientComponent {
   templateUrl: 'confirm-deletion.html',
   styleUrls: ['../app.component.css']
 })
-
 export class ConfirmDeletionComponent {
 
   constructor(public dialogRef: MatDialogRef<ConfirmDeletionComponent>) { }
@@ -144,7 +142,7 @@ export class MainNavigationComponent implements OnInit {
 
   invitePatient(): void {
     const dialogRef = this.dialog.open(InvitePatientComponent, {
-      width: '40%',
+      width: '25%',
       data: {email: ''}
     });
 
