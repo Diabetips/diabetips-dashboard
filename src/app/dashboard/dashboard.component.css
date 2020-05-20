@@ -1,52 +1,81 @@
-.full-width {
-  max-width: 100%;
+.full-width         {width: 100%; max-width: 100%;}
+.three-quart-width  {width: 75%;}
+.mid-width          {width: 50%;}
+.quart-width        {width: 25%;}
+
+.flex {display: flex;}
+
+.column {
+  flex-direction: column;
 }
 
-.mid-width {
-  width: 50%;
-}
-
-.quart-width {
-  width: 25%;
-}
-
-.flex {
-  display: flex;
+.row {
+  flex-direction: row;
+  margin: 0
 }
 
 .no-margin {
   margin: 0;
 }
 
-.mat-radio-button {
-  display: block;
-  margin: 5px 0;
-}
-
-.data-card-title {
-  display: flex;
-  flex: 1;
-}
-
-.column {
-  padding: 10px;
-  flex-direction: column;
-}
-
 .card {
   margin-bottom: 10px;
 }
 
-.biometric-line {
-  display: flex;
-  flex-direction: row;
+.big-card {
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
-.biometric-info {
-  margin-bottom: 4px !important;
-  font-size: 16px;
+.small-card-left {
+  margin-left: 15px;
+  margin-right: 5px;
 }
 
-.biometric-icon {
-  margin-right: 10px;
+.small-card-right {
+  margin-right: 15px;
+  margin-left: 5px;
+}
+
+span {
+  margin-top: 5px;
+}
+
+#profile-picture {
+  margin-bottom: 10px;
+  max-width: 108px;
+  max-height: 108px;
+}
+
+.card .card-content {
+  padding: 13px;
+}
+
+.simple-small-div {
+  height: 3px;
+  background-color: #00000023;
+  margin-bottom: 10px;
+}
+
+span, p, h4 {
+  font-family: Rubik;
+}
+
+.card-title {
+  font-family: Muli;
+  margin-top: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.input-title {
+}
+
+.archive-button {
+  border-radius: 25px;
+  background-color: #FFA300;
+  color: #fff;
+  font-weight: normal;
+  font-family: Roboto;
+  font-size: 14px;
 }

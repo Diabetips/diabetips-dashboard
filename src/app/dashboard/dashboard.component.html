@@ -1,77 +1,71 @@
-<div class="flex">
-  <div class="container mid-width" style="max-width: 9999px">
-    <div class="column flex">
-      <div class="card white no-margin">
-        <div class="card-content black-text">
-          <div style="display: flex; flex-direction: row;">
-            <span class="card-title">{{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
-            <span class="card-title" style="font-size: 16px; font-style: italic; font-weight: lighter; margin: 3px 0 0 15px;">Homme</span>
-          </div>
-          <div class="row flex" style="margin-bottom: 0;">
-            <div class="column flex" style="flex: 1">
-              <span class="biometric-line">
-                <mat-icon class="biometric-icon">event</mat-icon>
-                <p class="biometric-info">Né le:  {{userInfo.biometrics.date_of_birth}}</p>
-              </span>
-              <span class="biometric-line">
-                <mat-icon class="biometric-icon">av_timer</mat-icon>
-                <p class="biometric-info">Poids:  {{userInfo.biometrics.mass}} kg</p>
-              </span>
-              <span class="biometric-line">
-                <mat-icon class="biometric-icon">straighten</mat-icon>
-                <p class="biometric-info">Taille: {{userInfo.biometrics.height}} cm</p>
-              </span>
-              <br/><p class="biometric-info">Diabétique de type 1</p>
-            </div>
-            <div class="flex">
-              <img src="{{userInfo.profile_picture}}" class="circle responsive-img" style="max-width: 150px; max-height: 150px;"/>
-            </div>
-          </div>
+<div class="flex column">
+  <div class="container three-quart-width" style="margin-top: 10px;">
+    <div class="card white no-margin">
+      <div class="card-content black-text flex row">
+        <div class="flex column" style="justify-content: center; align-items: center;">
+          <img src="{{userInfo.profile_picture}}" id="profile-picture" class="circle responsive-img"/>
+          <span class="">{{ userInfo.email }}</span>
+          <span class="">Homme</span>
         </div>
-      </div>
-      <div class="card white no-margin" style="height: 0%;">
-        <div class="card-content black-text">
-          <div class="row no-margin flex">
-            <mat-select class="card-title data-card-title"  [(ngModel)]="selectedData" style="width: 35%">
-              <mat-option value="hba1c">Hb A1c</mat-option>
-              <mat-option value="insulin">Injections d'insuline</mat-option>
-              <mat-option value="bloodsugar">Glycémie</mat-option>
-            </mat-select>
+        <div style="width: 20px"></div>
+        <div class="flex column full-width">
+          <div class="card-title" style="margin-bottom: 6px; display: flex;">
+            <span style="flex-grow: 1; margin-top: 4px;">{{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
+            <a class="waves-effect waves-light btn archive-button">Archiver le patient</a>
           </div>
-          <mat-list *ngIf="userInfo.hba1c && selectedData == 'hba1c'">
-            <mat-list-item *ngFor="let measure of userInfo.hba1c">
-              <h4 mat-line>{{measure.value}} %</h4>
-              <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
-            </mat-list-item>
-          </mat-list>
-          <mat-list *ngIf="userInfo.blood_sugar && selectedData == 'bloodsugar'">
-            <mat-list-item *ngFor="let measure of userInfo.blood_sugar">
-              <h4 mat-line>{{measure.value}} mg/dL</h4>
-              <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
-            </mat-list-item>
-          </mat-list>
-          <mat-list *ngIf="userInfo.insulin && selectedData == 'insulin'">
-            <mat-list-item *ngFor="let measure of userInfo.insulin">
-              <h4 mat-line>{{measure.quantity}} mg</h4>
-              <p mat-line>{{measure.description}}</p>
-              <p mat-line>{{this.timestampAsDate(measure.timestamp)}}</p>
-            </mat-list-item>
-          </mat-list>
+          <div class="simple-small-div"></div>
+          <div class="row flex">
+            <div class="column flex mid-width">
+              <p class="biometric-info">Né le:  {{userInfo.biometrics.date_of_birth}}</p>
+              <p class="biometric-info">Taille: {{userInfo.biometrics.height}} cm</p>
+            </div>
+            <div class="column flex mid-width">
+              <p class="biometric-info">Poids:  {{userInfo.biometrics.mass}} kg</p>
+              <p class="biometric-info">Diabétique de type 1</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="container mid-width" style="max-width: 9999px">
-    <div class="column flex">
-      <div class="card white no-margin" style="height: 0%; margin-bottom: 10px;">
+  <div class="container full-width">
+    <div class="card big-card white" style="margin-top: 0;">
+      <div class="card-content black-text">
+        <span class="card-title" style="margin-bottom: 0;">Taux de glycémie</span>
+        <div class="simple-small-div"></div>
+        <canvas baseChart height="85"
+          [datasets]="bsChartData"
+          [labels]="bsChartLabels"
+          [options]="bsChartOptions"
+          [legend]="bsChartLegend"
+          [chartType]="bsChartType">
+        </canvas>
+      </div>
+    </div>
+    <div class="container full-width flex row">
+      <div class="card small-card-left white mid-width no-margin">
         <div class="card-content black-text">
-          <span class="card-title">Repas</span>
+          <span class="card-title" style="margin-bottom: 0;">???</span>
+          <div class="simple-small-div"></div>
           <mat-list *ngIf="userInfo.meals">
             <a *ngFor="let meal of userInfo.meals" mat-list-item (click)="displayMeals(meal)">
               <h4 mat-line>{{meal.total_sugar.toFixed(2)}} g</h4>
-              <p mat-line>{{this.timestampAsDate(meal.timestamp)}}</p>
+              <p mat-line>{{this.timestampFromNow(meal.timestamp)}}</p>
             </a>
           </mat-list>
+        </div>
+      </div>
+      <div class="card small-card-right white mid-width no-margin">
+        <div class="card-content black-text">
+          <span class="card-title" style="margin-bottom: 0;">Hémoglobine Glyquée (HbA1C)</span>
+          <div class="simple-small-div"></div>
+          <canvas baseChart
+            [datasets]="hbChartData"
+            [labels]="hbChartLabels"
+            [options]="hbChartOptions"
+            [legend]="hbChartLegend"
+            [chartType]="hbChartType">
+          </canvas>
         </div>
       </div>
     </div>

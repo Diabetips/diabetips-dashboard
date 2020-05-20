@@ -17,6 +17,8 @@ import { MessageService } from './message.service';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { OptionsComponent, ConfirmDeactivationComponent, ConfirmReinitialisationComponent } from './options/options.component';
 
+import { ChartsModule } from 'ng2-charts';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +50,8 @@ import { OptionsComponent, ConfirmDeactivationComponent, ConfirmReinitialisation
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    HttpClientModule
+    HttpClientModule,
+    ChartsModule
   ],
   providers: [
     HttpErrorHandler,

@@ -17,9 +17,6 @@
         <mat-icon aria-label="Side nav toggle icon" style="margin-right: 15px">person_add</mat-icon>
         Ajouter un patient 
       </a>
-      <mat-toolbar style="height: 45px; font-size: 17px; color: #ffffff">
-        Mes patients
-      </mat-toolbar>
       <a *ngFor="let patient of patients" mat-list-item >
         <img src="{{patient.profile_picture}}" class="circle responsive-img" style="height: 65%; margin-right: 10px;"/>
         <h4 routerLink="/dashboard" [queryParams]="{ patient: patient.uid }" class="patient-name">

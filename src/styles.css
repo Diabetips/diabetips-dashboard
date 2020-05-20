@@ -1,4 +1,6 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
 
 /* Application-wide Styles */
 
@@ -75,8 +77,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .input-field .prefix.active {
 	color: #00A1E0;
 }
-
-/* Bullshit to handle fucking materialize */
 
 input:not([type]):focus:not([readonly]),
 input[type=text]:not(.browser-default):focus:not([readonly]),

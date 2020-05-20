@@ -71,6 +71,44 @@ export class DashboardComponent implements OnInit {
     this.userInfo = new Patient
   }
 
+  public bsChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    legend: { display: false }
+  };
+
+  public bsChartLabels = [];
+  public bsChartType = 'line';
+  public bsChartLegend = true;
+  public bsChartData = [{
+    data: [],
+    backgroundColor: "rgba(53, 191, 246, 0.425)",
+    borderColor: "#4DCEFF",
+    pointBackgroundColor: "#fff",
+    pointBorderColor: "#4DCEFF",
+    pointRadius: 5,
+    pointHitRadius: 12,
+  }];
+
+  public hbChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    legend: { display: false }
+  };
+
+  public hbChartLabels = [];
+  public hbChartType = 'line';
+  public hbChartLegend = true;
+  public hbChartData = [{
+    data: [],
+    backgroundColor: "#00000000",
+    borderColor: "#4DCEFF",
+    pointBackgroundColor: "#fff",
+    pointBorderColor: "#4DCEFF",
+    pointRadius: 12,
+    pointHitRadius: 12,
+  }];
+
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.uid = params.patient
@@ -82,14 +120,22 @@ export class DashboardComponent implements OnInit {
         this.userInfo.last_name = patient.last_name;
       });
       this.patientsService.getPatientHb(this.uid).subscribe(hba1c => {
-        if (hba1c) {
-          this.userInfo.hba1c = hba1c;
-        } else {
-          this.userInfo.hba1c = [];
-        }
+        this.userInfo.hba1c = hba1c;
+        this.hbChartLabels = []
+        this.hbChartData[0].data = []
+        hba1c.reverse().forEach(measure => {
+          this.hbChartLabels.push(this.timestampAsDate(measure.timestamp))
+          this.hbChartData[0].data.push(measure.value)
+        });
       });
       this.patientsService.getPatientBs(this.uid).subscribe(blood_sugar => {
         this.userInfo.blood_sugar = blood_sugar
+        this.bsChartLabels = []
+        this.bsChartData[0].data = []
+        blood_sugar.reverse().forEach(measure => {
+          this.bsChartLabels.push(this.timestampAsDate(measure.timestamp))
+          this.bsChartData[0].data.push(measure.value)
+        });
       });
       this.patientsService.getPatientInsulin(this.uid).subscribe(insulin => {
         this.userInfo.insulin = insulin;
@@ -115,8 +161,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  timestampAsDate(ts: number) {
+  timestampFromNow(ts: number) {
     var a = new Date(ts * 1000);
     return moment(a).fromNow();
+  }
+
+  timestampAsDate(ts: number) {
+    var a = new Date(ts * 1000);
+    return moment(a).format('DD/MM/YYYY h:mm')
   }
 }
