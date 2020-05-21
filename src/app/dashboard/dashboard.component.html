@@ -1,11 +1,11 @@
 <div class="flex column">
-  <div class="container three-quart-width" style="margin-top: 10px;">
-    <div class="card white no-margin">
-      <div class="card-content black-text flex row">
+  <div class="container info-col">
+    <div class="patient-bar no-margin">
+      <div class="black-text flex row">
         <div class="flex column" style="justify-content: center; align-items: center;">
           <img src="{{userInfo.profile_picture}}" id="profile-picture" class="circle responsive-img"/>
-          <span class="">{{ userInfo.email }}</span>
-          <span class="">Homme</span>
+          <span class="main-info">{{ userInfo.email }}</span>
+          <span class="main-info">Homme</span>
         </div>
         <div style="width: 20px"></div>
         <div class="flex column full-width">
@@ -15,59 +15,85 @@
           </div>
           <div class="simple-small-div"></div>
           <div class="row flex">
-            <div class="column flex mid-width">
-              <p class="biometric-info">Né le:  {{userInfo.biometrics.date_of_birth}}</p>
-              <p class="biometric-info">Taille: {{userInfo.biometrics.height}} cm</p>
+            <div class="column flex info-col">
+              <p class="biometric-info">Poids (kg):</p>
+              <input class="info-input" value="{{userInfo.biometrics.mass}}"/>
+              <p class="biometric-info">Taille (cm):</p>
+              <input class="info-input" value="{{userInfo.biometrics.height}}"/>
             </div>
-            <div class="column flex mid-width">
-              <p class="biometric-info">Poids:  {{userInfo.biometrics.mass}} kg</p>
-              <p class="biometric-info">Diabétique de type 1</p>
+            <div class="column flex info-col">
+              <p class="biometric-info">Né le:</p>
+              <input class="info-input" value="{{userInfo.biometrics.date_of_birth}}" disabled/>
+              <p class="biometric-info">Type de diabète:</p>
+              <input class="info-input" value="Type 1" disabled/>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="container full-width">
-    <div class="card big-card white" style="margin-top: 0;">
-      <div class="card-content black-text">
-        <span class="card-title" style="margin-bottom: 0;">Taux de glycémie</span>
-        <div class="simple-small-div"></div>
-        <canvas baseChart height="85"
-          [datasets]="bsChartData"
-          [labels]="bsChartLabels"
-          [options]="bsChartOptions"
-          [legend]="bsChartLegend"
-          [chartType]="bsChartType">
-        </canvas>
-      </div>
-    </div>
-    <div class="container full-width flex row">
-      <div class="card small-card-left white mid-width no-margin">
-        <div class="card-content black-text">
-          <span class="card-title" style="margin-bottom: 0;">???</span>
-          <div class="simple-small-div"></div>
-          <mat-list *ngIf="userInfo.meals">
-            <a *ngFor="let meal of userInfo.meals" mat-list-item (click)="displayMeals(meal)">
-              <h4 mat-line>{{meal.total_sugar.toFixed(2)}} g</h4>
-              <p mat-line>{{this.timestampFromNow(meal.timestamp)}}</p>
-            </a>
-          </mat-list>
+  <div class="container tab-container full-width" style="border-radius: 10px;">
+    <mat-tab-group mat-stretch-tabs class="main-tabs">
+      <mat-tab label="Glycémies">
+        <div class="tab-div">
+          <div class="card full-width-card white" style="margin-top: 0;">
+            <div class="card-content black-text">
+              <span class="card-title" style="margin-bottom: 0;">Taux de glycémie</span>
+              <div class="simple-small-div"></div>
+              <canvas baseChart height="85"
+                [datasets]="bsChartData"
+                [labels]="bsChartLabels"
+                [options]="bsChartOptions"
+                [legend]="bsChartLegend"
+                [chartType]="bsChartType">
+              </canvas>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="card small-card-right white mid-width no-margin">
-        <div class="card-content black-text">
-          <span class="card-title" style="margin-bottom: 0;">Hémoglobine Glyquée (HbA1C)</span>
-          <div class="simple-small-div"></div>
-          <canvas baseChart
-            [datasets]="hbChartData"
-            [labels]="hbChartLabels"
-            [options]="hbChartOptions"
-            [legend]="hbChartLegend"
-            [chartType]="hbChartType">
-          </canvas>
+      </mat-tab>
+      <mat-tab label="Notes">
+        <div class="tab-div">
+          Notes go here
         </div>
-      </div>
-    </div>
+      </mat-tab>
+      <mat-tab label="Repas">
+        <div class="tab-div">
+          <div class="card full-width-card white no-margin">
+            <div class="card-content black-text">
+              <span class="card-title" style="margin-bottom: 0;">Liste des repas</span>
+              <div class="simple-small-div"></div>
+              <mat-list *ngIf="userInfo.meals">
+                <a *ngFor="let meal of userInfo.meals" mat-list-item (click)="displayMeals(meal)">
+                  <h4 mat-line>{{meal.total_sugar.toFixed(2)}} g</h4>
+                  <p mat-line>{{this.timestampFromNow(meal.timestamp)}}</p>
+                </a>
+              </mat-list>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Planning" disabled="true">
+        <div class="tab-div">
+          Planning goes here
+        </div>
+      </mat-tab>
+      <mat-tab label="Prises de sang">
+        <div class="tab-div">
+          <div class="card mid-width white no-margin">
+            <div class="card-content black-text">
+              <span class="card-title" style="margin-bottom: 0;">Hémoglobine Glyquée (HbA1C)</span>
+              <div class="simple-small-div"></div>
+              <canvas baseChart
+                [datasets]="hbChartData"
+                [labels]="hbChartLabels"
+                [options]="hbChartOptions"
+                [legend]="hbChartLegend"
+                [chartType]="hbChartType">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

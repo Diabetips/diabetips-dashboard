@@ -8,6 +8,7 @@ import { DashboardComponent, DisplayMealsComponent } from './dashboard/dashboard
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material';
+import {MatTabsModule} from '@angular/material/tabs';
 import { MainNavigationComponent, InvitePatientComponent, ConfirmDeletionComponent } from './main-navigation/main-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
@@ -34,6 +35,7 @@ import { ChartsModule } from 'ng2-charts';
   ],
   imports: [
     MatDialogModule,
+    MatTabsModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule,

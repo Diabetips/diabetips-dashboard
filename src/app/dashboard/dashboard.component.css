@@ -5,6 +5,10 @@
 
 .flex {display: flex;}
 
+.full-width-card {
+  width: 99%;
+}
+
 .column {
   flex-direction: column;
 }
@@ -20,11 +24,12 @@
 
 .card {
   margin-bottom: 10px;
+  border-radius: 7px 7px 7px 0;
 }
 
 .big-card {
-  margin-left: 15px;
-  margin-right: 15px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 .small-card-left {
@@ -43,8 +48,8 @@ span {
 
 #profile-picture {
   margin-bottom: 10px;
-  max-width: 108px;
-  max-height: 108px;
+  max-width: 85px;
+  max-height: 85px;
 }
 
 .card .card-content {
@@ -52,7 +57,7 @@ span {
 }
 
 .simple-small-div {
-  height: 3px;
+  height: 2px;
   background-color: #00000023;
   margin-bottom: 10px;
 }
@@ -78,4 +83,49 @@ span, p, h4 {
   font-weight: normal;
   font-family: Roboto;
   font-size: 14px;
+  text-transform: none;
+  height: 32px;
+}
+
+.patient-bar {
+  margin: 30px 0;
+}
+
+.tab-container {
+  background-color: #FAFAFA;
+}
+
+.main-tabs {
+  margin: 0 auto 15px auto;
+  width: 96%;
+}
+
+.tab-div {
+  margin-top: 13px;
+  display: flex;
+  justify-content: center;
+}
+
+.info-input {
+  background-color: #FFF;
+  color: #000 !important;
+  border-radius: 15px 15px 15px 0;
+  padding: 13px;
+  height: 5px;
+  width: 85%;
+}
+
+.biometric-info {
+  margin: 0;
+  font-size: 12px;
+  font-family: Rubik;
+  color: #575757;
+}
+
+.main-info {
+  font-size: 14px;
+}
+
+.info-col {
+  width: 60%;
 }

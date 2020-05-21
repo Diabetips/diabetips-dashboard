@@ -43,6 +43,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 	padding: 0 !important;
 }
 
+.mat-drawer-container {
+	background-color: #F0F0F0;
+}
+
 /* Stuff to change the highlight color on labels and such */
 
 /* label color */
