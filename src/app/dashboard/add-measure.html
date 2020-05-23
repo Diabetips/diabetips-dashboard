@@ -1,0 +1,12 @@
+<div class="card white" style="margin: 0;">
+  <div class="card-content black-text modal-confirm">
+    <span class="card-title" style="display: flex; flex-direction: column;">Ajouter une mesure HBa1C</span>
+    <span class="card-content" style="text-align: center; padding-top: 5px;">
+      <input class="info-input" [(ngModel)]="data.measure"/>
+    </span>
+    <div mat-dialog-actions>
+      <button mat-button (click)="onNoClick()">No Thanks</button>
+      <button mat-button [mat-dialog-close]="data.measure" cdkFocusInitial>Ok</button>
+    </div>
+  </div>
+</div>

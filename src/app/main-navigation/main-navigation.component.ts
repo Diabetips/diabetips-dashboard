@@ -140,4 +140,8 @@ export class MainNavigationComponent implements OnInit {
       }
     });
   }
+
+  goToOptions() {
+    window.location.href = "https://account.diabetips.fr/"
+  }
 }

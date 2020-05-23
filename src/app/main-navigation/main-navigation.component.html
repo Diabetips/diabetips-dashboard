@@ -34,7 +34,7 @@
         <img src="{{this.me.profile_picture}}" class="circle responsive-img" style="height: 40px; width: 40px;"/>
       </button>
       <mat-menu #patientOptionsMenu="matMenu" xPosition="before">
-        <button mat-menu-item routerLink="/options">Options</button>
+        <button mat-menu-item (click)="goToOptions()">Options</button>
         <button mat-menu-item (click)="signOut()">Deconnexion</button>
       </mat-menu>
     </mat-toolbar>

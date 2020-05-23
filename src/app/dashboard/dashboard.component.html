@@ -11,7 +11,7 @@
         <div class="flex column full-width">
           <div class="card-title" style="display: flex; margin-bottom: 6px;">
             <span style="flex-grow: 1; margin-top: 4px;">{{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
-            <a class="waves-effect waves-light btn archive-button" style="margin-right: 5px;" (click)="saveChanges()">
+            <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;" (click)="saveChanges()">
               <i class="material-icons left" style="margin-right: 10px;">save</i>
               Sauvegarder
             </a>
@@ -22,7 +22,6 @@
               <button mat-menu-item disabled>Envoyer un message</button>
               <button mat-menu-item (click)="deleteConnection()">Archiver le patient</button>
             </mat-menu>
-
           </div>
           <div class="simple-small-div"></div>
           <div class="row flex">
@@ -74,7 +73,7 @@
               <span class="card-title" style="margin-bottom: 0;">Liste des repas</span>
               <div class="simple-small-div"></div>
               <mat-list *ngIf="userInfo.meals">
-                <a *ngFor="let meal of userInfo.meals" mat-list-item (click)="displayMeals(meal)">
+                <a *ngFor="let meal of userInfo.meals" mat-list-item>
                   <h4 mat-line>{{meal.total_sugar.toFixed(2)}} g</h4>
                   <p mat-line>{{this.timestampFromNow(meal.timestamp)}}</p>
                 </a>
@@ -92,7 +91,13 @@
         <div class="tab-div">
           <div class="card mid-width white no-margin">
             <div class="card-content black-text">
-              <span class="card-title" style="margin-bottom: 0;">Hémoglobine Glyquée (HbA1C)</span>
+              <div class="card-title" style="display: flex; margin-bottom: 6px;">
+                <span style="flex-grow: 1; margin-top: 4px;">Hémoglobine Glyquée (HbA1C)</span>
+                <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;" (click)="addHb()">
+                  <i class="material-icons left" style="margin-right: 10px;">add</i>
+                  Ajouter une valeur
+                </a>
+              </div>
               <div class="simple-small-div"></div>
               <canvas baseChart
                 [datasets]="hbChartData"

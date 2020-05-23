@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { DashboardComponent, DisplayMealsComponent, ConfirmDeletionComponent } from './dashboard/dashboard.component';
+import { DashboardComponent, AddMeasureComponent, ConfirmDeletionComponent } from './dashboard/dashboard.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
@@ -17,7 +17,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpErrorHandler } from './http-error-handler.service';
 import { MessageService } from './message.service';
 import { MyProfileComponent } from './my-profile/my-profile.component';
-import { OptionsComponent, ConfirmDeactivationComponent, ConfirmReinitialisationComponent } from './options/options.component';
 
 import { ChartsModule } from 'ng2-charts';
 import { PatientsService } from './patients-service/patients.service';
@@ -28,12 +27,9 @@ import { PatientsService } from './patients-service/patients.service';
     DashboardComponent,
     MainNavigationComponent,
     InvitePatientComponent,
-    DisplayMealsComponent,
+    AddMeasureComponent,
     ConfirmDeletionComponent,
     MyProfileComponent,
-    OptionsComponent,
-    ConfirmReinitialisationComponent,
-    ConfirmDeactivationComponent
   ],
   imports: [
     MatDialogModule,
@@ -66,10 +62,8 @@ import { PatientsService } from './patients-service/patients.service';
   bootstrap: [AppComponent],
   entryComponents: [
     InvitePatientComponent,
-    DisplayMealsComponent,
     ConfirmDeletionComponent,
-    ConfirmReinitialisationComponent,
-    ConfirmDeactivationComponent
+    AddMeasureComponent
   ]
 })
 export class AppModule { }

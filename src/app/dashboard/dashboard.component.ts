@@ -1,31 +1,20 @@
-import { Component, OnInit, Input, Inject, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, ViewChildren, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { Patient } from '../patients-service/profile-classes';
 import { PatientsService } from '../patients-service/patients.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { $ } from 'protractor';
 import * as moment from 'moment';
-import { Chart } from 'chart.js';
-import { Router, ActivatedRoute } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
-import { resolve } from 'url';
-
-export interface DialogData {
-  email: any;
-  first_name: any;
-  last_name: any;
-}
-
-function trackByFn(index, item) {
-  console.log(index)
-  return index;
-}
+import { ActivatedRoute } from '@angular/router';
 
 moment.locale('fr')
+
+export interface MeasureData {
+  measure: number;
+}
 
 @Component({
   selector: 'app-confirm-deletion',
   templateUrl: 'confirm-deletion.html',
-  styleUrls: ['../app.component.css']
+  styleUrls: ['./dashboard.component.css']
 })
 export class ConfirmDeletionComponent {
 
@@ -37,31 +26,23 @@ export class ConfirmDeletionComponent {
 }
 
 @Component({
-  selector: 'app-display-meals',
-  templateUrl: 'display-meals.html'
+  selector: 'app-add-measure',
+  templateUrl: 'add-measure.html',
+  styleUrls: ['./dashboard.component.css']
 })
-export class DisplayMealsComponent {
+export class AddMeasureComponent {
 
-  constructor(
-    public dialogRef: MatDialogRef<DisplayMealsComponent>,
-    @Inject(MAT_DIALOG_DATA) public meal: any) { }
-
-  ngOnInit() { }
+  constructor(public dialogRef: MatDialogRef<AddMeasureComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: MeasureData) { }
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  timestampAsDate(ts: number) {
-    var a = new Date(ts * 1000);
-    return moment(a).format('Do MMMM YYYY, hh:mm:ss');
   }
 }
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  providers: [],
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
@@ -167,27 +148,6 @@ export class DashboardComponent implements OnInit {
   saveChanges(): void {
     this.patientsService.updateGeneralBiometrics(this.userInfo.uid, parseInt(this.userInfo.biometrics.height), parseInt(this.userInfo.biometrics.mass))
   }
- 
-  editProfile(): void {
-    this.editing = !this.editing;
-  }
-
-  displayMeals(meal: any): void {
-    const dialogRef = this.dialog.open(DisplayMealsComponent, {
-      width: '40%',
-      data: {meal: meal}
-    });
-  }
-
-  timestampFromNow(ts: number) {
-    var a = new Date(ts * 1000);
-    return moment(a).fromNow();
-  }
-
-  timestampAsDate(ts: number) {
-    var a = new Date(ts * 1000);
-    return moment(a).format('DD/MM/YYYY h:mm')
-  }
 
   deleteConnection(): void {
     const dialogRef = this.dialog.open(ConfirmDeletionComponent, {
@@ -200,5 +160,26 @@ export class DashboardComponent implements OnInit {
           .deleteConnection(this.patientsService.connectedId, this.userInfo.uid);
       }
     });
+  }
+
+  addHb(): void {
+    const dialogRef = this.dialog.open(AddMeasureComponent, {
+      width: '25%',
+      data: {measure: 0}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+    })
+  }
+
+  timestampFromNow(ts: number) {
+    var a = new Date(ts * 1000);
+    return moment(a).fromNow();
+  }
+
+  timestampAsDate(ts: number) {
+    var a = new Date(ts * 1000);
+    return moment(a).format('DD/MM/YYYY h:mm')
   }
 }
