@@ -9,17 +9,28 @@
         </div>
         <div style="width: 20px"></div>
         <div class="flex column full-width">
-          <div class="card-title" style="margin-bottom: 6px; display: flex;">
+          <div class="card-title" style="display: flex; margin-bottom: 6px;">
             <span style="flex-grow: 1; margin-top: 4px;">{{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
-            <a class="waves-effect waves-light btn archive-button">Archiver le patient</a>
+            <a class="waves-effect waves-light btn archive-button" style="margin-right: 5px;" (click)="saveChanges()">
+              <i class="material-icons left" style="margin-right: 10px;">save</i>
+              Sauvegarder
+            </a>
+            <button mat-icon-button [matMenuTriggerFor]="patientOptionsMenu" style="width: 32px; height: 32px;">
+              <mat-icon style="margin-bottom: 8px;">more_vert</mat-icon>
+            </button>
+            <mat-menu #patientOptionsMenu="matMenu" xPosition="before">
+              <button mat-menu-item disabled>Envoyer un message</button>
+              <button mat-menu-item (click)="deleteConnection()">Archiver le patient</button>
+            </mat-menu>
+
           </div>
           <div class="simple-small-div"></div>
           <div class="row flex">
             <div class="column flex info-col">
               <p class="biometric-info">Poids (kg):</p>
-              <input class="info-input" value="{{userInfo.biometrics.mass}}"/>
+              <input class="info-input" [(ngModel)]="userInfo.biometrics.mass"/>
               <p class="biometric-info">Taille (cm):</p>
-              <input class="info-input" value="{{userInfo.biometrics.height}}"/>
+              <input class="info-input" [(ngModel)]="userInfo.biometrics.height"/>
             </div>
             <div class="column flex info-col">
               <p class="biometric-info">Né le:</p>
@@ -32,7 +43,7 @@
       </div>
     </div>
   </div>
-  <div class="container tab-container full-width" style="border-radius: 10px;">
+  <div class="container tab-container full-width">
     <mat-tab-group mat-stretch-tabs class="main-tabs">
       <mat-tab label="Glycémies">
         <div class="tab-div">
@@ -51,7 +62,7 @@
           </div>
         </div>
       </mat-tab>
-      <mat-tab label="Notes">
+      <mat-tab label="Notes" disabled="true">
         <div class="tab-div">
           Notes go here
         </div>

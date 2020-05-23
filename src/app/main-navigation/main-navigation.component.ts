@@ -31,23 +31,9 @@ export class InvitePatientComponent {
 }
 
 @Component({
-  selector: 'app-confirm-deletion',
-  templateUrl: 'confirm-deletion.html',
-  styleUrls: ['../app.component.css']
-})
-export class ConfirmDeletionComponent {
-
-  constructor(public dialogRef: MatDialogRef<ConfirmDeletionComponent>) { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
-
-@Component({
   selector: 'app-main-navigation',
   templateUrl: './main-navigation.component.html',
-  providers: [PatientsService],
+  providers: [],
   styleUrls: ['./main-navigation.component.css']
 })
 export class MainNavigationComponent implements OnInit {
@@ -83,6 +69,7 @@ export class MainNavigationComponent implements OnInit {
     await this.getToken(this.myRoute)
     this.patientsService.getMe().subscribe(me => {
       this.me = me;
+      this.patientsService.connectedId = me.uid
       this.getPictureForProfile(this.me)
       this.getConnections();
     });
@@ -128,6 +115,7 @@ export class MainNavigationComponent implements OnInit {
 
       // Get token from parsed fragment
       this.token = parsedFragment.get('access_token')
+      this.patientsService.token = this.token
     });
   }
 
@@ -149,20 +137,6 @@ export class MainNavigationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.email) {
         this.patientsService.invitePatient(result.email, this.me.uid);
-      }
-    });
-  }
-
-  deleteConnection(patient: Patient): void {
-    const dialogRef = this.dialog.open(ConfirmDeletionComponent, {
-      width: '25%'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && result.confirm) {
-        this.patients = this.patients.filter(h => h !== patient);
-        this.patientsService
-          .deleteConnection(this.me.uid, patient.uid);
       }
     });
   }

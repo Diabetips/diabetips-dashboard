@@ -22,6 +22,9 @@ export class PatientsService {
   authUrl = 'https://api.diabetips.fr/v1/auth';  // URL to web api
   private handleError: HandleError;
 
+  token: string = undefined;
+  connectedId: string = undefined;
+
   constructor(
     private http: HttpClient,
     httpErrorHandler: HttpErrorHandler) {
@@ -125,6 +128,17 @@ export class PatientsService {
       .pipe(
         catchError(this.handleError('updatePatient', patient))
       );
+  }
+
+  updateGeneralBiometrics(uid: string, height: number, mass: number) {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    
+    const url = `${this.patientsUrl}/${uid}/biometrics`;
+    return this.http.put<any>(url, {"mass": mass, "height": height}, httpOptions)
+      .subscribe(response => {
+        console.log(response)
+      })
   }
 
   reinitialisePassword(email: string) {

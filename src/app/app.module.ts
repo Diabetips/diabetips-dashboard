@@ -3,13 +3,14 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { DashboardComponent, DisplayMealsComponent } from './dashboard/dashboard.component';
+import { DashboardComponent, DisplayMealsComponent, ConfirmDeletionComponent } from './dashboard/dashboard.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material';
-import {MatTabsModule} from '@angular/material/tabs';
-import { MainNavigationComponent, InvitePatientComponent, ConfirmDeletionComponent } from './main-navigation/main-navigation.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
+import { MainNavigationComponent, InvitePatientComponent } from './main-navigation/main-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -19,6 +20,7 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
 import { OptionsComponent, ConfirmDeactivationComponent, ConfirmReinitialisationComponent } from './options/options.component';
 
 import { ChartsModule } from 'ng2-charts';
+import { PatientsService } from './patients-service/patients.service';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { ChartsModule } from 'ng2-charts';
   imports: [
     MatDialogModule,
     MatTabsModule,
+    MatMenuModule,
     BrowserModule,
     FormsModule,
     AppRoutingModule,
@@ -57,7 +60,8 @@ import { ChartsModule } from 'ng2-charts';
   ],
   providers: [
     HttpErrorHandler,
-    MessageService
+    MessageService,
+    PatientsService
   ],
   bootstrap: [AppComponent],
   entryComponents: [

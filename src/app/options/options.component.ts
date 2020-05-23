@@ -35,7 +35,7 @@ export class ConfirmReinitialisationComponent {
 @Component({
   selector: 'app-options',
   templateUrl: './options.component.html',
-  providers: [PatientsService],
+  providers: [],
   styleUrls: ['./options.component.css']
 })
 export class OptionsComponent implements OnInit {

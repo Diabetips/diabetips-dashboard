@@ -15,7 +15,7 @@ export interface DialogData {
 @Component({
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
-  providers: [PatientsService],
+  providers: [],
   styleUrls: ['./my-profile.component.css']
 })
 export class MyProfileComponent implements OnInit {

@@ -23,6 +23,20 @@ function trackByFn(index, item) {
 moment.locale('fr')
 
 @Component({
+  selector: 'app-confirm-deletion',
+  templateUrl: 'confirm-deletion.html',
+  styleUrls: ['../app.component.css']
+})
+export class ConfirmDeletionComponent {
+
+  constructor(public dialogRef: MatDialogRef<ConfirmDeletionComponent>) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
+@Component({
   selector: 'app-display-meals',
   templateUrl: 'display-meals.html'
 })
@@ -47,7 +61,7 @@ export class DisplayMealsComponent {
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  providers: [PatientsService],
+  providers: [],
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
@@ -150,6 +164,10 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+  saveChanges(): void {
+    this.patientsService.updateGeneralBiometrics(this.userInfo.uid, parseInt(this.userInfo.biometrics.height), parseInt(this.userInfo.biometrics.mass))
+  }
+ 
   editProfile(): void {
     this.editing = !this.editing;
   }
@@ -169,5 +187,18 @@ export class DashboardComponent implements OnInit {
   timestampAsDate(ts: number) {
     var a = new Date(ts * 1000);
     return moment(a).format('DD/MM/YYYY h:mm')
+  }
+
+  deleteConnection(): void {
+    const dialogRef = this.dialog.open(ConfirmDeletionComponent, {
+      width: '25%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.confirm) {
+        this.patientsService
+          .deleteConnection(this.patientsService.connectedId, this.userInfo.uid);
+      }
+    });
   }
 }

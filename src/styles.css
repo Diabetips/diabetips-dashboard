@@ -77,6 +77,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 	box-shadow: 0 1px 0 0 #00A1E0;
 }
 
+button:focus {
+	background-color: transparent;
+}
+
 /* icon prefix focus color */
 .input-field .prefix.active {
 	color: #00A1E0;
