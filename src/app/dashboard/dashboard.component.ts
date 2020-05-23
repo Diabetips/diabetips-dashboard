@@ -165,11 +165,13 @@ export class DashboardComponent implements OnInit {
   addHb(): void {
     const dialogRef = this.dialog.open(AddMeasureComponent, {
       width: '25%',
-      data: {measure: 0}
+      data: {measure: undefined}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+      if (result != undefined) {
+        this.patientsService.addHbMeasure(parseInt(result), this.userInfo.uid)
+      }
     })
   }
 

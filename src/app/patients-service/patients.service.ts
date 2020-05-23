@@ -141,6 +141,18 @@ export class PatientsService {
       })
   }
 
+  addHbMeasure(measure: number, patientId: string) {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    
+    const url = `${this.patientsUrl}/${patientId}/hba1c`;
+    // dividing by 1000 because we need to remove milliseconds
+    this.http.post(url, { 'value': measure, 'timestamp': Math.trunc(Date.now() / 1000)}, { observe: 'response'})
+      .subscribe(response => {
+        console.log(response.status);
+      })
+  }
+
   reinitialisePassword(email: string) {
     const url = `${this.authUrl}/reset-password`;
     this.http.post(url, { 'email': email }, { observe: 'response'})
