@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
         this.userInfo.hba1c = hba1c;
         this.hbChartLabels = []
         this.hbChartData[0].data = []
-        hba1c.reverse().forEach(measure => {
+        hba1c.forEach(measure => {
           this.hbChartLabels.push(this.timestampAsDate(measure.timestamp))
           this.hbChartData[0].data.push(measure.value)
         });

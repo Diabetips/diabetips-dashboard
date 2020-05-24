@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { parse } from 'querystring';
+import { Title } from '@angular/platform-browser';
 
 export interface DialogData {
   email: any;
@@ -44,9 +45,8 @@ export class MainNavigationComponent implements OnInit {
   newProfile: any;
   me: Patient = new Patient;
   token;
-  myRoute
 
-  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize?response_type=token&redirect_uri=http://localhost:4200';
+  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize?response_type=token&redirect_uri=' + window.location.href;
   isLoading = true;
 
   constructor(
@@ -56,9 +56,7 @@ export class MainNavigationComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute
-  ) {
-    this.myRoute = route
-  }
+  ) { }
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
   .pipe(
@@ -66,7 +64,7 @@ export class MainNavigationComponent implements OnInit {
   );
 
   async ngOnInit() {
-    await this.getToken(this.myRoute)
+    await this.getToken(this.route)
     this.patientsService.getMe().subscribe(me => {
       this.me = me;
       this.patientsService.connectedId = me.uid
