@@ -170,9 +170,20 @@ export class DashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
-        this.patientsService.addHbMeasure(parseInt(result), this.userInfo.uid)
+        this.bsChartData[0].data = []
+        this.patientsService.addHbMeasure(result, this.userInfo.uid)
+        this.bsChartLabels.push(this.timestampAsDate(Math.trunc(Date.now() / 1000)))
+        this.patientsService.getPatientBs(this.uid).subscribe(blood_sugar => {
+          this.userInfo.blood_sugar = blood_sugar
+          this.bsChartLabels = []
+          this.bsChartData[0].data = []
+          blood_sugar.reverse().forEach(measure => {
+            this.bsChartLabels.push(this.timestampAsDate(measure.timestamp))
+            this.bsChartData[0].data.push(measure.value)
+          });
+        })
       }
-    })
+    });
   }
 
   timestampFromNow(ts: number) {
