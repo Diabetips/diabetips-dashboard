@@ -91,7 +91,7 @@ export class MainNavigationComponent implements OnInit {
     if (this.token !== null && this.token !== undefined) {
       localStorage.setItem('token', this.token);
       this.isLoading = false
-      this.router.navigate(['/mon-profil']);
+      this.router.navigate(['/accueil']);
     } else {
       this.document.location.href = this.signinUrl;
     }

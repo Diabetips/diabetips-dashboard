@@ -139,7 +139,6 @@ export class DashboardComponent implements OnInit {
         this.userInfo.insulin = insulin;
       });
       this.patientsService.getPatientMeals(this.uid).subscribe(meals => {
-        console.log(meals)
         meals.forEach(meal => {
           let ingredients = []
           meal.foods.forEach(food => {
@@ -172,7 +171,7 @@ export class DashboardComponent implements OnInit {
       if (result && result.confirm) {
         this.patientsService
           .deleteConnection(this.patientsService.connectedId, this.userInfo.uid);
-        this.router.navigate(['mon-profil'])
+        this.router.navigate(['accueil'])
       }
     });
   }
