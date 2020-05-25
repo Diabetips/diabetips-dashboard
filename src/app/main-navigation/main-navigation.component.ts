@@ -84,6 +84,7 @@ export class MainNavigationComponent implements OnInit {
 
   async getToken(route) {
     this.token = await localStorage.getItem('token');
+    console.log(this.signinUrl)
     if (!this.token) {
       await this.getTokenFromUrl(route)
     }
