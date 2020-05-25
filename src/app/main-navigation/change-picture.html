@@ -1,0 +1,13 @@
+<div class="card" style="margin: 0; padding: 20px; padding-bottom: 0; background-color: #FAFAFA;">
+  <div class="card-content black-text modal-content">
+    <span class="card-title" style="display: flex; flex-direction: column; font-size: 24px;">Changer de photo</span>
+    <span class="card-content" style="text-align: center; padding-top: 5px;">
+      <p class="biometric-info" style="text-align: start;">Photo :</p>
+      <input class="picture-selector" type="file" (change)="onFileChanged($event)" [(ngModel)]="data.picture">
+    </span>
+    <div style="height: 20px;"></div>
+    <div style="display: flex; justify-content: flex-end;">
+      <button class="waves-effect waves-light btn no-button" style="margin-right: 10px;" (click)="onNoClick()" cdkFocusInitial>Annuler</button>
+    </div>
+  </div>
+</div>

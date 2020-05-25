@@ -11,7 +11,7 @@ import { MatDialogModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MainNavigationComponent, InvitePatientComponent } from './main-navigation/main-navigation.component';
+import { MainNavigationComponent, InvitePatientComponent, ChangePictureComponent } from './main-navigation/main-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -28,6 +28,7 @@ import { PatientsService } from './patients-service/patients.service';
     DashboardComponent,
     MainNavigationComponent,
     InvitePatientComponent,
+    ChangePictureComponent,
     AddMeasureComponent,
     ConfirmDeletionComponent,
     MyProfileComponent,
@@ -67,6 +68,7 @@ import { PatientsService } from './patients-service/patients.service';
   bootstrap: [AppComponent],
   entryComponents: [
     InvitePatientComponent,
+    ChangePictureComponent,
     ConfirmDeletionComponent,
     AddMeasureComponent
   ]

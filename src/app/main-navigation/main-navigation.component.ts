@@ -30,6 +30,38 @@ export class InvitePatientComponent {
   }
 }
 
+export interface PictureData {
+  picture: any;
+}
+
+@Component({
+  selector: 'app-change-picture',
+  templateUrl: 'change-picture.html',
+  styleUrls: ['../dashboard/dashboard.component.css']
+})
+export class ChangePictureComponent {
+
+  constructor(
+    private patientsService: PatientsService,
+    public dialogRef: MatDialogRef<ChangePictureComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: PictureData) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  onFileChanged(event) {
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+      reader.onload = (event: any) => {
+        this.dialogRef.close({picture: event.target.result})
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+    this.patientsService.updateNewPicture(event.target.files[0])
+  }
+}
+
 @Component({
   selector: 'app-main-navigation',
   templateUrl: './main-navigation.component.html',
@@ -139,7 +171,21 @@ export class MainNavigationComponent implements OnInit {
     });
   }
 
+  changePicture(): void {
+    const dialogRef = this.dialog.open(ChangePictureComponent, {
+      width: '25%',
+      data: {picture: ''}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.me.profile_picture = result.picture
+      }
+    });
+  }
+
   goToOptions() {
     window.location.href = "https://account.diabetips.fr/"
   }
+
 }
