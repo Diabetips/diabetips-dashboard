@@ -183,7 +183,7 @@ export class DashboardComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result.measure && result.timestamp) {
+      if (result && result.measure && result.timestamp) {
         this.patientsService.addHbMeasure(result.measure, result.timestamp.getTime(), this.userInfo.uid)
         this.hbChartData[0].data.push(result.measure)
         this.hbChartLabels.push(this.timestampAsDateNoHour(result.timestamp.getTime()/1000))

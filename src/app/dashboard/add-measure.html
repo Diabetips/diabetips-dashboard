@@ -6,7 +6,7 @@
       <input class="info-input" [(ngModel)]="data.measure"/>
       <p class="biometric-info" style="text-align: start;">Date :</p>
       <input class="info-input" [(ngModel)]="data.timestamp" [matDatepicker]="picker" style="width: 40%;">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker-toggle matSuffix [for]="picker" style="margin-left: 5px;"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </span>
     <div style="height: 20px;"></div>
