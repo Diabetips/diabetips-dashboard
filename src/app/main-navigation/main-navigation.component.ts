@@ -123,6 +123,7 @@ export class MainNavigationComponent implements OnInit {
 
   signOut(): void {
     localStorage.removeItem('token');
+    window.location.href = "https://account.diabetips.fr/logout"
     this.ngOnInit();
   }
 
