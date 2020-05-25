@@ -68,6 +68,7 @@ export class PatientsService {
     this.http.post(url, { 'email': email }, { observe: 'response'})
       .subscribe(response => {
         console.log(response.status);
+        location.reload()
       })
   }
 
@@ -76,6 +77,7 @@ export class PatientsService {
     this.http.delete(url, { observe: 'response'})
       .subscribe(response => {
         console.log(response.status);
+        location.reload()
       })
   }
 

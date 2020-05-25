@@ -145,3 +145,17 @@ span, p, h4 {
 .info-col {
   width: 60%;
 }
+
+th {
+  font-family: Muli;
+  font-size: 18px;
+  font-weight: bolder;
+  color: #B0B0B0;
+}
+
+tr {
+  font-family: Muli;
+  font-size: 16px;
+  color: #424242
+}
+

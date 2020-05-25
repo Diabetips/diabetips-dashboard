@@ -71,13 +71,25 @@
           <div class="card full-width-card white no-margin">
             <div class="card-content black-text">
               <span class="card-title" style="margin-bottom: 0;">Liste des repas</span>
-              <div class="simple-small-div"></div>
-              <mat-list *ngIf="userInfo.meals">
-                <a *ngFor="let meal of userInfo.meals" mat-list-item>
-                  <h4 mat-line>{{meal.total_sugar.toFixed(2)}} g</h4>
-                  <p mat-line>{{this.timestampFromNow(meal.timestamp)}}</p>
-                </a>
-              </mat-list>
+              <div class="simple-small-div" style="margin-bottom: 0;"></div>
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 12%;">Date</th>
+                    <th>Ingrédients</th>
+                    <th style="width: 30%;">Description</th>
+                    <th style="width: 15%;">Quantité de sucre</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let meal of userInfo.meals">
+                    <td>{{this.timestampAsDate(meal.timestamp)}}</td>
+                    <td>{{meal.ingredients}}</td>
+                    <td>{{meal.description}}</td>
+                    <td>{{meal.total_sugar.toFixed(2)}}g</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -99,7 +111,7 @@
                 </a>
               </div>
               <div class="simple-small-div"></div>
-              <canvas baseChart
+              <canvas baseChart #hbChart
                 [datasets]="hbChartData"
                 [labels]="hbChartLabels"
                 [options]="hbChartOptions"

@@ -3,7 +3,8 @@ import { Patient } from '../patients-service/profile-classes';
 import { PatientsService } from '../patients-service/patients.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as moment from 'moment';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BaseChartDirective } from 'ng2-charts';
 
 moment.locale('fr')
 
@@ -56,12 +57,11 @@ export class DashboardComponent implements OnInit {
   uid: string;
   editing: boolean = false;
   
-  @ViewChild('myChart', { static: false }) myChart;
-
   constructor(
     private patientsService: PatientsService,
     public dialog: MatDialog,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.userInfo = new Patient
   }
@@ -100,9 +100,11 @@ export class DashboardComponent implements OnInit {
     borderColor: "#4DCEFF",
     pointBackgroundColor: "#fff",
     pointBorderColor: "#4DCEFF",
-    pointRadius: 12,
+    pointRadius: 5,
     pointHitRadius: 12,
   }];
+
+  @ViewChild(BaseChartDirective, {static: false}) chart: BaseChartDirective;
 
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -115,16 +117,16 @@ export class DashboardComponent implements OnInit {
         this.userInfo.last_name = patient.last_name;
       });
       this.patientsService.getPatientHb(this.uid).subscribe(hba1c => {
-        console.log(hba1c)
         this.userInfo.hba1c = hba1c;
         this.hbChartLabels = []
         this.hbChartData[0].data = []
         hba1c.reverse().forEach(measure => {
-          this.hbChartLabels.push(this.timestampAsDate(measure.timestamp))
+          this.hbChartLabels.push(this.timestampAsDateNoHour(measure.timestamp))
           this.hbChartData[0].data.push(measure.value)
         });
       });
       this.patientsService.getPatientBs(this.uid).subscribe(blood_sugar => {
+        this.chart.chart.data.datasets[0].data = blood_sugar.reverse
         this.userInfo.blood_sugar = blood_sugar
         this.bsChartLabels = []
         this.bsChartData[0].data = []
@@ -137,6 +139,17 @@ export class DashboardComponent implements OnInit {
         this.userInfo.insulin = insulin;
       });
       this.patientsService.getPatientMeals(this.uid).subscribe(meals => {
+        console.log(meals)
+        meals.forEach(meal => {
+          let ingredients = []
+          meal.foods.forEach(food => {
+            ingredients.push(food.food.name)
+          })
+          meal.recipes.forEach(recipe => {
+            ingredients.push(recipe.recipe.name)
+          })
+          meal.ingredients = ingredients.join(", ")
+        });
         this.userInfo.meals = meals;
       });
       this.patientsService.getPatientBiometrics(this.uid).subscribe(biometrics => {
@@ -159,6 +172,7 @@ export class DashboardComponent implements OnInit {
       if (result && result.confirm) {
         this.patientsService
           .deleteConnection(this.patientsService.connectedId, this.userInfo.uid);
+        this.router.navigate(['mon-profil'])
       }
     });
   }
@@ -171,18 +185,10 @@ export class DashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result.measure && result.timestamp) {
-        this.bsChartData[0].data = []
         this.patientsService.addHbMeasure(result.measure, result.timestamp.getTime(), this.userInfo.uid)
-        this.bsChartLabels.push(this.timestampAsDate(Math.trunc(Date.now() / 1000)))
-        this.patientsService.getPatientBs(this.uid).subscribe(blood_sugar => {
-          this.userInfo.blood_sugar = blood_sugar
-          this.bsChartLabels = []
-          this.bsChartData[0].data = []
-          blood_sugar.reverse().forEach(measure => {
-            this.bsChartLabels.push(this.timestampAsDate(measure.timestamp))
-            this.bsChartData[0].data.push(measure.value)
-          });
-        })
+        this.hbChartData[0].data.push(result.measure)
+        this.hbChartLabels.push(this.timestampAsDateNoHour(result.timestamp.getTime()/1000))
+        this.chart.chart.update()
       }
     });
   }
@@ -195,5 +201,10 @@ export class DashboardComponent implements OnInit {
   timestampAsDate(ts: number) {
     var a = new Date(ts * 1000);
     return moment(a).format('DD/MM/YYYY HH:mm')
+  }
+
+  timestampAsDateNoHour(ts: number) {
+    var a = new Date(ts * 1000);
+    return moment(a).format('DD/MM/YYYY')
   }
 }
