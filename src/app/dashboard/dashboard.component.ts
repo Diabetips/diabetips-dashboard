@@ -115,10 +115,11 @@ export class DashboardComponent implements OnInit {
         this.userInfo.last_name = patient.last_name;
       });
       this.patientsService.getPatientHb(this.uid).subscribe(hba1c => {
+        console.log(hba1c)
         this.userInfo.hba1c = hba1c;
         this.hbChartLabels = []
         this.hbChartData[0].data = []
-        hba1c.forEach(measure => {
+        hba1c.reverse().forEach(measure => {
           this.hbChartLabels.push(this.timestampAsDate(measure.timestamp))
           this.hbChartData[0].data.push(measure.value)
         });
@@ -165,13 +166,13 @@ export class DashboardComponent implements OnInit {
   addHb(): void {
     const dialogRef = this.dialog.open(AddMeasureComponent, {
       width: '25%',
-      data: {measure: undefined}
+      data: {measure: undefined, timestamp: undefined}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined) {
+      if (result.measure && result.timestamp) {
         this.bsChartData[0].data = []
-        this.patientsService.addHbMeasure(result, this.userInfo.uid)
+        this.patientsService.addHbMeasure(result.measure, result.timestamp.getTime(), this.userInfo.uid)
         this.bsChartLabels.push(this.timestampAsDate(Math.trunc(Date.now() / 1000)))
         this.patientsService.getPatientBs(this.uid).subscribe(blood_sugar => {
           this.userInfo.blood_sugar = blood_sugar
@@ -193,6 +194,6 @@ export class DashboardComponent implements OnInit {
 
   timestampAsDate(ts: number) {
     var a = new Date(ts * 1000);
-    return moment(a).format('DD/MM/YYYY h:mm')
+    return moment(a).format('DD/MM/YYYY HH:mm')
   }
 }

@@ -52,6 +52,10 @@ span {
   max-height: 85px;
 }
 
+.modal-content {
+  padding-top: 4px !important;
+}
+
 .card .card-content {
   padding: 13px;
 }

@@ -6,10 +6,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent, AddMeasureComponent, ConfirmDeletionComponent } from './dashboard/dashboard.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material';
 import { MatDialogModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MainNavigationComponent, InvitePatientComponent } from './main-navigation/main-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
@@ -32,6 +33,8 @@ import { PatientsService } from './patients-service/patients.service';
     MyProfileComponent,
   ],
   imports: [
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatDialogModule,
     MatTabsModule,
     MatMenuModule,
@@ -57,7 +60,9 @@ import { PatientsService } from './patients-service/patients.service';
   providers: [
     HttpErrorHandler,
     MessageService,
-    PatientsService
+    MatDatepickerModule,
+    PatientsService,
+    {provide: MAT_DATE_LOCALE, useValue: 'fr'}
   ],
   bootstrap: [AppComponent],
   entryComponents: [

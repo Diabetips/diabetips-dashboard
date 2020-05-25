@@ -1,23 +1,14 @@
-<div class="card white" style="margin: 0;">
-  <div class="card-content black-text">
-    <span class="card-title" style="display: flex; flex-direction: column;">Inviter un patient</span>
-    <form class="col s12">
-      <div class="row">
-        <div class="input-field col s12">
-          <input name="email" type="email" class="validate" [(ngModel)]="data.email">
-          <label for="email">Email</label>
-        </div>
-      </div>
-      <div>
-        <button class="btn waves-effect waves-light green darken-1" [mat-dialog-close]="data" style="margin-right: 10px">
-          <i class="material-icons left">send</i>
-          Envoyer l'invitation
-        </button>
-        <a class="waves-effect waves-light btn red darken-1" (click)="onNoClick()">
-          <i class="material-icons left">close</i>
-          Annuler
-        </a>
-      </div>
-    </form>
+<div class="card" style="margin: 0; padding: 20px; padding-bottom: 0; background-color: #FAFAFA;">
+  <div class="card-content black-text modal-content">
+    <span class="card-title" style="display: flex; flex-direction: column; font-size: 24px;">Inviter un patient</span>
+    <span class="card-content" style="text-align: center; padding-top: 5px;">
+      <p class="biometric-info" style="text-align: start;">Email :</p>
+      <input class="info-input" [(ngModel)]="data.email"/>
+    </span>
+    <div style="height: 20px;"></div>
+    <div style="display: flex; justify-content: flex-end;">
+      <button class="waves-effect waves-light btn no-button" style="margin-right: 10px;" (click)="onNoClick()">Annuler</button>
+      <button class="waves-effect waves-light btn topbar-button" [mat-dialog-close]="data.email" cdkFocusInitial>Ajouter</button>
+    </div>
   </div>
 </div>

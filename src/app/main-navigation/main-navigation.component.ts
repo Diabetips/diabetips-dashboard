@@ -9,8 +9,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { DOCUMENT } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { parse } from 'querystring';
-import { Title } from '@angular/platform-browser';
 
 export interface DialogData {
   email: any;
@@ -18,7 +16,8 @@ export interface DialogData {
 
 @Component({
   selector: 'app-invite-patient',
-  templateUrl: 'invite-patient.html'
+  templateUrl: 'invite-patient.html',
+  styleUrls: ['../dashboard/dashboard.component.css']
 })
 export class InvitePatientComponent {
 
@@ -133,8 +132,8 @@ export class MainNavigationComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result && result.email) {
-        this.patientsService.invitePatient(result.email, this.me.uid);
+      if (result) {
+        this.patientsService.invitePatient(result, this.me.uid);
       }
     });
   }

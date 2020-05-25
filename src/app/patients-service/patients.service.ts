@@ -141,13 +141,13 @@ export class PatientsService {
       })
   }
 
-  addHbMeasure(measure: string, patientId: string) {
+  addHbMeasure(measure: string, timestamp: number, patientId: string) {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
     
     const url = `${this.patientsUrl}/${patientId}/hba1c`;
     // dividing by 1000 because we need to remove
-    this.http.post(url, { 'value': parseFloat(measure), 'timestamp': Math.trunc(Date.now() / 1000)}, { observe: 'response'})
+    this.http.post(url, { 'value': parseFloat(measure), 'timestamp': timestamp/1000}, { observe: 'response'})
       .subscribe(response => {
         console.log(response.status);
       })
