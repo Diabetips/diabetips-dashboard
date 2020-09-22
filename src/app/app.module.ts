@@ -24,6 +24,11 @@ import { PatientsService } from './patients-service/patients.service';
 
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from '@angular/common';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -61,7 +66,10 @@ import { CommonModule } from '@angular/common';
     HttpClientModule,
     ChartsModule,
     CommonModule,
-    DragDropModule
+    NgbModalModule,
+    FlatpickrModule.forRoot(),
+    DragDropModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
   providers: [
     HttpErrorHandler,
