@@ -45,7 +45,43 @@
   <div class="container tab-container full-width">
     <mat-tab-group mat-stretch-tabs class="main-tabs">
       <mat-tab label="Glycémies">
-        <div class="tab-div">
+        <div class="tab-div" style="flex-direction: column;">
+          <div class="card full-width-card white" style="margin-top: 0;">
+            <div class="card-content black-text">
+              <div class="card-title" style="display: flex; margin-bottom: 6px;">
+                <span style="flex-grow: 1; margin-top: 4px;">Statistiques</span>
+                <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;" (click)="addHb()">
+                  <i class="material-icons left" style="margin-right: 10px;">add</i>
+                  Sélectionner une date
+                </a>
+                <select class="browser-default" style="width: 20%; font-size: 14px; height: 32px; border-radius: 16px;">
+                  <option value="1">1 jour</option>
+                  <option value="2">1 semaine</option>
+                  <option value="3" selected>1 mois</option>
+                  <option value="4">3 mois</option>
+                  <option value="5">6 mois</option>
+                  <option value="6">1 an</option>
+                </select>
+              </div>
+              <div class="simple-small-div"></div>
+              <div class="stats-container">
+                <div class="stat-container">
+                  <span class="stat-title">Hypoglycémies</span>
+                  <span class="stat-number">{{userInfo.biometrics.hypoglycemia}}</span>
+                </div>
+                <div class="simple-small-div-vert"></div>
+                <div class="stat-container">
+                  <span class="stat-title">Hyperglycémies</span>
+                  <span class="stat-number">{{userInfo.biometrics.hyperglycemia}}</span>
+                </div>
+                <div class="simple-small-div-vert"></div>
+                <div class="stat-container">
+                  <span class="stat-title">Utilisations capteur</span>
+                  <span class="stat-number">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="card full-width-card white" style="margin-top: 0;">
             <div class="card-content black-text">
               <span class="card-title" style="margin-bottom: 0;">Taux de glycémie</span>
@@ -61,9 +97,44 @@
           </div>
         </div>
       </mat-tab>
-      <mat-tab label="Notes" disabled="true">
+      <mat-tab label="Notes">
         <div class="tab-div">
-          Notes go here
+          <div class="card full-width-card white" style="margin-top: 0;">
+            <div class="card-content black-text">
+              <div class="card-title" style="display: flex; margin-bottom: 6px;">
+                <span style="flex-grow: 1; margin-top: 4px;">Notes</span>
+                <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;" (click)="addNote()">
+                  <i class="material-icons left" style="margin-right: 10px;">add</i>
+                  Ajouter une note
+                </a>
+              </div>
+              <div class="simple-small-div"></div>
+              <div class="note-container" cdkDropListGroup>
+                <div cdkDropList (cdkDropListDropped)="dropListDropped($event)" [cdkDropListEnterPredicate]="dropListEnterPredicate"></div>
+                <div cdkDropList *ngFor="let note of userInfo.notes" [cdkDropListEnterPredicate]="dropListEnterPredicate"
+                    (cdkDropListDropped)="dropListDropped($event)">
+                  <div cdkDrag class="note-box" (cdkDragMoved)="dragMoved($event);">
+                    <div style="height: 100%; width: 5px;" [ngStyle]="{'background-color': note.color}"></div>
+                    <div style="display: flex; flex-direction: column; flex: 1; height: 100%;">
+                      <div style="font-family: Roboto; font-size: 15px; margin-top: 10px; display: flex;">
+                        <span style="display: flex; flex: 1; margin-left: 10px; font-weight: bold;">
+                          {{note.title}}
+                        </span>
+                        <button mat-icon-button (click)="addNote()" style="width: 32px; height: 32px;">
+                          <mat-icon style="margin-bottom: 8px;">clear</mat-icon>
+                        </button>
+                      </div>
+                      <div class="simple-small-div" style="margin: 10px;"></div>
+                      <div class="note-box-text" stylez="font-family: Muli; font-size: 18px">
+                        {{note.content}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+
+            </div>
+          </div>
         </div>
       </mat-tab>
       <mat-tab label="Repas">

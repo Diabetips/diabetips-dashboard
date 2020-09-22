@@ -3,8 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { mergeMap, catchError } from 'rxjs/operators';
 
 import { Patient } from './profile-classes';
 import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
@@ -18,12 +18,14 @@ const httpOptions = {
                                                                                                                                                                              
 @Injectable()
 export class PatientsService {
-  patientsUrl = 'https://api.diabetips.fr/v1/users';  // URL to web api
-  authUrl = 'https://api.diabetips.fr/v1/auth';  // URL to web api
+  patientsUrl = 'https://api.dev.diabetips.fr/v1/users';  // URL to web api
+  authUrl = 'https://api.dev.diabetips.fr/v1/auth';  // URL to web api
   private handleError: HandleError;
 
   token: string = undefined;
   connectedId: string = undefined;
+
+  private pictureSub = new BehaviorSubject<Blob>(null);
 
   constructor(
     private http: HttpClient,
@@ -42,22 +44,14 @@ export class PatientsService {
      );
   }
 
-  updateNewPicture(newPicture: any) {
-    httpOptions.headers =
-      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    const url = `${this.patientsUrl}/me/picture`;
-    
-    this.http.post(url, newPicture, {...httpOptions, observe: "response"})
-      .subscribe(response => {
-        console.log(response.status);
-      })
-  }
-
   //////// Connections-related methods //////////
 
   getConnections(uid: string): Observable<Patient[]> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
     const url = `${this.patientsUrl}/${uid}/connections`;
-    return this.http.get<Patient[]>(url)
+    return this.http.get<Patient[]>(url, httpOptions)
      .pipe(
        catchError(this.handleError('getPatients', []))
      );
@@ -81,41 +75,101 @@ export class PatientsService {
       })
   }
 
+  //////// Notes-related methods //////////
+
+  getPatientNotes(myUid: string, patientUid: string): Observable<any> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
+    const url = `${this.patientsUrl}/${myUid}/sticky/${patientUid}`;
+    return this.http.get(url, httpOptions)
+  }
+
+  addPatientNote(myUid: string, patientUid: string, note: any) {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
+    const url = `${this.patientsUrl}/${myUid}/sticky/${patientUid}`;
+    this.http.post(url, note, httpOptions)
+    .subscribe(response => {
+      console.log(response);
+    })
+  }
+
+  deletePatientNote(myUid: string, patientUid: string, id: string) {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
+    const url = `${this.patientsUrl}/${myUid}/sticky/${patientUid}/${id}`;
+    this.http.delete(url, httpOptions)
+  }
+
   //////// Patient-related methods //////////
 
   getPatient(uid: string): Observable<Patient> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
     const url = `${this.patientsUrl}/${uid}`;
-    return this.http.get<Patient>(url);
+    return this.http.get<Patient>(url, httpOptions);
   }
 
-  getPatientPicture(uid: string): string {
+  getPatientPicture(uid: string): Observable<Blob> {
+    const httpOptionsImage = {
+      headers: new HttpHeaders({
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }),
+      responseType: 'blob'
+    };
+
     const url = `${this.patientsUrl}/${uid}/picture`;
-    return url;
+    return this.http.get(url, { responseType: 'blob' })
+      .pipe(
+        mergeMap((picture) => {
+          this.pictureSub.next(picture);
+          return this.pictureSub.asObservable();
+        })
+      );
   }
 
   getPatientHb(uid: string): Observable<any> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
     const url = `${this.patientsUrl}/${uid}/hba1c`;
-    return this.http.get(url)
+    return this.http.get(url, httpOptions)
   }
 
   getPatientBs(uid: string): Observable<any> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
     const url = `${this.patientsUrl}/${uid}/blood_sugar`;
-    return this.http.get(url)
+    return this.http.get(url, httpOptions)
   }
 
   getPatientInsulin(uid: string): Observable<any> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
     const url = `${this.patientsUrl}/${uid}/insulin`;
-    return this.http.get(url)
+    return this.http.get(url, httpOptions)
   }
 
   getPatientMeals(uid: string): Observable<any> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
     const url = `${this.patientsUrl}/${uid}/meals`;
-    return this.http.get(url)
+    return this.http.get(url, httpOptions)
   }
 
   getPatientBiometrics(uid: string): Observable<any> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
     const url = `${this.patientsUrl}/${uid}/biometrics`;
-    return this.http.get(url)
+    return this.http.get(url, httpOptions)
   }
 
   //////// Direct patient profile modification //////////

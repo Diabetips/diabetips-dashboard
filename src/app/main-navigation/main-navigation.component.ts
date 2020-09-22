@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Patient } from '../patients-service/profile-classes';
 import { PatientsService } from '../patients-service/patients.service';
@@ -10,10 +10,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 export interface DialogData {
   email: any;
 }
-
 @Component({
   selector: 'app-invite-patient',
   templateUrl: 'invite-patient.html',
@@ -27,38 +28,6 @@ export class InvitePatientComponent {
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-}
-
-export interface PictureData {
-  picture: any;
-}
-
-@Component({
-  selector: 'app-change-picture',
-  templateUrl: 'change-picture.html',
-  styleUrls: ['../dashboard/dashboard.component.css']
-})
-export class ChangePictureComponent {
-
-  constructor(
-    private patientsService: PatientsService,
-    public dialogRef: MatDialogRef<ChangePictureComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PictureData) { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  onFileChanged(event) {
-    if (event.target.files && event.target.files[0]) {
-      var reader = new FileReader();
-      reader.onload = (event: any) => {
-        this.dialogRef.close({picture: event.target.result})
-      }
-      reader.readAsDataURL(event.target.files[0]);
-    }
-    this.patientsService.updateNewPicture(event.target.files[0])
   }
 }
 
@@ -76,8 +45,14 @@ export class MainNavigationComponent implements OnInit {
   newProfile: any;
   me: Patient = new Patient;
   token;
+  searchText: string = "";
 
-  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize?response_type=token&redirect_uri=' + window.location.href;
+  signinUrl = 'http://api.dev.diabetips.fr/v1/auth/authorize'
+    + '?response_type=token'
+    + '&client_id=diabetips-dashboard'
+    + '&scope=profile:write connections:read connections:write biometrics:read biometrics:write meals:read notes:read notes:write'
+    + '&redirect_uri=' + 'http://localhost:4200';
+
   isLoading = true;
 
   constructor(
@@ -86,7 +61,8 @@ export class MainNavigationComponent implements OnInit {
     private patientsService: PatientsService,
     public dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer
   ) { }
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -126,7 +102,7 @@ export class MainNavigationComponent implements OnInit {
       this.isLoading = false
       this.router.navigate(['/accueil']);
     } else {
-      this.document.location.href = this.signinUrl;
+      this.document.location.href = encodeURI(this.signinUrl);
     }
   }
 
@@ -149,8 +125,13 @@ export class MainNavigationComponent implements OnInit {
     });
   }
 
+  pictureUrl?: SafeUrl
+
   getPictureForProfile(profile: Patient) {
-    profile.profile_picture = this.patientsService.getPatientPicture(profile.uid)
+    this.patientsService.getPatientPicture(profile.uid)
+      .subscribe(picture => {
+        profile.profile_picture = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(picture))
+      });
   }
 
   signOut(): void {
@@ -171,17 +152,12 @@ export class MainNavigationComponent implements OnInit {
     });
   }
 
-  changePicture(): void {
-    const dialogRef = this.dialog.open(ChangePictureComponent, {
-      width: '25%',
-      data: {picture: ''}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.me.profile_picture = result.picture
-      }
-    });
+  searchPatient() {
+    if (this.searchText && this.searchText != "") {
+      return this.patients.filter(patient => (patient.first_name + ' ' + patient.last_name).toLowerCase().includes(this.searchText))
+    } else {
+      return this.patients
+    }
   }
 
   goToOptions() {

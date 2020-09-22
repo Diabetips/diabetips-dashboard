@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { DashboardComponent, AddMeasureComponent, ConfirmDeletionComponent } from './dashboard/dashboard.component';
+import { DashboardComponent, AddMeasureComponent, AddNoteComponent, ConfirmDeletionComponent } from './dashboard/dashboard.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material';
@@ -11,7 +11,7 @@ import { MatDialogModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MainNavigationComponent, InvitePatientComponent, ChangePictureComponent } from './main-navigation/main-navigation.component';
+import { MainNavigationComponent, InvitePatientComponent } from './main-navigation/main-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -22,14 +22,17 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
 import { ChartsModule } from 'ng2-charts';
 import { PatientsService } from './patients-service/patients.service';
 
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { CommonModule } from '@angular/common';
+
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     MainNavigationComponent,
     InvitePatientComponent,
-    ChangePictureComponent,
     AddMeasureComponent,
+    AddNoteComponent,
     ConfirmDeletionComponent,
     MyProfileComponent,
   ],
@@ -56,7 +59,9 @@ import { PatientsService } from './patients-service/patients.service';
     MatIconModule,
     MatListModule,
     HttpClientModule,
-    ChartsModule
+    ChartsModule,
+    CommonModule,
+    DragDropModule
   ],
   providers: [
     HttpErrorHandler,
@@ -68,9 +73,9 @@ import { PatientsService } from './patients-service/patients.service';
   bootstrap: [AppComponent],
   entryComponents: [
     InvitePatientComponent,
-    ChangePictureComponent,
     ConfirmDeletionComponent,
-    AddMeasureComponent
+    AddMeasureComponent,
+    AddNoteComponent
   ]
 })
 export class AppModule { }

@@ -66,6 +66,12 @@ span {
   margin-bottom: 10px;
 }
 
+.simple-small-div-vert {
+  width: 2px;
+  background-color: #00000023;
+  margin: 0 10px;
+}
+
 span, p, h4 {
   font-family: Rubik;
 }
@@ -132,6 +138,16 @@ span, p, h4 {
   box-shadow: 0px 0px 7px -4px #424242;
 }
 
+.info-textarea {
+  background-color: #FFF;
+  color: #000 !important;
+  border-radius: 15px 15px 15px 0;
+  padding: 13px;
+  min-height: 5px;
+  width: 85%;
+  box-shadow: 0px 0px 7px -4px #424242;
+}
+
 .biometric-info {
   margin: 0;
   font-size: 12px;
@@ -157,6 +173,107 @@ th {
 tr {
   font-family: Muli;
   font-size: 16px;
-  color: #424242
+  color: #746060
 }
 
+.note-container {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 600px;
+}
+
+.note-box {
+  width: 100%;
+  height: 200px;
+  border: solid 1px #ccc;
+  font-size: 10pt;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: move;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #fff;
+  border-radius: 4px;
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+  0 2px 2px 0 rgba(0, 0, 0, 0.14),
+  0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.note-box:active {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  opacity: .6;
+}
+
+.note-box-color {
+  width: 100%;
+  background-color: red;
+}
+
+.note-box-text {
+  height: 100%;
+  padding: 0 15px 15px 15px;
+  text-align: left;
+  overflow: auto;
+}
+
+.cdk-drop-list {
+  display: flex;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  width: 20%;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: .3;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+button {
+  margin-right: 4px;
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: row;
+  margin: 0 45px;
+}
+
+.stat-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.stat-title {
+  font-size: 15px;
+  font-family: Roboto;
+  color: #848484;
+}
+
+.stat-number {
+  font-size: 43px;
+  font-family: Roboto;
+  font-weight: lighter;
+  line-height: 43px;
+  color: #00A1E0;
+}

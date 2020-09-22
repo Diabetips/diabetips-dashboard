@@ -13,11 +13,13 @@
       </span>
     </mat-toolbar>
     <mat-nav-list style="background-color: #00A1E0; padding-top: 0px">
-      <a mat-list-item style="background-color: #0087BD; height: 45px; font-size: 17px; color: #ffffff" (click)="invitePatient()">
-        <mat-icon aria-label="Side nav toggle icon" style="margin-right: 15px">person_add</mat-icon>
-        Ajouter un patient 
-      </a>
-      <a *ngFor="let patient of patients" mat-list-item >
+      <div style="background-color: #0087BD; height: 45px; font-size: 17px; display: flex; flex-direction: row;">
+        <input placeholder="Rechercher un patient" [(ngModel)]="searchText" style="padding-left: 10px; color: #ffffff; border-bottom: none !important; box-shadow: none !important;" class=""/>
+        <a mat-list-item (click)="invitePatient()" style="width: 50px; background-color: #FFA300; border-radius: 50% 0 0 50%; color: #ffffff;">
+          <mat-icon aria-label="Side nav toggle icon" style="margin-right: 15px">person_add</mat-icon>
+        </a>
+      </div>
+      <a *ngFor="let patient of searchPatient()" mat-list-item >
         <img src="{{patient.profile_picture}}" class="circle responsive-img" style="height: 65%; margin-right: 10px;"/>
         <h4 routerLink="/dashboard" [queryParams]="{ patient: patient.uid }" class="patient-name">
           {{patient.first_name}}
@@ -35,7 +37,6 @@
       </button>
       <mat-menu #patientOptionsMenu="matMenu" xPosition="before">
         <button mat-menu-item (click)="goToOptions()">Options</button>
-        <button mat-menu-item (click)="changePicture()">Changer de photo de profil</button>
         <button mat-menu-item (click)="signOut()">Deconnexion</button>
       </mat-menu>
     </mat-toolbar>
