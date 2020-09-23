@@ -48,21 +48,18 @@
         <div class="tab-div" style="flex-direction: column;">
           <div class="card full-width-card white" style="margin-top: 0;">
             <div class="card-content black-text">
+              
               <div class="card-title" style="display: flex; margin-bottom: 6px;">
                 <span style="flex-grow: 1; margin-top: 4px;">Statistiques</span>
                 <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;" (click)="addHb()">
                   <i class="material-icons left" style="margin-right: 10px;">add</i>
                   Sélectionner une date
                 </a>
-                <select class="browser-default" style="width: 20%; font-size: 14px; height: 32px; border-radius: 16px;">
-                  <option value="1">1 jour</option>
-                  <option value="2">1 semaine</option>
-                  <option value="3" selected>1 mois</option>
-                  <option value="4">3 mois</option>
-                  <option value="5">6 mois</option>
-                  <option value="6">1 an</option>
+                <select [(ngModel)]="currentLimit" (change)="updateDateLimit()" class="browser-default" style="width: 20%; font-size: 14px; height: 32px; border-radius: 16px;">
+                  <option *ngFor="let date of dateLimits" [ngValue]="date">{{date.limitName}}</option>
                 </select>
               </div>
+              
               <div class="simple-small-div"></div>
               <div class="stats-container">
                 <div class="stat-container">
@@ -273,6 +270,9 @@
                   <i class="material-icons left" style="margin-right: 10px;">add</i>
                   Ajouter une valeur
                 </a>
+                <select [(ngModel)]="currentLimit" (change)="updateDateLimit()" class="browser-default" style="width: 20%; font-size: 14px; height: 32px; border-radius: 16px;">
+                  <option *ngFor="let date of dateLimits" [ngValue]="date">{{date.limitName}}</option>
+                </select>
               </div>
               <div class="simple-small-div"></div>
               <canvas baseChart #hbChart

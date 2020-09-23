@@ -50,9 +50,9 @@ export class MainNavigationComponent implements OnInit {
   signinUrl = 'http://api.diabetips.fr/v1/auth/authorize'
     + '?response_type=token'
     + '&client_id=diabetips-dashboard'
-    + '&scope=profile:write connections:read connections:write biometrics:read biometrics:write meals:read notes:read notes:write'
+    + '&scope=profile:write connections:read connections:invite connections:write biometrics:read biometrics:write meals:read notes:read notes:write'
     + '&redirect_uri=' + window.location.href;
-
+//window.location.href
   isLoading = true;
 
   constructor(
