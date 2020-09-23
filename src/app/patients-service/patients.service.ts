@@ -58,19 +58,25 @@ export class PatientsService {
   }
 
   invitePatient(email: string, uid: string) {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
     const url = `${this.patientsUrl}/${uid}/connections`;
-    this.http.post(url, { 'email': email }, { observe: 'response'})
+    this.http.post(url, { 'email': email }, httpOptions)
       .subscribe(response => {
-        console.log(response.status);
+        console.log(response);
         location.reload()
       })
   }
 
   deleteConnection(userUid, patientUid) {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
     const url = `${this.patientsUrl}/${userUid}/connections/${patientUid}`;
-    this.http.delete(url, { observe: 'response'})
+    this.http.delete(url, httpOptions)
       .subscribe(response => {
-        console.log(response.status);
+        console.log(response);
         location.reload()
       })
   }
