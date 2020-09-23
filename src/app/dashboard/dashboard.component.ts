@@ -1,14 +1,15 @@
-import { Component, OnInit, Inject, ViewChild, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ChangeDetectionStrategy, TemplateRef, QueryList, ViewChildren } from '@angular/core';
 
 import { Patient } from '../patients-service/profile-classes';
 import { PatientsService } from '../patients-service/patients.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import * as moment from 'moment';
-import { unitOfTime } from 'moment';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseChartDirective } from 'ng2-charts';
+
+import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
+import { Color, BaseChartDirective, Label } from 'ng2-charts';
 
 // Notes imports
 
@@ -126,30 +127,29 @@ export class DashboardComponent implements OnInit {
   userInfo: Patient;
 
   me: any;
-
-  @ViewChild(BaseChartDirective, {static: false}) chart: BaseChartDirective;
-
+  
   // Bs variables
 
-  public bsChartOptions = {
-    scaleShowVerticalLines: false,
+  public bsChartData: ChartDataSets[] = [
+    { data: [] },
+  ];
+  public bsChartLabels: Label[] = [];
+  public bsChartOptions: (ChartOptions) = {
     responsive: true,
-    legend: { display: false }
   };
-
-  public bsChartLabels = [];
-  public bsChartType = 'line';
-  public bsChartLegend = true;
-  public bsChartData = [{
-    data: [],
-    backgroundColor: "rgba(53, 191, 246, 0.425)",
-    borderColor: "#4DCEFF",
-    pointBackgroundColor: "#fff",
-    pointBorderColor: "#4DCEFF",
-    pointRadius: 5,
-    pointHitRadius: 12,
-  }];
-
+  public bsChartColors: Color[] = [
+    { // grey
+      backgroundColor: 'rgba(0,161,224,0.2)',
+      borderColor: 'rgba(0,161,224,1)',
+      pointBackgroundColor: 'rgba(0,161,224,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(0,161,224,0.8)'
+    },
+  ];
+  public bsChartLegend = false;
+  public bsChartType: ChartType = 'line';
+  
   // Notes variables
 
   @ViewChild(CdkDropListGroup, {static: false}) listGroup: CdkDropListGroup<CdkDropList>;
@@ -242,24 +242,27 @@ export class DashboardComponent implements OnInit {
 
   // Hb variables
 
-  public hbChartOptions = {
-    scaleShowVerticalLines: false,
+  public hbChartData: ChartDataSets[] = [
+    { data: [] },
+  ];
+  public hbChartLabels: Label[] = [];
+  public hbChartOptions: (ChartOptions) = {
     responsive: true,
-    legend: { display: false }
   };
-
-  public hbChartLabels = [];
-  public hbChartType = 'line';
-  public hbChartLegend = true;
-  public hbChartData = [{
-    data: [],
-    backgroundColor: "#00000000",
-    borderColor: "#4DCEFF",
-    pointBackgroundColor: "#fff",
-    pointBorderColor: "#4DCEFF",
-    pointRadius: 5,
-    pointHitRadius: 12,
-  }];
+  public hbChartColors: Color[] = [
+    { // grey
+      backgroundColor: 'rgba(0,161,224,0.2)',
+      borderColor: 'rgba(0,161,224,1)',
+      pointBackgroundColor: 'rgba(0,161,224,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(0,161,224,0.8)'
+    },
+  ];
+  public hbChartLegend = false;
+  public hbChartType: ChartType = 'line';
+  
+  @ViewChildren( BaseChartDirective ) charts: QueryList<BaseChartDirective>
 
   // Variables end
 
@@ -329,7 +332,6 @@ export class DashboardComponent implements OnInit {
         });
       });
       this.patientsService.getPatientBs(uid).subscribe(blood_sugar => {
-        this.chart.chart.data.datasets[0].data = blood_sugar.reverse
         this.userInfo.blood_sugar = blood_sugar
         this.bsChartLabels = []
         this.bsChartData[0].data = []
@@ -412,18 +414,33 @@ export class DashboardComponent implements OnInit {
     let tmpDate = moment(this.selectedDateLimit)
 
     if (this.currentLimit.index == 0) {
-      console.log(tmpDate.subtract(1, 'day').toISOString())
+      tmpDate.subtract(1, 'day').toISOString()
     } else if (this.currentLimit.index == 1) {
-      console.log(tmpDate.subtract(1, 'week').toISOString())
+      tmpDate.subtract(1, 'week').toISOString()
     } else if (this.currentLimit.index == 2) {
-      console.log(tmpDate.subtract(1, 'month').toISOString())
+      tmpDate.subtract(1, 'month').toISOString()
     } else if (this.currentLimit.index == 3) {
-      console.log(tmpDate.subtract(3, 'month').toISOString())
+      tmpDate.subtract(3, 'month').toISOString()
     } else if (this.currentLimit.index == 4) {
-      console.log(tmpDate.subtract(6, 'month').toISOString())
+      tmpDate.subtract(6, 'month').toISOString()
     } else if (this.currentLimit.index == 5) {
-      console.log(tmpDate.subtract(1, 'year').toISOString())
+      tmpDate.subtract(1, 'year').toISOString()
     }
+
+    this.patientsService.getPatientHbLimit(this.userInfo.uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(hba1c => {
+      this.userInfo.hba1c = hba1c;
+
+      this.hbChartLabels.length = 0
+      this.hbChartData[0].data.length = 0
+
+      hba1c.reverse().forEach(measure => {
+        this.hbChartLabels.push(this.timestampAsDateNoHour(measure.time))
+        this.hbChartData[0].data.push(measure.value)
+      });
+      
+      this.charts.toArray()[0].update()
+      this.charts.toArray()[1].update()
+    });
   }
 
   // Notes functions
@@ -612,7 +629,9 @@ export class DashboardComponent implements OnInit {
         this.patientsService.addHbMeasure(result.measure, result.timestamp.getTime(), this.userInfo.uid)
         this.hbChartData[0].data.push(result.measure)
         this.hbChartLabels.push(this.timestampAsDateNoHour(result.timestamp.getTime()/1000))
-        this.chart.chart.update()
+        
+        this.charts.toArray()[0].update()
+        this.charts.toArray()[1].update()
       }
     });
   }

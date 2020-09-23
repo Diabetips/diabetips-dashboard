@@ -19,7 +19,7 @@ import { HttpErrorHandler } from './http-error-handler.service';
 import { MessageService } from './message.service';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 
-import { ChartsModule } from 'ng2-charts';
+import { ChartsModule, ThemeService } from 'ng2-charts';
 import { PatientsService } from './patients-service/patients.service';
 
 import { DragDropModule } from "@angular/cdk/drag-drop";
@@ -76,6 +76,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     MessageService,
     MatDatepickerModule,
     PatientsService,
+    ThemeService,
     {provide: MAT_DATE_LOCALE, useValue: 'fr'}
   ],
   bootstrap: [AppComponent],

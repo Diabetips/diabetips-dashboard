@@ -61,8 +61,6 @@ export class PatientsService {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
 
-    console.log("hah")
-
     const url = `${this.patientsUrl}/${uid}/connections`;
     this.http.post(url, { 'email': email }, httpOptions)
       .subscribe(response => {
@@ -148,7 +146,7 @@ export class PatientsService {
     return this.http.get(url, httpOptions)
   }
 
-  getPatientHbLimit(uid: string, startDate: string, endDate: string) {
+  getPatientHbLimit(uid: string, startDate: string, endDate: string): Observable<any> {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
 

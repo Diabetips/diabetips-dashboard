@@ -51,10 +51,12 @@
               
               <div class="card-title" style="display: flex; margin-bottom: 6px;">
                 <span style="flex-grow: 1; margin-top: 4px;">Statistiques</span>
-                <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;" (click)="addHb()">
+                
+                <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;">
                   <i class="material-icons left" style="margin-right: 10px;">add</i>
                   Sélectionner une date
                 </a>
+                
                 <select [(ngModel)]="currentLimit" (change)="updateDateLimit()" class="browser-default" style="width: 20%; font-size: 14px; height: 32px; border-radius: 16px;">
                   <option *ngFor="let date of dateLimits" [ngValue]="date">{{date.limitName}}</option>
                 </select>
@@ -87,6 +89,7 @@
                 [datasets]="bsChartData"
                 [labels]="bsChartLabels"
                 [options]="bsChartOptions"
+                [colors]="bsChartColors"
                 [legend]="bsChartLegend"
                 [chartType]="bsChartType">
               </canvas>
@@ -275,10 +278,11 @@
                 </select>
               </div>
               <div class="simple-small-div"></div>
-              <canvas baseChart #hbChart
+              <canvas baseChart height="85"
                 [datasets]="hbChartData"
                 [labels]="hbChartLabels"
                 [options]="hbChartOptions"
+                [colors]="hbChartColors"
                 [legend]="hbChartLegend"
                 [chartType]="hbChartType">
               </canvas>
