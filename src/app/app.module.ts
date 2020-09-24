@@ -14,13 +14,13 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MainNavigationComponent, InvitePatientComponent } from './main-navigation/main-navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorHandler } from './http-error-handler.service';
 import { MessageService } from './message.service';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 
 import { ChartsModule, ThemeService } from 'ng2-charts';
-import { PatientsService } from './patients-service/patients.service';
+import { AuthInterceptor, PatientsService } from './patients-service/patients.service';
 
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CommonModule } from '@angular/common';
@@ -77,7 +77,8 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     MatDatepickerModule,
     PatientsService,
     ThemeService,
-    {provide: MAT_DATE_LOCALE, useValue: 'fr'}
+    { provide: MAT_DATE_LOCALE, useValue: 'fr' },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
   entryComponents: [

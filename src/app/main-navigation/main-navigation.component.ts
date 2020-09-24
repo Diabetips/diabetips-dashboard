@@ -97,7 +97,7 @@ export class MainNavigationComponent implements OnInit {
     }
 
     if (this.token !== null && this.token !== undefined) {
-      localStorage.setItem('token', this.token);
+      this.patientsService.token = this.token
       this.isLoading = false
       this.router.navigate(['/accueil']);
     } else {
@@ -123,8 +123,6 @@ export class MainNavigationComponent implements OnInit {
       this.patientsService.token = this.token
     });
   }
-
-  pictureUrl?: SafeUrl
 
   getPictureForProfile(profile: Patient) {
     this.patientsService.getPatientPicture(profile.uid)

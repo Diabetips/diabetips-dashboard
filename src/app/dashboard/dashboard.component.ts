@@ -329,27 +329,9 @@ export class DashboardComponent implements OnInit {
         this.userInfo.first_name = patient.first_name;
         this.userInfo.last_name = patient.last_name;
       });
-      // this.patientsService.getPatientHb(uid).subscribe(hba1c => {
-      //   this.userInfo.hba1c = hba1c;
-      //   this.hbChartLabels = []
-      //   this.hbChartData[0].data = []
-      //   hba1c.reverse().forEach(measure => {
-      //     this.hbChartLabels.push(this.timestampAsDateNoHour(measure.time))
-      //     this.hbChartData[0].data.push(measure.value)
-      //   });
-      // });
-      // this.patientsService.getPatientBs(uid).subscribe(blood_sugar => {
-      //   this.userInfo.blood_sugar = blood_sugar
-      //   this.bsChartLabels = []
-      //   this.bsChartData[0].data = []
-      //   blood_sugar.reverse().forEach(measure => {
-      //     this.bsChartLabels.push(this.timestampAsDate(measure.time))
-      //     this.bsChartData[0].data.push(measure.value)
-      //   });
-      // });
-      // this.patientsService.getPatientInsulin(uid).subscribe(insulin => {
-      //   this.userInfo.insulin = insulin;
-      // });
+      this.patientsService.getPatientPicture(this.userInfo.uid).subscribe(picture => {
+        this.userInfo.profile_picture = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(picture))
+      });
       this.patientsService.getPatientMeals(uid).subscribe(meals => {
         meals.forEach(meal => {
           let ingredients = []
@@ -371,7 +353,7 @@ export class DashboardComponent implements OnInit {
       });
       this.patientsService.getMe().subscribe(me => {
         this.me = me;
-        this.patientsService.getPatientNotes(me.uid, uid).subscribe(notes => {
+        this.patientsService.getPatientNotes(uid).subscribe(notes => {
           this.userInfo.notes = notes
         })
       });
@@ -493,14 +475,14 @@ export class DashboardComponent implements OnInit {
         index: 0,
       }
       this.userInfo.notes.push(newNote)
-      this.patientsService.addPatientNote(this.me.uid, this.userInfo.uid, newNote)
+      this.patientsService.addPatientNote(this.userInfo.uid, newNote)
     });
   }
 
   deleteNote(note): void {
     let toDelete = note.index - 1
 
-    this.patientsService.deletePatientNote(this.me.uid, this.userInfo.uid, note.id)
+    this.patientsService.deletePatientNote(this.userInfo.uid, note.id)
     this.userInfo.notes.splice(toDelete, 1)
 
     for (let i = toDelete; i < this.userInfo.notes.length; i++) {
@@ -535,7 +517,7 @@ export class DashboardComponent implements OnInit {
     this.target = null;
     this.source = null;
 
-    this.patientsService.moveNote(this.me.uid, this.userInfo.uid, this.userInfo.notes[this.sourceIndex], this.targetIndex)
+    this.patientsService.moveNote(this.userInfo.uid, this.userInfo.notes[this.sourceIndex], this.targetIndex)
 
     let tmp = this.userInfo.notes[this.sourceIndex]
     this.userInfo.notes[this.targetIndex].index = this.sourceIndex

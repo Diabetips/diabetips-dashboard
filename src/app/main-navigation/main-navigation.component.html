@@ -20,7 +20,7 @@
         </a>
       </div>
       <a *ngFor="let patient of searchPatient()" mat-list-item >
-        <img src="{{patient.profile_picture}}" class="circle responsive-img" style="height: 65%; margin-right: 10px;"/>
+        <img [src]="patient.profile_picture" class="circle responsive-img" style="height: 65%; margin-right: 10px;"/>
         <h4 routerLink="/dashboard" [queryParams]="{ patient: patient.uid }" class="patient-name">
           {{patient.first_name}}
           {{patient.last_name}}
