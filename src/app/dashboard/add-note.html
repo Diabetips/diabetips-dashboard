@@ -10,7 +10,14 @@
       <textarea class="materialize-textarea info-textarea" [(ngModel)]="data.content" style="width: -webkit-fill-available;"></textarea>
       
       <p class="biometric-info" style="text-align: start;">Couleur :</p>
-      <input class="info-input" [(ngModel)]="data.color" style="width: -webkit-fill-available;"/>
+      <div style="display: flex; align-items: center;">
+        <i class="material-icons left" style="margin-right: 10px;" [ngStyle]="{'color': data.color.code}">brightness_1</i>
+        <select [(ngModel)]="data.color" class="browser-default date-limit-input" style="width: -webkit-fill-available; box-shadow: 0px 0px 7px -4px #424242; border-radius: 15px 15px 15px 0;">
+          <option *ngFor="let color of noteColors" [ngValue]="color" [ngStyle]="{'background-color': color.code}" style="color: #FAFAFA">
+            {{color.name}}
+          </option>
+        </select>
+      </div>
     
     </span>
     <div style="height: 20px;"></div>

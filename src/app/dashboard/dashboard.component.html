@@ -278,6 +278,11 @@
                 <select [(ngModel)]="currentLimit" (change)="updateDateLimit()" class="browser-default date-limit-input">
                   <option *ngFor="let date of dateLimits" [ngValue]="date">{{date.limitName}}</option>
                 </select>
+                
+                <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;" (click)="addHb()">
+                  <i class="material-icons left" style="margin-right: 10px;">add</i>
+                  Ajouter une valeur
+                </a>
               </div>
               <div class="simple-small-div"></div>
               <canvas baseChart height="85"

@@ -5,7 +5,7 @@
       <p class="biometric-info" style="text-align: start;">Valeur :</p>
       <input class="info-input" [(ngModel)]="data.measure" style="width: -webkit-fill-available;"/>
       <p class="biometric-info" style="text-align: start;">Date :</p>
-      <input class="info-input" [(ngModel)]="data.timestamp" [matDatepicker]="picker" style="width: 40%;">
+      <input class="info-input" [(ngModel)]="data.time" [matDatepicker]="picker" style="width: 40%;">
       <mat-datepicker-toggle matSuffix [for]="picker" style="margin-left: 5px;"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </span>

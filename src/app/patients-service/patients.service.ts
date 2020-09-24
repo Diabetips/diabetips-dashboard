@@ -188,10 +188,9 @@ export class PatientsService {
       })
   }
 
-  addHbMeasure(measure: string, timestamp: number, patientId: string) {
+  addHbMeasure(measure: string, time: string, patientId: string) {
     const url = `${this.patientsUrl}/${patientId}/hba1c`;
-    // dividing by 1000 because we need to remove
-    this.http.post(url, { 'value': parseFloat(measure), 'timestamp': timestamp/1000}, { observe: 'response'})
+    this.http.post(url, { 'value': parseFloat(measure), 'time': time}, { observe: 'response'})
       .subscribe(response => {
         console.log(response.status);
       })

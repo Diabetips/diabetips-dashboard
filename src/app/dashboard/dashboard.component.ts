@@ -69,6 +69,7 @@ export class ConfirmDeletionComponent {
 
 export interface MeasureData {
   measure: number;
+  time: Date;
 }
 
 @Component({
@@ -97,6 +98,33 @@ export interface NoteData {
   styleUrls: ['./dashboard.component.css']
 })
 export class AddNoteComponent {
+
+  public noteColors = [
+    {
+      name: "bleu",
+      code: "#01B5EA"
+    },
+    {
+      name: "orange",
+      code: "#FFA300"
+    },
+    {
+      name: "rouge",
+      code: "#E23600"
+    },
+    {
+      name: "marron",
+      code: "#872C2C"
+    },
+    {
+      name: "vert",
+      code: "#49B20D"
+    },
+    {
+      name: "violet",
+      code: "#8F1EC6"
+    },
+  ]
 
   constructor(public dialogRef: MatDialogRef<AddNoteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: NoteData) { }
@@ -208,7 +236,7 @@ export class DashboardComponent implements OnInit {
     {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
-      title: 'A 3 day event',
+      title: 'Evenement de 3 jours',
       color: colors.red,
       actions: this.actions,
       allDay: true,
@@ -219,22 +247,16 @@ export class DashboardComponent implements OnInit {
       draggable: true,
     },
     {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions,
-    },
-    {
       start: subDays(endOfMonth(new Date()), 3),
       end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
+      title: 'Evenement sur 2 mois',
       color: colors.blue,
       allDay: true,
     },
     {
       start: addHours(startOfDay(new Date()), 2),
       end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
+      title: 'Evenement modifiable',
       color: colors.yellow,
       actions: this.actions,
       resizable: {
@@ -464,16 +486,28 @@ export class DashboardComponent implements OnInit {
   addNote(): void {
     const dialogRef = this.dialog.open(AddNoteComponent, {
       width: '25%',
-      data: {title: undefined, content: undefined, color: undefined}
+      data: {
+        title: undefined,
+        content: undefined,
+        color: {
+          name: "bleu",
+          code: "#01B5EA"
+        }
+      }
     });
     
     dialogRef.afterClosed().subscribe(result => {
+      if (!result || !result.title || !result.content) {
+        return
+      }
+
       let newNote = {
         title: result.title,
         content: result.content,
-        color: result.color,
+        color: result.color.code,
         index: 0,
       }
+
       this.userInfo.notes.push(newNote)
       this.patientsService.addPatientNote(this.userInfo.uid, newNote)
     });
@@ -648,17 +682,13 @@ export class DashboardComponent implements OnInit {
   addHb(): void {
     const dialogRef = this.dialog.open(AddMeasureComponent, {
       width: '25%',
-      data: {measure: undefined, timestamp: undefined}
+      data: {measure: undefined, time: undefined}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result && result.measure && result.timestamp) {
-        this.patientsService.addHbMeasure(result.measure, result.timestamp.getTime(), this.userInfo.uid)
-        this.hbChartData[0].data.push(result.measure)
-        this.hbChartLabels.push(this.timestampAsDateNoHour(result.timestamp.getTime()/1000))
-        
-        this.charts.toArray()[0].update()
-        this.charts.toArray()[1].update()
+      if (result && result.measure && result.time) {
+        this.patientsService.addHbMeasure(result.measure, result.time.toISOString(), this.userInfo.uid)
+        this.updateDateLimit(this.userInfo.uid)
       }
     });
   }
