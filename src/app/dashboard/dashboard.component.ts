@@ -411,7 +411,7 @@ export class DashboardComponent implements OnInit {
     return moment(time).utc().format('DD/MM/YYYY')
   }
 
-  // Bs functions
+  // Bs and Hb functions
 
   updateDateLimit(uid: string = null) {
     if (uid == null) {
@@ -472,6 +472,35 @@ export class DashboardComponent implements OnInit {
   }
 
   // Notes functions
+
+  addNote(): void {
+    const dialogRef = this.dialog.open(AddNoteComponent, {
+      width: '25%',
+      data: {title: undefined, content: undefined, color: undefined}
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      let newNote = {
+        title: result.title,
+        content: result.content,
+        color: result.color,
+        index: 0,
+      }
+      this.userInfo.notes.push(newNote)
+      this.patientsService.addPatientNote(this.me.uid, this.userInfo.uid, newNote)
+    });
+  }
+
+  deleteNote(note): void {
+    let toDelete = note.index - 1
+
+    this.patientsService.deletePatientNote(this.me.uid, this.userInfo.uid, note.id)
+    this.userInfo.notes.splice(toDelete, 1)
+
+    for (let i = toDelete; i < this.userInfo.notes.length; i++) {
+      this.userInfo.notes[i].index -= 1
+    }
+  }
   
   dragMoved(e: CdkDragMove) {
     let point = this.getPointerPositionOnPage(e.event);
@@ -499,6 +528,8 @@ export class DashboardComponent implements OnInit {
 
     this.target = null;
     this.source = null;
+
+    this.patientsService.moveNote(this.me.uid, this.userInfo.uid, this.userInfo.notes[this.sourceIndex], this.targetIndex)
 
     let tmp = this.userInfo.notes[this.sourceIndex]
     this.userInfo.notes[this.targetIndex].index = this.sourceIndex
@@ -554,26 +585,6 @@ export class DashboardComponent implements OnInit {
           x: point.pageX - scrollPosition.left,
           y: point.pageY - scrollPosition.top
       };
-  }
-
-  // Notes functions
-
-  addNote(): void {
-    const dialogRef = this.dialog.open(AddNoteComponent, {
-      width: '25%',
-      data: {title: undefined, content: undefined, color: undefined}
-    });
-    
-    dialogRef.afterClosed().subscribe(result => {
-      let newNote = {
-        title: result.title,
-        content: result.content,
-        color: result.color,
-        index: 0,
-      }
-      this.userInfo.notes.push(newNote)
-      this.patientsService.addPatientNote(this.me.uid, this.userInfo.uid, newNote)
-    });
   }
 
   // Planning functions

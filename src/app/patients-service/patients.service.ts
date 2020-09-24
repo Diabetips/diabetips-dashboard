@@ -102,12 +102,28 @@ export class PatientsService {
     })
   }
 
+  moveNote(myUid: string, patientUid: string, note: any, newIndex: number) {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
+    note.index = newIndex + 1
+
+    const url = `${this.patientsUrl}/${myUid}/sticky/${patientUid}/${note.id}`;
+    this.http.put(url, note, httpOptions)
+    .subscribe(response => {
+      //console.log(response);
+    })
+  }
+
   deletePatientNote(myUid: string, patientUid: string, id: string) {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
 
     const url = `${this.patientsUrl}/${myUid}/sticky/${patientUid}/${id}`;
     this.http.delete(url, httpOptions)
+    .subscribe(response => {
+      //console.log(response);
+    })
   }
 
   //////// Patient-related methods //////////
