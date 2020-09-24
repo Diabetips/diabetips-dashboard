@@ -33,7 +33,7 @@
       <button mat-icon-button [matMenuTriggerFor]="patientOptionsMenu" style="width: 140px; flex-direction: row;" [disableRipple]="true">
         Dr. {{ this.me.last_name }}
         <mat-icon style="margin-bottom: 3px;">keyboard_arrow_down</mat-icon>
-        <img src="{{this.me.profile_picture}}" class="circle responsive-img" style="height: 40px; width: 40px;"/>
+        <img src="../../assets/default_user_picture.svg" class="circle responsive-img" style="height: 40px; width: 40px;"/>
       </button>
       <mat-menu #patientOptionsMenu="matMenu" xPosition="before">
         <button mat-menu-item (click)="goToOptions()">Options</button>

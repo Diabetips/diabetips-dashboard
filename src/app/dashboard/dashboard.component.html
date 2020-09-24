@@ -275,7 +275,7 @@
                 <input matInput [matDatepicker]="hbPicker" [(ngModel)]="selectedDateLimit" (dateChange)="updateDateLimit()" class="date-input" (focus)="hbPicker.open()">
                 <mat-datepicker #hbPicker></mat-datepicker>
                 
-                <select [(ngModel)]="currentLimit" (change)="updateDateLimit()" class="browser-default date-limit-input">
+                <select [(ngModel)]="currentLimit" (change)="updateDateLimit()" class="browser-default date-limit-input" style="margin-right: 5px;">
                   <option *ngFor="let date of dateLimits" [ngValue]="date">{{date.limitName}}</option>
                 </select>
                 
