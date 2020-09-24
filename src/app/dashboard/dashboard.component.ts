@@ -43,6 +43,7 @@ import {
 } from 'angular-calendar';
 
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatDatepickerInputEvent } from '@angular/material';
 
 moment.locale('fr')
 
@@ -138,7 +139,7 @@ export class DashboardComponent implements OnInit {
     responsive: true,
   };
   public bsChartColors: Color[] = [
-    { // grey
+    { // diabetips blue
       backgroundColor: 'rgba(0,161,224,0.2)',
       borderColor: 'rgba(0,161,224,1)',
       pointBackgroundColor: 'rgba(0,161,224,1)',
@@ -295,7 +296,7 @@ export class DashboardComponent implements OnInit {
 
   public currentLimit = this.dateLimits[2];
 
-  public selectedDateLimit = moment()
+  public selectedDateLimit = new Date()
 
   constructor(
     private patientsService: PatientsService,
@@ -322,27 +323,27 @@ export class DashboardComponent implements OnInit {
         this.userInfo.first_name = patient.first_name;
         this.userInfo.last_name = patient.last_name;
       });
-      this.patientsService.getPatientHb(uid).subscribe(hba1c => {
-        this.userInfo.hba1c = hba1c;
-        this.hbChartLabels = []
-        this.hbChartData[0].data = []
-        hba1c.reverse().forEach(measure => {
-          this.hbChartLabels.push(this.timestampAsDateNoHour(measure.time))
-          this.hbChartData[0].data.push(measure.value)
-        });
-      });
-      this.patientsService.getPatientBs(uid).subscribe(blood_sugar => {
-        this.userInfo.blood_sugar = blood_sugar
-        this.bsChartLabels = []
-        this.bsChartData[0].data = []
-        blood_sugar.reverse().forEach(measure => {
-          this.bsChartLabels.push(this.timestampAsDate(measure.time))
-          this.bsChartData[0].data.push(measure.value)
-        });
-      });
-      this.patientsService.getPatientInsulin(uid).subscribe(insulin => {
-        this.userInfo.insulin = insulin;
-      });
+      // this.patientsService.getPatientHb(uid).subscribe(hba1c => {
+      //   this.userInfo.hba1c = hba1c;
+      //   this.hbChartLabels = []
+      //   this.hbChartData[0].data = []
+      //   hba1c.reverse().forEach(measure => {
+      //     this.hbChartLabels.push(this.timestampAsDateNoHour(measure.time))
+      //     this.hbChartData[0].data.push(measure.value)
+      //   });
+      // });
+      // this.patientsService.getPatientBs(uid).subscribe(blood_sugar => {
+      //   this.userInfo.blood_sugar = blood_sugar
+      //   this.bsChartLabels = []
+      //   this.bsChartData[0].data = []
+      //   blood_sugar.reverse().forEach(measure => {
+      //     this.bsChartLabels.push(this.timestampAsDate(measure.time))
+      //     this.bsChartData[0].data.push(measure.value)
+      //   });
+      // });
+      // this.patientsService.getPatientInsulin(uid).subscribe(insulin => {
+      //   this.userInfo.insulin = insulin;
+      // });
       this.patientsService.getPatientMeals(uid).subscribe(meals => {
         meals.forEach(meal => {
           let ingredients = []
@@ -358,16 +359,18 @@ export class DashboardComponent implements OnInit {
       });
       this.patientsService.getPatientBiometrics(uid).subscribe(biometrics => {
         this.userInfo.biometrics = biometrics;
-      })
+      });
       this.patientsService.getPatientPicture(uid).subscribe(picture => {
         this.userInfo.profile_picture = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(picture))
-      })
+      });
       this.patientsService.getMe().subscribe(me => {
         this.me = me;
         this.patientsService.getPatientNotes(me.uid, uid).subscribe(notes => {
           this.userInfo.notes = notes
         })
-      })
+      });
+
+      this.updateDateLimit(uid)
     })
   }
 
@@ -410,7 +413,15 @@ export class DashboardComponent implements OnInit {
 
   // Bs functions
 
-  updateDateLimit() {
+  updateDateLimit(uid: string = null) {
+    if (uid == null) {
+      uid = this.userInfo.uid
+    }
+
+    if (this.selectedDateLimit == null) {
+      return
+    }
+
     let tmpDate = moment(this.selectedDateLimit)
 
     if (this.currentLimit.index == 0) {
@@ -427,7 +438,25 @@ export class DashboardComponent implements OnInit {
       tmpDate.subtract(1, 'year').toISOString()
     }
 
-    this.patientsService.getPatientHbLimit(this.userInfo.uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(hba1c => {
+    this.patientsService.getPatientBsLimit(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(blood_sugar => {
+      this.userInfo.blood_sugar = blood_sugar;
+
+      this.bsChartLabels.length = 0
+      this.bsChartData[0].data.length = 0
+
+      blood_sugar.reverse().forEach(measure => {
+        this.bsChartLabels.push(this.timestampAsDateNoHour(measure.time))
+        this.bsChartData[0].data.push(measure.value)
+      });
+      
+      this.charts.toArray()[0].update()
+    });
+
+    this.patientsService.getPatientBsTarget(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(targets => {
+      this.userInfo.targets = targets;
+    });
+
+    this.patientsService.getPatientHbLimit(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(hba1c => {
       this.userInfo.hba1c = hba1c;
 
       this.hbChartLabels.length = 0
@@ -438,7 +467,6 @@ export class DashboardComponent implements OnInit {
         this.hbChartData[0].data.push(measure.value)
       });
       
-      this.charts.toArray()[0].update()
       this.charts.toArray()[1].update()
     });
   }

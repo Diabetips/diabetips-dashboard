@@ -162,6 +162,22 @@ export class PatientsService {
     return this.http.get(url, httpOptions)
   }
 
+  getPatientBsLimit(uid: string, startDate: string, endDate: string): Observable<any> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
+    const url = `${this.patientsUrl}/${uid}/blood_sugar?start=` + startDate + '&end=' + endDate;
+    return this.http.get(url, httpOptions)
+  }
+
+  getPatientBsTarget(uid: string, startDate: string, endDate: string): Observable<any> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+
+    const url = `${this.patientsUrl}/${uid}/blood_sugar/target?start=` + startDate + '&end=' + endDate;
+    return this.http.get(url, httpOptions)
+  }
+
   getPatientInsulin(uid: string): Observable<any> {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));

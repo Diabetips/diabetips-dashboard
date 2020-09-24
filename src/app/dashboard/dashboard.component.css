@@ -293,3 +293,14 @@ pre {
   justify-content: center;
   align-items: center;
 }
+
+.date-input {
+  width: 75px;
+  font-size: 14px;
+  margin-top: 1px;
+  margin-right: 5px;
+  height: 19px;
+  border-radius: 16px;
+  border: 1px solid #f2f2f2;
+  padding: 5px 5px 5px 10px;
+}

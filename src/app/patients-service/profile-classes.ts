@@ -11,6 +11,7 @@ export class Patient {
     insulin: any;
     meals: any;
     biometrics: any;
+    targets: any;
     notes: any;
 
     constructor() {
@@ -23,6 +24,7 @@ export class Patient {
         this.blood_sugar = []
         this.meals = []
         this.biometrics = {}
+        this.targets = {}
         this.notes = []
     }
 }
