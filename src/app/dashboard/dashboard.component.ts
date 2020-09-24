@@ -8,6 +8,11 @@ import * as moment from 'moment';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
+
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
 
@@ -46,6 +51,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatDatepickerInputEvent } from '@angular/material';
 
 moment.locale('fr')
+
 
 @Component({
   selector: 'app-confirm-deletion',

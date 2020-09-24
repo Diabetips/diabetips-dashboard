@@ -312,3 +312,9 @@ pre {
   height: 32px;
   border-radius: 16px;
 }
+
+.calendar-top-button {
+  font-size: 12px;
+  margin: 0 2px;
+  background-color: #00a1e0;
+}

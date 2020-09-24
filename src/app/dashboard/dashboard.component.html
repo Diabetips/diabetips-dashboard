@@ -171,57 +171,57 @@
             <div class="calendar-container">
               <div class="btn-group">
                 <div
-                  class="btn btn-primary"
+                  class="btn btn-primary calendar-top-button"
                   mwlCalendarPreviousView
                   [view]="view"
                   [(viewDate)]="viewDate"
                   (viewDateChange)="closeOpenMonthViewDay()"
                 >
-                  Previous
+                  Précédent
                 </div>
                 <div
-                  class="btn btn-outline-secondary"
+                  class="btn btn-outline-secondary calendar-top-button"
                   mwlCalendarToday
                   [(viewDate)]="viewDate"
                 >
-                  Today
+                  Aujourd'hui
                 </div>
                 <div
-                  class="btn btn-primary"
+                  class="btn btn-primary calendar-top-button"
                   mwlCalendarNextView
                   [view]="view"
                   [(viewDate)]="viewDate"
                   (viewDateChange)="closeOpenMonthViewDay()"
                 >
-                  Next
+                  Prochain
                 </div>
               </div>
             </div>
-            <div class="calendar-container" style="flex: 2">
-              <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+            <div class="calendar-container" style="flex: 1">
+              <h3 style="margin: 0; font-size: 21px;">{{ viewDate | calendarDate:(view + 'ViewTitle'):'Fr' }}</h3>
             </div>
             <div class="calendar-container">
               <div class="btn-group">
                 <div
-                  class="btn btn-primary"
+                  class="btn btn-primary calendar-top-button"
                   (click)="setView(CalendarView.Month)"
                   [class.active]="view === CalendarView.Month"
                 >
-                  Month
+                  Mois
                 </div>
                 <div
-                  class="btn btn-primary"
+                  class="btn btn-primary calendar-top-button"
                   (click)="setView(CalendarView.Week)"
                   [class.active]="view === CalendarView.Week"
                 >
-                  Week
+                  Semaine
                 </div>
                 <div
-                  class="btn btn-primary"
+                  class="btn btn-primary calendar-top-button"
                   (click)="setView(CalendarView.Day)"
                   [class.active]="view === CalendarView.Day"
                 >
-                  Day
+                  Jour
                 </div>
               </div>
             </div>
@@ -230,6 +230,7 @@
           <div [ngSwitch]="view">
             <mwl-calendar-month-view
               *ngSwitchCase="CalendarView.Month"
+              [locale]="'fr'"
               [viewDate]="viewDate"
               [events]="events"
               [refresh]="refresh"
@@ -241,6 +242,7 @@
             </mwl-calendar-month-view>
             <mwl-calendar-week-view
               *ngSwitchCase="CalendarView.Week"
+              [locale]="'fr'"
               [viewDate]="viewDate"
               [events]="events"
               [refresh]="refresh"
@@ -250,6 +252,7 @@
             </mwl-calendar-week-view>
             <mwl-calendar-day-view
               *ngSwitchCase="CalendarView.Day"
+              [locale]="'fr'"
               [viewDate]="viewDate"
               [events]="events"
               [refresh]="refresh"
