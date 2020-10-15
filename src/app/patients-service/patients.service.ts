@@ -19,8 +19,8 @@ const httpOptions = {
 
 @Injectable()
 export class PatientsService {
-  patientsUrl = 'https://api.diabetips.fr/v1/users';  // URL to web api
-  authUrl = 'https://api.diabetips.fr/v1/auth';  // URL to web api
+  patientsUrl = 'https://api.dev.diabetips.fr/v1/users';  // URL to web api
+  authUrl = 'https://api.dev.diabetips.fr/v1/auth';  // URL to web api
   private handleError: HandleError;
 
   token: string = undefined;
