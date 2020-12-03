@@ -184,6 +184,54 @@ export class DashboardComponent implements OnInit {
   ];
   public bsChartLegend = false;
   public bsChartType: ChartType = 'line';
+
+  // Hb variables
+
+  public hbChartData: ChartDataSets[] = [
+    { data: [] },
+  ];
+  public hbChartLabels: Label[] = [];
+  public hbChartOptions: (ChartOptions) = {
+    responsive: true,
+  };
+  public hbChartColors: Color[] = [
+    { // grey
+      backgroundColor: 'rgba(0,161,224,0.2)',
+      borderColor: 'rgba(0,161,224,1)',
+      pointBackgroundColor: 'rgba(0,161,224,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(0,161,224,0.8)'
+    },
+  ];
+  public hbChartLegend = false;
+  public hbChartType: ChartType = 'line';
+  
+  // Insulin variables
+
+  public insulinChartData: ChartDataSets[] = [
+    { data: [] },
+    { data: [] },
+    { data: [] },
+  ];
+  public insulinChartLabels: Label[] = [];
+  public insulinChartOptions: (ChartOptions) = {
+    responsive: true,
+  };
+  public insulinChartColors: Color[] = [
+    { // grey
+      backgroundColor: 'rgba(0,161,224,0.2)',
+      borderColor: 'rgba(0,161,224,1)',
+      pointBackgroundColor: 'rgba(0,161,224,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(0,161,224,0.8)'
+    },
+  ];
+  public insulinChartLegend = false;
+  public insulinChartType: ChartType = 'line';
+  
+  @ViewChildren( BaseChartDirective ) charts: QueryList<BaseChartDirective>
   
   // Notes variables
 
@@ -268,30 +316,6 @@ export class DashboardComponent implements OnInit {
   ];
 
   activeDayIsOpen: boolean = true;
-
-  // Hb variables
-
-  public hbChartData: ChartDataSets[] = [
-    { data: [] },
-  ];
-  public hbChartLabels: Label[] = [];
-  public hbChartOptions: (ChartOptions) = {
-    responsive: true,
-  };
-  public hbChartColors: Color[] = [
-    { // grey
-      backgroundColor: 'rgba(0,161,224,0.2)',
-      borderColor: 'rgba(0,161,224,1)',
-      pointBackgroundColor: 'rgba(0,161,224,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(0,161,224,0.8)'
-    },
-  ];
-  public hbChartLegend = false;
-  public hbChartType: ChartType = 'line';
-  
-  @ViewChildren( BaseChartDirective ) charts: QueryList<BaseChartDirective>
 
   // Variables end
 
@@ -465,6 +489,31 @@ export class DashboardComponent implements OnInit {
     this.patientsService.getPatientBsTarget(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(targets => {
       this.userInfo.targets = targets;
     });
+    
+    this.patientsService.getPatientInsulinLimit(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString(), 1).subscribe(insulin => {
+      this.userInfo.insulin = insulin;
+
+      this.insulinChartLabels.length = 0
+      this.insulinChartData[0].data.length = 0
+
+      const insulinTypes = ["slow", "fast", "very_fast"];
+
+      insulin.reverse().forEach(measure => {
+        this.insulinChartLabels.push(this.timestampAsDateNoHour(measure.time))
+
+        this.insulinChartData[0].data.push(measure.quantity)
+
+        // if (measure.type == insulinTypes[0]) {
+        //   this.insulinChartData[0].data.push(measure.quantity)
+        // } else if (measure.type == insulinTypes[1]) {
+        //   this.insulinChartData[1].data.push(measure.quantity)
+        // } else if (measure.type == insulinTypes[2]) {
+        //   this.insulinChartData[2].data.push(measure.quantity)
+        // }
+      });
+
+      this.charts.toArray()[1].update()
+    })
 
     this.patientsService.getPatientHbLimit(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(hba1c => {
       this.userInfo.hba1c = hba1c;
@@ -476,8 +525,8 @@ export class DashboardComponent implements OnInit {
         this.hbChartLabels.push(this.timestampAsDateNoHour(measure.time))
         this.hbChartData[0].data.push(measure.value)
       });
-      
-      this.charts.toArray()[1].update()
+
+      this.charts.toArray()[2].update()
     });
   }
 

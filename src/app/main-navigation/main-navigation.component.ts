@@ -12,6 +12,8 @@ import { HttpParams } from '@angular/common/http';
 
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
+import { ConvAdapter } from '../patients-service/conv-adapter';
+
 export interface DialogData {
   email: any;
 }
@@ -47,13 +49,28 @@ export class MainNavigationComponent implements OnInit {
   token;
   searchText: string = "";
 
-  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize'
+  signinUrl = 'http://api.dev.diabetips.fr/v1/auth/authorize'
     + '?response_type=token'
     + '&client_id=diabetips-dashboard'
-    + '&scope=profile:write connections:read connections:invite connections:write biometrics:read biometrics:write meals:read notes:read notes:write'
-    + '&redirect_uri=' + window.location.href;
-//
+    + '&scope=profile:write connections:read connections:invite connections:write biometrics:read biometrics:write meals:read notes:read notes:write notifications'
+    + '&redirect_uri=' + 'http://localhost:4200';
+
   isLoading = true;
+
+  notificationsList = [
+    {
+      title: "test",
+      description: "this is a test notification"
+    },
+    {
+      title: "test2",
+      description: "this is a second test notification"
+    },
+  ];
+  
+  public adapter: ConvAdapter;
+
+  public readyToChat = false;
 
   constructor(
     @Inject(DOCUMENT) private document: Document, 
@@ -74,20 +91,31 @@ export class MainNavigationComponent implements OnInit {
     await this.getToken(this.route)
     this.patientsService.getMe().subscribe(me => {
       this.me = me;
+      this.adapter = new ConvAdapter(me.uid, this.patientsService)
+      this.readyToChat = true
       this.patientsService.connectedId = me.uid
-      this.getPictureForProfile(this.me)
+      // this.getPictureForProfile(this.me)
       this.getConnections();
+      this.getNotifications();
     });
   }
 
   getConnections(): void {
-    this.patientsService.getConnections(this.me.uid)
+    this.patientsService.getConnections()
       .subscribe(patients => {
         this.patients = patients;
         this.patients.forEach(patient => {
           this.getPictureForProfile(patient)
         });
       });
+  }
+
+  getNotifications(): void {
+    this.patientsService.getAllNotifications()
+      .subscribe(notificationsList => {
+        console.log(notificationsList)
+        this.notificationsList = notificationsList
+      })
   }
 
   async getToken(route) {
@@ -160,6 +188,20 @@ export class MainNavigationComponent implements OnInit {
 
   goToOptions() {
     window.location.href = "https://account.diabetips.fr/"
+  }
+
+  sendTestNotif() {
+    this.patientsService.sendTestNotif()
+    .subscribe(response => { })
+  }
+
+  markNotifAsRead(notification, index) {
+    this.notificationsList.splice(index, 1)
+
+    // TODO: mark notif as read
+
+    // We return false so the mat-menu doesn't close
+    return false
   }
 
 }

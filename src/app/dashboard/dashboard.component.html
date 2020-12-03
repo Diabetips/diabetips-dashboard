@@ -10,7 +10,7 @@
         <div style="width: 20px"></div>
         <div class="flex column full-width">
           <div class="card-title" style="display: flex; margin-bottom: 6px;">
-            <span style="flex-grow: 1; margin-top: 4px;">{{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
+            <span style="flex-grow: 1; margin-top: 5px;">{{ userInfo.first_name }} {{ userInfo.last_name | uppercase }}</span>
             <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;" (click)="saveChanges()">
               <i class="material-icons left" style="margin-right: 10px;">save</i>
               Sauvegarder
@@ -20,7 +20,7 @@
             </button>
             <mat-menu #patientOptionsMenu="matMenu" xPosition="before">
               <button mat-menu-item disabled>Envoyer un message</button>
-              <button mat-menu-item (click)="deleteConnection()">Archiver le patient</button>
+              <button mat-menu-item (click)="deleteConnection()">Arrêter le suivi</button>
             </mat-menu>
           </div>
           <div class="simple-small-div"></div>
@@ -43,14 +43,14 @@
     </div>
   </div>
   <div class="container tab-container full-width">
-    <mat-tab-group mat-stretch-tabs class="main-tabs">
+    <mat-tab-group mat-stretch-tabs>
       <mat-tab label="Glycémies">
         <div class="tab-div" style="flex-direction: column;">
           <div class="card full-width-card white" style="margin-top: 0;">
             <div class="card-content black-text">
               
-              <div class="card-title" style="display: flex; margin-bottom: 6px;">
-                <span style="flex-grow: 1; margin-top: 4px;">Statistiques</span>
+              <div class="card-title" style="display: flex; margin-bottom: 0;">
+                <span style="flex-grow: 1; margin-top: 0;">Statistiques</span>
                 
                 <input matInput [matDatepicker]="bsPicker" [(ngModel)]="selectedDateLimit" (dateChange)="updateDateLimit()" class="date-input" (focus)="bsPicker.open()">
                 <mat-datepicker #bsPicker></mat-datepicker>
@@ -90,6 +90,20 @@
                 [colors]="bsChartColors"
                 [legend]="bsChartLegend"
                 [chartType]="bsChartType">
+              </canvas>
+            </div>
+          </div>
+          <div class="card full-width-card white" style="margin-top: 0;">
+            <div class="card-content black-text">
+              <span class="card-title" style="margin-bottom: 0;">Mesures d'insuline</span>
+              <div class="simple-small-div"></div>
+              <canvas baseChart height="85"
+                [datasets]="insulinChartData"
+                [labels]="insulinChartLabels"
+                [options]="insulinChartOptions"
+                [colors]="insulinChartColors"
+                [legend]="insulinChartLegend"
+                [chartType]="insulinChartType">
               </canvas>
             </div>
           </div>
@@ -266,7 +280,7 @@
       </mat-tab>
       
       <mat-tab label="Prises de sang">
-        <div class="tab-div">
+        <div class="tab-div" style="flex-direction: column; align-items: center;">
           <div class="card mid-width white no-margin">
             <div class="card-content black-text">
               <div class="card-title" style="display: flex; margin-bottom: 6px;">
@@ -293,6 +307,27 @@
                 [legend]="hbChartLegend"
                 [chartType]="hbChartType">
               </canvas>
+            </div>
+          </div>
+          
+          <div class="card full-width-card white no-margin">
+            <div class="card-content black-text">
+              <span class="card-title" style="margin-bottom: 0;">Liste des mesures</span>
+              <div class="simple-small-div" style="margin-bottom: 0;"></div>
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 80%;">Date</th>
+                    <th>Valeur</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let measure of userInfo.hba1c">
+                    <td>{{this.timestampAsDate(measure.time)}}</td>
+                    <td>{{measure.value}}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

@@ -36,10 +36,29 @@
         <img src="../../assets/default_user_picture.svg" class="circle responsive-img" style="height: 40px; width: 40px;"/>
       </button>
       <mat-menu #patientOptionsMenu="matMenu" xPosition="before">
+        <button mat-menu-item (click)="sendTestNotif()">test notif.</button>
         <button mat-menu-item (click)="goToOptions()">Options</button>
         <button mat-menu-item (click)="signOut()">Deconnexion</button>
       </mat-menu>
+      <div class="simple-small-div-vert" style="height: 50%; margin-left: 2px;"></div>
+      <button mat-icon-button [matMenuTriggerFor]="notificationsMenu" [disableRipple]="true">
+        <mat-icon style="margin-bottom: 3px;">notifications</mat-icon>
+      </button>
+      <mat-menu #notificationsMenu="matMenu" xPosition="before">
+        <button mat-menu-item
+          *ngFor="let notification of notificationsList; let indexOfelement = index; let last = last"
+          (click)="$event.stopPropagation()"
+          (contextmenu)="markNotifAsRead(notification, indexOfelement)"
+        >
+          <div style="display: flex; flex-direction: column;">
+            <span style="line-height: 23px;">{{notification.time}}</span>
+            <span style="line-height: 23px;">{{notification.type}}</span>
+            <div *ngIf="!last" class="simple-small-div"></div>
+          </div>
+        </button>
+      </mat-menu>
     </mat-toolbar>
+    <ng-chat *ngIf="readyToChat" [adapter]="adapter" [userId]="me.uid" [theme]="'dark-theme'" [title]="'ta mere'"></ng-chat>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

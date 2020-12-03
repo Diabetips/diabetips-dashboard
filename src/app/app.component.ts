@@ -9,6 +9,7 @@ import { Title } from '@angular/platform-browser';
 export class AppComponent {
   title = 'Dashboard Diabetips';
   description = 'Diabetips\' doctor dashboard';
+  
 
   public constructor(private titleService: Title) {
     this.titleService.setTitle(this.title)

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
-
 import { BehaviorSubject, Observable } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
 
@@ -10,6 +9,13 @@ import { Patient } from './profile-classes';
 import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
 import { ɵNoopAnimationStyleNormalizer } from '@angular/animations/browser';
 import { Router } from '@angular/router';
+
+import { ConvAdapter } from './conv-adapter'
+
+import firebase from 'firebase/app';
+import 'firebase/analytics';
+import 'firebase/messaging';
+import { ChatParticipantStatus, ChatParticipantType, ParticipantResponse } from 'ng-chat';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,19 +25,92 @@ const httpOptions = {
 
 @Injectable()
 export class PatientsService {
-  patientsUrl = 'https://api.diabetips.fr/v1/users';  // URL to web api
-  authUrl = 'https://api.diabetips.fr/v1/auth';  // URL to web api
+  patientsUrl = 'https://api.dev.diabetips.fr/v1/users';  // URL to web api
+  authUrl = 'https://api.dev.diabetips.fr/v1/auth';  // URL to web api
+  notifUrl = 'https://api.dev.diabetips.fr/v1'
   private handleError: HandleError;
 
   token: string = undefined;
   connectedId: string = undefined;
 
+  public convAdapter: ConvAdapter
+
   private pictureSub = new BehaviorSubject<Blob>(null);
 
-  constructor(
-    private http: HttpClient,
-    httpErrorHandler: HttpErrorHandler) {
+  constructor(private http: HttpClient, httpErrorHandler: HttpErrorHandler) {
     this.handleError = httpErrorHandler.createHandleError('PatientsService');
+
+    //////// Firebase Setup //////////
+    
+    var firebaseConfig = {
+      apiKey: "AIzaSyBBlVe4BM_u8BIFWBMbMdPGQMHEjTweUzo",
+      authDomain: "diabetips-42069.firebaseapp.com",
+      databaseURL: "https://diabetips-42069.firebaseio.com",
+      projectId: "diabetips-42069",
+      storageBucket: "diabetips-42069.appspot.com",
+      messagingSenderId: "662514934162",
+      appId: "1:662514934162:web:536585977496be771fa14b",
+      measurementId: "G-X6DVX49JTZ"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Retrieve an instance of Firebase Messaging so that it can handle background messages.
+    const messaging = firebase.messaging();
+    messaging.getToken({vapidKey: "BMg-O_t5azymJCJbJ91s404AF0lr8Nd0YsY9O_2tB2XSlniiGFCqFF1in52JsHMyleyZz8WtKbpZfAGBnDXxwDc"})
+    .then((token) => {
+      if (token) {
+        this.registerFcm(token);
+      } else {
+        Notification.requestPermission().then(() => {});
+      }
+    });
+
+    // Handle incoming messages. Called when:
+    // - a message is received while the app has focus
+    // - the user clicks on an app notification created by a service worker
+    //   `messaging.setBackgroundMessageHandler` handler.
+    messaging.onMessage((payload) => {
+      console.log('Message received. ', payload);
+
+      // Pass the new message to the conversation adapter for things
+      this.convAdapter.onMessageReceived({
+        participantType: ChatParticipantType.User,
+        id: "000",
+        status: ChatParticipantStatus.Online,
+        avatar: '',
+        displayName: "Baguettson"
+      }, {
+        fromId: "000",
+        toId: "000",
+        message: "Hello World !"
+      })
+    });
+  }
+
+  //////// Notifications-related methods //////////
+
+  registerFcm(token: string) {
+    const url = `${this.notifUrl}/notifications/fcm_token`;
+    this.http.post(url, { 'token': token })
+      .subscribe(response => { })
+  }
+
+  getAllNotifications() {
+    const url = `${this.notifUrl}/notifications`;
+    return this.http.get<any>(url)
+     .pipe(
+       catchError(this.handleError('getPatients', []))
+     );
+  }
+
+  sendTestNotif() {
+    const url = `${this.notifUrl}/notifications/test`;
+    return this.http.get<any>(url)
+     .pipe(
+       catchError(this.handleError('sendTestNotif', []))
+     );
   }
 
   //////// Me-related methods //////////
@@ -45,8 +124,8 @@ export class PatientsService {
 
   //////// Connections-related methods //////////
 
-  getConnections(uid: string): Observable<Patient[]> {
-    const url = `${this.patientsUrl}/${uid}/connections`;
+  getConnections(): Observable<Patient[]> {
+    const url = `${this.patientsUrl}/me/connections`;
     return this.http.get<Patient[]>(url)
      .pipe(
        catchError(this.handleError('getPatients', []))
@@ -154,8 +233,15 @@ export class PatientsService {
     return this.http.get(url)
   }
 
-  getPatientInsulin(uid: string): Observable<any> {
-    const url = `${this.patientsUrl}/${uid}/insulin`;
+  insulinTypes = ["slow", "fast", "very_fast"];
+
+  getPatientInsulin(uid: string, type: number): Observable<any> {
+    const url = `${this.patientsUrl}/${uid}/insulin?type=${this.insulinTypes[type]}`;
+    return this.http.get(url)
+  }
+
+  getPatientInsulinLimit(uid: string, startDate: string, endDate: string, type: number): Observable<any> {
+    const url = `${this.patientsUrl}/${uid}/insulin?type=${this.insulinTypes[type]}&start=` + startDate + '&end=' + endDate;
     return this.http.get(url)
   }
 
@@ -212,7 +298,6 @@ export class PatientsService {
       );
   }
 }
-
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 

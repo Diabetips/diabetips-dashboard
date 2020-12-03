@@ -42,3 +42,15 @@
 h4 {
   outline: 0
 }
+
+.simple-small-div-vert {
+  width: 2px;
+  background-color: #00000023;
+  margin: 0 10px;
+}
+
+.simple-small-div {
+  height: 2px;
+  background-color: #00000023;
+  margin-bottom: 10px;
+}

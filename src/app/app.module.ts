@@ -30,6 +30,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { NgChatModule } from 'ng-chat';
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,7 +70,8 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModalModule,
     FlatpickrModule.forRoot(),
     DragDropModule,
-    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
+    NgChatModule
   ],
   providers: [
     HttpErrorHandler,
@@ -80,7 +82,9 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
     { provide: MAT_DATE_LOCALE, useValue: 'fr' },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [
+    AppComponent
+  ],
   entryComponents: [
     InvitePatientComponent,
     ConfirmDeletionComponent,
