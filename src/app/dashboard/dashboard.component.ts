@@ -39,7 +39,6 @@ import {
   addHours,
 } from 'date-fns';
 import { Subject } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -48,7 +47,7 @@ import {
 } from 'angular-calendar';
 
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatDatepickerInputEvent } from '@angular/material';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 moment.locale('fr')
 
@@ -88,8 +87,10 @@ export class AddMeasureComponent {
 }
 
 export interface NoteData {
-  color: string;
+  color: any;
   note: string;
+  title: string;
+  content: string;
 }
 
 @Component({
@@ -235,8 +236,8 @@ export class DashboardComponent implements OnInit {
   
   // Notes variables
 
-  @ViewChild(CdkDropListGroup, {static: false}) listGroup: CdkDropListGroup<CdkDropList>;
-  @ViewChild(CdkDropList, {static: false}) placeholder: CdkDropList;
+  @ViewChild(CdkDropListGroup) listGroup: CdkDropListGroup<CdkDropList>;
+  @ViewChild(CdkDropList) placeholder: CdkDropList;
 
   public target: CdkDropList;
   public targetIndex: number;
@@ -247,7 +248,6 @@ export class DashboardComponent implements OnInit {
   
   // Planning variables
 
-  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
 
@@ -357,7 +357,6 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private viewportRuler: ViewportRuler,
     private sanitizer: DomSanitizer,
-    private modal: NgbModal
   ) {
     this.userInfo = new Patient
 
@@ -584,7 +583,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  dropListDropped() {
+  dropListDropped(ev) {
     if (!this.target)
       return;
 
@@ -642,7 +641,7 @@ export class DashboardComponent implements OnInit {
     dropElement.parentElement.insertBefore(phElement, (dropIndex > dragIndex 
       ? dropElement.nextSibling : dropElement));
 
-    this.placeholder.enter(drag, drag.element.nativeElement.offsetLeft, drag.element.nativeElement.offsetTop);
+    //this.placeholder.enter(drag, drag.element.nativeElement.offsetLeft, drag.element.nativeElement.offsetTop);
     return false;
   }
   
@@ -693,8 +692,10 @@ export class DashboardComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    console.log(action)
+    console.log(event)
+    // this.modalData = { event, action };
+    // this.modal.open(this.modalContent, { size: 'lg' });
   }
 
   addEvent(): void {

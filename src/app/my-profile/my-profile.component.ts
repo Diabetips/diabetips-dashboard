@@ -25,7 +25,7 @@ export class MyProfileComponent implements OnInit {
 
   token: string = localStorage.getItem('token');
   
-  @ViewChild('myChart', { static: false }) myChart;
+  @ViewChild('myChart') myChart;
 
   constructor( private patientsService: PatientsService, public dialog: MatDialog ) {
     this.userInfo = new Diabetolog

@@ -6,8 +6,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent, AddMeasureComponent, AddNoteComponent, ConfirmDeletionComponent } from './dashboard/dashboard.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatRadioModule, MatCardModule, MatToolbarModule, MatSidenavModule, MatIconModule, MatListModule, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material';
-import { MatDialogModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -28,7 +38,6 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { FlatpickrModule } from 'angularx-flatpickr';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { NgChatModule } from 'ng-chat';
 @NgModule({
@@ -67,7 +76,6 @@ import { NgChatModule } from 'ng-chat';
     HttpClientModule,
     ChartsModule,
     CommonModule,
-    NgbModalModule,
     FlatpickrModule.forRoot(),
     DragDropModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
