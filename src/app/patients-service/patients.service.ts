@@ -27,7 +27,8 @@ const httpOptions = {
 export class PatientsService {
   patientsUrl = 'https://api.dev.diabetips.fr/v1/users';  // URL to web api
   authUrl = 'https://api.dev.diabetips.fr/v1/auth';  // URL to web api
-  notifUrl = 'https://api.dev.diabetips.fr/v1'
+  convUrl = 'https://api.dev.diabetips.fr/v1/chat'
+  notifUrl = 'https://api.dev.diabetips.fr/v1/notifications'
   private handleError: HandleError;
 
   token: string = undefined;
@@ -73,6 +74,7 @@ export class PatientsService {
     //   `messaging.setBackgroundMessageHandler` handler.
     messaging.onMessage((payload) => {
       console.log('Message received. ', payload);
+      //this.convAdapter = new ConvAdapter(me.uid, this.patientsService)
 
       // Pass the new message to the conversation adapter for things
       this.convAdapter.onMessageReceived({
@@ -89,28 +91,44 @@ export class PatientsService {
     });
   }
 
+  //////// Chat-related methods //////////
+
+  getConversation(patientUid: string) {
+    const url = `${this.convUrl}/${patientUid}`;
+    return this.http.get<any>(url)
+      .pipe(
+        catchError(this.handleError('getConversation', []))
+      );
+  }
+
+  sendMessage(patientUid: string, message: string) {
+    const url = `${this.convUrl}/${patientUid}`;
+    this.http.post(url, { content: message })
+      .subscribe(response => { })
+  }
+
   //////// Notifications-related methods //////////
 
   registerFcm(token: string) {
-    const url = `${this.notifUrl}/notifications/fcm_token`;
+    const url = `${this.notifUrl}/fcm_token`;
     this.http.post(url, { 'token': token })
       .subscribe(response => { })
   }
 
   getAllNotifications() {
-    const url = `${this.notifUrl}/notifications`;
+    const url = `${this.notifUrl}`;
     return this.http.get<any>(url)
-     .pipe(
-       catchError(this.handleError('getPatients', []))
-     );
+      .pipe(
+        catchError(this.handleError('getPatients', []))
+      );
   }
 
   sendTestNotif() {
-    const url = `${this.notifUrl}/notifications/test`;
+    const url = `${this.notifUrl}/test`;
     return this.http.get<any>(url)
-     .pipe(
-       catchError(this.handleError('sendTestNotif', []))
-     );
+      .pipe(
+        catchError(this.handleError('sendTestNotif', []))
+      );
   }
 
   //////// Me-related methods //////////

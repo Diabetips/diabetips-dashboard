@@ -13,16 +13,13 @@ export class ConvAdapter extends ChatAdapter {
     ) {
         super();
         this.userId = userId;
-
-        console.log("ConvAdapter setup and ready for action !")
     }
 
     listFriends(): Observable<ParticipantResponse[]> {
-        // List connected users to show in the friends list
-        // Sending the userId from the request body as this is just a demo 
         return this.patientsService.getConnections().pipe(map(data => {
             let participantResponseArray: ParticipantResponse[] = []
 
+            // Treat all connections and convert them into ParticipantResponses
             data.forEach((element, i) => {
                 participantResponseArray.push({
                     participant: {
@@ -30,7 +27,7 @@ export class ConvAdapter extends ChatAdapter {
                         id: element.uid,
                         status: ChatParticipantStatus.Online,
                         avatar: null,
-                        displayName: element.email
+                        displayName: element.first_name + ' ' + element.last_name.toUpperCase()
                     },
                     metadata: {
                         totalUnreadMessages: 0
@@ -42,12 +39,22 @@ export class ConvAdapter extends ChatAdapter {
     }
 
     getMessageHistory(userId: any): Observable<Message[]> {
-        // This could be an API call to your NodeJS application that would go to the database
-        // and retrieve a N amount of history messages between the users.
-        return of([]);
+        return this.patientsService.getConversation(userId).pipe(map(data => {
+            let participantResponseArray: Message[] = []
+
+            // Treat all connections and convert them into ParticipantResponses
+            data.reverse().forEach((element, i) => {
+                participantResponseArray.push({
+                    fromId: element.from,
+                    toId: element.to,
+                    message: element.content
+                })
+            });
+            return participantResponseArray
+        }))
     }
 
     sendMessage(message: Message): void {
-        // this.patientsService.sendMessage()
+        this.patientsService.sendMessage(message.toId, message.message)
     }
 }
