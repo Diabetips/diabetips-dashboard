@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, ChangeDetectionStrategy, TemplateRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ChangeDetectionStrategy, TemplateRef, QueryList, ViewChildren, ChangeDetectorRef } from '@angular/core';
 
 import { Patient } from '../patients-service/profile-classes';
 import { PatientsService } from '../patients-service/patients.service';
@@ -135,6 +135,28 @@ export class AddNoteComponent {
   }
 }
 
+export interface EventData {
+  title: string;
+  description: string;
+  dateStart: any;
+  dateEnd: any;
+}
+
+@Component({
+  selector: 'app-add-event',
+  templateUrl: 'add-event.html',
+  styleUrls: ['./dashboard.component.css']
+})
+export class AddEventComponent {
+
+  constructor(public dialogRef: MatDialogRef<AddEventComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: EventData) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+}
+
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -152,7 +174,6 @@ const colors: any = {
 
 @Component({
   selector: 'app-dashboard',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -162,8 +183,6 @@ export class DashboardComponent implements OnInit {
 
   userInfo: Patient;
 
-  me: any;
-  
   // Bs variables
 
   public bsChartData: ChartDataSets[] = [
@@ -172,6 +191,18 @@ export class DashboardComponent implements OnInit {
   public bsChartLabels: Label[] = [];
   public bsChartOptions: (ChartOptions) = {
     responsive: true,
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }],
+      xAxes: [{
+        ticks: {
+          autoSkip: false
+        }
+      }]
+    }
   };
   public bsChartColors: Color[] = [
     { // diabetips blue
@@ -194,6 +225,13 @@ export class DashboardComponent implements OnInit {
   public hbChartLabels: Label[] = [];
   public hbChartOptions: (ChartOptions) = {
     responsive: true,
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
   };
   public hbChartColors: Color[] = [
     { // grey
@@ -212,12 +250,17 @@ export class DashboardComponent implements OnInit {
 
   public insulinChartData: ChartDataSets[] = [
     { data: [] },
-    { data: [] },
-    { data: [] },
   ];
   public insulinChartLabels: Label[] = [];
   public insulinChartOptions: (ChartOptions) = {
     responsive: true,
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
   };
   public insulinChartColors: Color[] = [
     { // grey
@@ -230,7 +273,7 @@ export class DashboardComponent implements OnInit {
     },
   ];
   public insulinChartLegend = false;
-  public insulinChartType: ChartType = 'line';
+  public insulinChartType: ChartType = 'bar';
   
   @ViewChildren( BaseChartDirective ) charts: QueryList<BaseChartDirective>
   
@@ -248,7 +291,6 @@ export class DashboardComponent implements OnInit {
   
   // Planning variables
 
-
   view: CalendarView = CalendarView.Month;
 
   CalendarView = CalendarView;
@@ -261,21 +303,13 @@ export class DashboardComponent implements OnInit {
   };
 
   actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
-      a11yLabel: 'Edit',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      },
-    },
-    {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
-      a11yLabel: 'Delete',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      },
-    },
+    // {
+    //   label: '<mat-icon>create</mat-icon>',
+    //   a11yLabel: 'Edit',
+    //   onClick: ({ event }: { event: CalendarEvent }): void => {
+    //     this.handleEvent('Edited', event);
+    //   },
+    // }
   ];
 
   refresh: Subject<any> = new Subject();
@@ -357,6 +391,7 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private viewportRuler: ViewportRuler,
     private sanitizer: DomSanitizer,
+    private cdr: ChangeDetectorRef
   ) {
     this.userInfo = new Patient
 
@@ -374,7 +409,7 @@ export class DashboardComponent implements OnInit {
         this.userInfo.first_name = patient.first_name;
         this.userInfo.last_name = patient.last_name;
       });
-      this.patientsService.getPatientPicture(this.userInfo.uid).subscribe(picture => {
+      this.patientsService.getPatientPicture(uid).subscribe(picture => {
         this.userInfo.profile_picture = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(picture))
       });
       this.patientsService.getPatientMeals(uid).subscribe(meals => {
@@ -389,19 +424,20 @@ export class DashboardComponent implements OnInit {
           meal.ingredients = ingredients.join(", ")
         });
         this.userInfo.meals = meals;
+        console.log(this.userInfo.meals)
       });
       this.patientsService.getPatientBiometrics(uid).subscribe(biometrics => {
         this.userInfo.biometrics = biometrics;
       });
-      this.patientsService.getPatientPicture(uid).subscribe(picture => {
-        this.userInfo.profile_picture = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(picture))
-      });
-      this.patientsService.getMe().subscribe(me => {
-        this.me = me;
-        this.patientsService.getPatientNotes(uid).subscribe(notes => {
-          this.userInfo.notes = notes
-        })
-      });
+      this.patientsService.getPatientNotes(uid).subscribe(notes => {
+        this.userInfo.notes = notes
+      })
+      this.patientsService.getAllPlanningEvents().subscribe(events => {
+        console.log(events)
+      })
+      this.patientsService.getPredictionSettings(uid).subscribe(settings => {
+        this.userInfo.prediction_enabled = settings.enabled
+      })
 
       this.updateDateLimit(uid)
     })
@@ -444,6 +480,10 @@ export class DashboardComponent implements OnInit {
     return moment(time).utc().format('DD/MM/YYYY')
   }
 
+  changePredictionSettings() {
+    this.patientsService.setPredictionSettings(this.userInfo.uid, this.userInfo.prediction_enabled)
+  }
+
   // Bs and Hb functions
 
   updateDateLimit(uid: string = null) {
@@ -481,7 +521,7 @@ export class DashboardComponent implements OnInit {
         this.bsChartLabels.push(this.timestampAsDateNoHour(measure.time))
         this.bsChartData[0].data.push(measure.value)
       });
-      
+
       this.charts.toArray()[0].update()
     });
 
@@ -498,7 +538,7 @@ export class DashboardComponent implements OnInit {
       const insulinTypes = ["slow", "fast", "very_fast"];
 
       insulin.reverse().forEach(measure => {
-        this.insulinChartLabels.push(this.timestampAsDateNoHour(measure.time))
+        this.insulinChartLabels.push(this.timestampAsDate(measure.time))
 
         this.insulinChartData[0].data.push(measure.quantity)
 
@@ -556,8 +596,10 @@ export class DashboardComponent implements OnInit {
         index: 0,
       }
 
-      this.userInfo.notes.push(newNote)
-      this.patientsService.addPatientNote(this.userInfo.uid, newNote)
+      this.patientsService.addPatientNote(this.userInfo.uid, newNote).subscribe(note => {
+        this.userInfo.notes.push(note)
+        this.cdr.detectChanges()
+      })
     });
   }
 
@@ -658,6 +700,36 @@ export class DashboardComponent implements OnInit {
   }
 
   // Planning functions
+
+  addEvent(): void {
+    const dialogRef = this.dialog.open(AddEventComponent, {
+      width: '25%',
+      data: {
+        title: undefined,
+        description: undefined,
+        dateStart: (new Date()).toISOString().slice(0, -8),
+        dateEnd: undefined,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result || !result.title || !result.description) {
+        return
+      }
+
+      let newEvent = {
+        title: result.title,
+        description: result.description,
+        dateStart: result.dateStart,
+        dateEnd: result.dateEnd
+      }
+
+      console.log(newEvent)
+
+      // this.userInfo.notes.push(newNote)
+      // this.patientsService.addPatientNote(this.userInfo.uid, newNote)
+    });
+  }
   
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -694,25 +766,33 @@ export class DashboardComponent implements OnInit {
   handleEvent(action: string, event: CalendarEvent): void {
     console.log(action)
     console.log(event)
-    // this.modalData = { event, action };
-    // this.modal.open(this.modalContent, { size: 'lg' });
-  }
+    const dialogRef = this.dialog.open(AddEventComponent, {
+      width: '25%',
+      data: {
+        title: event.title,
+        description: undefined,
+        dateStart: (event.start).toISOString().slice(0, -8),
+        dateEnd: (event.end).toISOString().slice(0, -8),
+      }
+    });
 
-  addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-      },
-    ];
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result || !result.title || !result.description) {
+        return
+      }
+
+      let newEvent = {
+        title: result.title,
+        description: result.description,
+        dateStart: result.dateStart,
+        dateEnd: result.dateEnd
+      }
+
+      console.log(newEvent)
+
+      // this.userInfo.notes.push(newNote)
+      // this.patientsService.addPatientNote(this.userInfo.uid, newNote)
+    });
   }
 
   deleteEvent(eventToDelete: CalendarEvent) {

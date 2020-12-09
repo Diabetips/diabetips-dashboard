@@ -13,6 +13,8 @@ export class Patient {
     biometrics: any;
     targets: any;
     notes: any;
+    prediction_enabled: boolean;
+    predictions: any;
 
     constructor() {
         this.uid = "ph"
@@ -26,6 +28,8 @@ export class Patient {
         this.biometrics = {}
         this.targets = {}
         this.notes = []
+        this.prediction_enabled = false
+        this.predictions = []
     }
 }
 

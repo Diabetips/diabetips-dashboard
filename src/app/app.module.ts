@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { DashboardComponent, AddMeasureComponent, AddNoteComponent, ConfirmDeletionComponent } from './dashboard/dashboard.component';
+import { DashboardComponent, AddMeasureComponent, AddNoteComponent, AddEventComponent, ConfirmDeletionComponent } from './dashboard/dashboard.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,6 +48,7 @@ import { NgChatModule } from 'ng-chat';
     InvitePatientComponent,
     AddMeasureComponent,
     AddNoteComponent,
+    AddEventComponent,
     ConfirmDeletionComponent,
     MyProfileComponent,
   ],
@@ -97,7 +98,8 @@ import { NgChatModule } from 'ng-chat';
     InvitePatientComponent,
     ConfirmDeletionComponent,
     AddMeasureComponent,
-    AddNoteComponent
+    AddNoteComponent,
+    AddEventComponent,
   ]
 })
 export class AppModule { }

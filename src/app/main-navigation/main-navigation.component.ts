@@ -52,8 +52,7 @@ export class MainNavigationComponent implements OnInit {
   signinUrl = 'http://api.dev.diabetips.fr/v1/auth/authorize'
     + '?response_type=token'
     + '&client_id=diabetips-dashboard'
-    + '&scope=profile:write connections:read connections:invite connections:write biometrics:read biometrics:write meals:read notes:read notes:write notifications chat'
-    + '&redirect_uri=' + window.location.href;
+    + '&scope=profile:write connections:read connections:invite connections:write biometrics:read biometrics:write meals:read notes:read notes:write notifications chat predictions:new predictions:settings';
 
   isLoading = true;
 

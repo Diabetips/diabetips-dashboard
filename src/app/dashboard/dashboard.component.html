@@ -93,18 +93,42 @@
               </canvas>
             </div>
           </div>
-          <div class="card full-width-card white" style="margin-top: 0;">
-            <div class="card-content black-text">
-              <span class="card-title" style="margin-bottom: 0;">Mesures d'insuline</span>
-              <div class="simple-small-div"></div>
-              <canvas baseChart height="85"
-                [datasets]="insulinChartData"
-                [labels]="insulinChartLabels"
-                [options]="insulinChartOptions"
-                [colors]="insulinChartColors"
-                [legend]="insulinChartLegend"
-                [chartType]="insulinChartType">
-              </canvas>
+          <div style="display: flex; flex-direction: row;">
+            <div class="card two-third-card white" style="margin-top: 0;">
+              <div class="card-content black-text">
+                <span class="card-title" style="flex-grow: 1; margin-bottom: 0;">Mesures d'insuline</span>
+                <div class="simple-small-div"></div>
+                <canvas baseChart height="85"
+                  [datasets]="insulinChartData"
+                  [labels]="insulinChartLabels"
+                  [options]="insulinChartOptions"
+                  [colors]="insulinChartColors"
+                  [legend]="insulinChartLegend"
+                  [chartType]="insulinChartType">
+                </canvas>
+              </div>
+            </div>
+            <div class="card one-third-card white" style="margin-top: 0;">
+              <div class="card-content black-text">
+                <div class="card-title" style="display: flex; margin-bottom: 0;">
+                  <span style="flex-grow: 1; margin-top: 0;">IA</span>
+                  
+                  <div class="switch">
+                    <label>
+                      Off
+                      <input type="checkbox" [(ngModel)]="userInfo.prediction_enabled" (change)="changePredictionSettings()">
+                      <span class="lever"></span>
+                      On
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="simple-small-div"></div>
+                <div class="stat-container">
+                  <span class="stat-title">Taux d'erreur</span>
+                  <span class="stat-number">3%</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -162,7 +186,6 @@
                   <tr>
                     <th style="width: 12%;">Date</th>
                     <th>Ingrédients</th>
-                    <th style="width: 30%;">Description</th>
                     <th style="width: 15%;">Quantité de sucre</th>
                   </tr>
                 </thead>
@@ -170,8 +193,7 @@
                   <tr *ngFor="let meal of userInfo.meals">
                     <td>{{this.timestampAsDate(meal.timestamp)}}</td>
                     <td>{{meal.ingredients}}</td>
-                    <td>{{meal.description}}</td>
-                    <!-- <td>{{meal.total_sugar.toFixed(2)}}g</td> -->
+                    <td>{{meal.total_sugars.toFixed(2)}}g</td>
                   </tr>
                 </tbody>
               </table>
@@ -214,6 +236,12 @@
             </div>
             <div class="calendar-container" style="flex: 1">
               <h3 style="margin: 0; font-size: 21px;">{{ viewDate | calendarDate:(view + 'ViewTitle'):'Fr' }}</h3>
+              <div class="card-title" style="display: flex; margin-bottom: 6px; margin-left: 15px;">
+                <a class="waves-effect waves-light btn topbar-button" style="margin-right: 5px;" (click)="addEvent()">
+                  <i class="material-icons left" style="margin-right: 10px;">add</i>
+                  Ajouter
+                </a>
+              </div>
             </div>
             <div class="calendar-container">
               <div class="btn-group">

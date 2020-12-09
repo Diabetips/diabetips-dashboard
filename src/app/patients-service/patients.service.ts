@@ -131,10 +131,37 @@ export class PatientsService {
       );
   }
 
+  //////// AI-related methods //////////
+
+  getPredictionSettings(patientUid: string): Observable<any> {
+    const url = `${this.patientsUrl}/${patientUid}/predictions/settings`;
+    return this.http.get<any>(url)
+     .pipe(
+       catchError(this.handleError('getPredictionSettings', []))
+     );
+  }
+
+  setPredictionSettings(patientUid: string, enabled: boolean) {
+    console.log("setting prediction settings to " + enabled)
+    const url = `${this.patientsUrl}/${patientUid}/predictions/settings`;
+    this.http.put(url, { 'enabled': enabled })
+      .subscribe(response => {
+        console.log(response);
+        location.reload()
+      })
+  }
+
   //////// Me-related methods //////////
 
   getMe(): Observable<any> {
     return this.http.get<any>(this.patientsUrl + '/me')
+     .pipe(
+       catchError(this.handleError('getMe', []))
+     );
+  }
+
+  getAllPlanningEvents(): Observable<any> {
+    return this.http.get<any>(this.patientsUrl + '/me/planning')
      .pipe(
        catchError(this.handleError('getMe', []))
      );
@@ -175,12 +202,9 @@ export class PatientsService {
     return this.http.get(url)
   }
 
-  addPatientNote(patientUid: string, note: any) {
+  addPatientNote(patientUid: string, note: any): Observable<any> {
     const url = `${this.patientsUrl}/me/sticky/${patientUid}`;
-    this.http.post(url, note)
-    .subscribe(response => {
-      console.log(response);
-    })
+    return this.http.post(url, note)
   }
 
   moveNote(patientUid: string, note: any, newIndex: number) {
@@ -242,7 +266,7 @@ export class PatientsService {
   }
 
   getPatientBsLimit(uid: string, startDate: string, endDate: string): Observable<any> {
-    const url = `${this.patientsUrl}/${uid}/blood_sugar?start=` + startDate + '&end=' + endDate;
+    const url = `${this.patientsUrl}/${uid}/blood_sugar?size=50&start=` + startDate + '&end=' + endDate;
     return this.http.get(url)
   }
 

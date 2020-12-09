@@ -23,7 +23,7 @@
         <img [src]="patient.profile_picture" class="circle responsive-img" style="height: 65%; margin-right: 10px;"/>
         <h4 routerLink="/dashboard" [queryParams]="{ patient: patient.uid }" class="patient-name">
           {{patient.first_name}}
-          {{patient.last_name}}
+          {{patient.last_name.toUpperCase()}}
         </h4>
       </a>
     </mat-nav-list>
@@ -58,7 +58,7 @@
         </button>
       </mat-menu>
     </mat-toolbar>
-    <ng-chat *ngIf="readyToChat" [adapter]="adapter" [userId]="me.uid" [theme]="'dark-theme'" [title]="'ta mere'"></ng-chat>
+    <ng-chat *ngIf="readyToChat" [adapter]="adapter" [userId]="me.uid" [title]="'Conversations'" [isCollapsed]="true"></ng-chat>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
