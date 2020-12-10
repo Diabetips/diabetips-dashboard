@@ -40,6 +40,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FlatpickrModule } from 'angularx-flatpickr';
 
 import { NgChatModule } from 'ng-chat';
+import { ProfilePictureComponent } from './profile-picture/profile-picture.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +52,7 @@ import { NgChatModule } from 'ng-chat';
     AddEventComponent,
     ConfirmDeletionComponent,
     MyProfileComponent,
+    ProfilePictureComponent,
   ],
   imports: [
     MatDatepickerModule,

@@ -3,11 +3,10 @@ import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRe
 import { HttpHeaders } from '@angular/common/http';
 
 import { BehaviorSubject, Observable } from 'rxjs';
-import { mergeMap, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 import { Patient } from './profile-classes';
 import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
-import { ɵNoopAnimationStyleNormalizer } from '@angular/animations/browser';
 import { Router } from '@angular/router';
 
 import { ConvAdapter } from './conv-adapter'
@@ -15,7 +14,6 @@ import { ConvAdapter } from './conv-adapter'
 import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/messaging';
-import { ChatParticipantStatus, ChatParticipantType, ParticipantResponse } from 'ng-chat';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -25,15 +23,16 @@ const httpOptions = {
 
 @Injectable()
 export class PatientsService {
-  patientsUrl = 'https://api.dev.diabetips.fr/v1/users';  // URL to web api
-  authUrl = 'https://api.dev.diabetips.fr/v1/auth';  // URL to web api
-  convUrl = 'https://api.dev.diabetips.fr/v1/chat'
-  notifUrl = 'https://api.dev.diabetips.fr/v1/notifications'
+  patientsUrl = 'https://api.diabetips.fr/v1/users';  // URL to web api
+  authUrl = 'https://api.diabetips.fr/v1/auth';  // URL to web api
+  convUrl = 'https://api.diabetips.fr/v1/chat'
+  notifUrl = 'https://api.diabetips.fr/v1/notifications'
   private handleError: HandleError;
 
   token: string = undefined;
   connectedId: string = undefined;
 
+  public messaging
   public convAdapter: ConvAdapter
 
   private pictureSub = new BehaviorSubject<Blob>(null);
@@ -58,36 +57,14 @@ export class PatientsService {
     firebase.initializeApp(firebaseConfig);
 
     // Retrieve an instance of Firebase Messaging so that it can handle background messages.
-    const messaging = firebase.messaging();
-    messaging.getToken({vapidKey: "BMg-O_t5azymJCJbJ91s404AF0lr8Nd0YsY9O_2tB2XSlniiGFCqFF1in52JsHMyleyZz8WtKbpZfAGBnDXxwDc"})
-    .then((token) => {
+    this.messaging = firebase.messaging();
+    this.messaging.getToken({vapidKey: "BMg-O_t5azymJCJbJ91s404AF0lr8Nd0YsY9O_2tB2XSlniiGFCqFF1in52JsHMyleyZz8WtKbpZfAGBnDXxwDc"})
+    .then(token => {
       if (token) {
         this.registerFcm(token);
       } else {
         Notification.requestPermission().then(() => {});
       }
-    });
-
-    // Handle incoming messages. Called when:
-    // - a message is received while the app has focus
-    // - the user clicks on an app notification created by a service worker
-    //   `messaging.setBackgroundMessageHandler` handler.
-    messaging.onMessage((payload) => {
-      console.log('Message received. ', payload);
-      //this.convAdapter = new ConvAdapter(me.uid, this.patientsService)
-
-      // Pass the new message to the conversation adapter for things
-      this.convAdapter.onMessageReceived({
-        participantType: ChatParticipantType.User,
-        id: "000",
-        status: ChatParticipantStatus.Online,
-        avatar: '',
-        displayName: "Baguettson"
-      }, {
-        fromId: "000",
-        toId: "000",
-        message: "Hello World !"
-      })
     });
   }
 
@@ -131,6 +108,11 @@ export class PatientsService {
       );
   }
 
+  markNotifAsRead(notifId: string) {
+    const url = `${this.notifUrl}/${notifId}`;
+    return this.http.delete<any>(url)
+  }
+
   //////// AI-related methods //////////
 
   getPredictionSettings(patientUid: string): Observable<any> {
@@ -138,6 +120,30 @@ export class PatientsService {
     return this.http.get<any>(url)
      .pipe(
        catchError(this.handleError('getPredictionSettings', []))
+     );
+  }
+  
+  getPredictionComparison(patientUid: string): Observable<any> {
+    const url = `${this.patientsUrl}/${patientUid}/predictions/comparison`;
+    return this.http.get<any>(url)
+     .pipe(
+       catchError(this.handleError('getPredictionSettings', []))
+     );
+  }
+  
+  getPredictionComparisonLimit(patientUid: string, startDate: string, endDate: string): Observable<any> {
+    const url = `${this.patientsUrl}/${patientUid}/predictions/comparison?start=${startDate}&end=${endDate}&size=100`;
+    return this.http.get<any>(url)
+     .pipe(
+       catchError(this.handleError('getPredictionComparisonLimit', []))
+     );
+  }
+  
+  getPredictions(patientUid: string): Observable<any> {
+    const url = `${this.patientsUrl}/${patientUid}/predictions`;
+    return this.http.get<any>(url)
+     .pipe(
+       catchError(this.handleError('getPredictions', []))
      );
   }
 
@@ -167,6 +173,41 @@ export class PatientsService {
      );
   }
 
+  getPatientPlanningEvents(patientUid: string): Observable<any> {
+    return this.http.get<any>(this.patientsUrl + '/' + patientUid +'/planning')
+     .pipe(
+       catchError(this.handleError('getMe', []))
+     );
+  }
+
+  createPlanningEvent(title: string, description: string, dateStart: string, dateEnd: string, patientUid: string): Observable<any> {
+    const url = `${this.patientsUrl}/me/planning`;
+    return this.http.post(url, {
+      title: title,
+      description: description,
+      start: dateStart,
+      end: dateEnd,
+      members: [
+        patientUid,
+      ]
+    })
+  }
+
+  editPlanningEvent(eventId:string, title: string, description: string, dateStart: string, dateEnd: string, patientUid: string): Observable<any> {
+    const url = `${this.patientsUrl}/me/planning/${eventId}`;
+    return this.http.put(url, {
+      title: title,
+      description: description,
+      start: dateStart,
+      end: dateEnd
+    })
+  }
+
+  deletePlanningEvent(eventId: string) {
+    const url = `${this.patientsUrl}/me/planning/${eventId}`;
+    return this.http.delete(url)
+  }
+
   //////// Connections-related methods //////////
 
   getConnections(): Observable<Patient[]> {
@@ -182,7 +223,6 @@ export class PatientsService {
     this.http.post(url, { 'email': email })
       .subscribe(response => {
         console.log(response);
-        location.reload()
       })
   }
 
@@ -233,21 +273,8 @@ export class PatientsService {
   }
 
   getPatientPicture(uid: string): Observable<Blob> {
-    const httpOptionsImage = {
-      headers: new HttpHeaders({
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      }),
-      responseType: 'blob'
-    };
-
     const url = `${this.patientsUrl}/${uid}/picture`;
     return this.http.get(url, { responseType: 'blob' })
-      .pipe(
-        mergeMap((picture) => {
-          this.pictureSub.next(picture);
-          return this.pictureSub.asObservable();
-        })
-      );
   }
 
   getPatientHb(uid: string): Observable<any> {
@@ -266,7 +293,12 @@ export class PatientsService {
   }
 
   getPatientBsLimit(uid: string, startDate: string, endDate: string): Observable<any> {
-    const url = `${this.patientsUrl}/${uid}/blood_sugar?size=50&start=` + startDate + '&end=' + endDate;
+    const url = `${this.patientsUrl}/${uid}/blood_sugar?page=1&size=100&start=` + startDate + '&end=' + endDate;
+    return this.http.get(url)
+  }
+
+  getPatientBsLimitPage(uid: string, startDate: string, endDate: string, page: number): Observable<any> {
+    const url = `${this.patientsUrl}/${uid}/blood_sugar?page=${page}&size=100&start=` + startDate + '&end=' + endDate;
     return this.http.get(url)
   }
 
@@ -282,8 +314,8 @@ export class PatientsService {
     return this.http.get(url)
   }
 
-  getPatientInsulinLimit(uid: string, startDate: string, endDate: string, type: number): Observable<any> {
-    const url = `${this.patientsUrl}/${uid}/insulin?type=${this.insulinTypes[type]}&start=` + startDate + '&end=' + endDate;
+  getPatientInsulinLimit(uid: string, startDate: string, endDate: string): Observable<any> {
+    const url = `${this.patientsUrl}/${uid}/insulin?start=` + startDate + '&end=' + endDate;
     return this.http.get(url)
   }
 

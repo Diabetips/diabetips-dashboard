@@ -54,10 +54,6 @@
                 
                 <input matInput [matDatepicker]="bsPicker" [(ngModel)]="selectedDateLimit" (dateChange)="updateDateLimit()" class="date-input" (focus)="bsPicker.open()">
                 <mat-datepicker #bsPicker></mat-datepicker>
-                
-                <select [(ngModel)]="currentLimit" (change)="updateDateLimit()" class="browser-default date-limit-input">
-                  <option *ngFor="let date of dateLimits" [ngValue]="date">{{date.limitName}}</option>
-                </select>
               </div>
               
               <div class="simple-small-div"></div>
@@ -126,7 +122,10 @@
                 <div class="simple-small-div"></div>
                 <div class="stat-container">
                   <span class="stat-title">Taux d'erreur</span>
-                  <span class="stat-number">3%</span>
+                  <span class="stat-number">{{ userInfo.predictions_precision }}%</span>
+                  <div class="simple-small-div" style="width: 90%; margin-top: 15px;"></div>
+                  <span class="stat-title">Confidence de la dernière prédiction</span>
+                  <span class="stat-number">{{ userInfo.last_prediction_confidence }}%</span>
                 </div>
               </div>
             </div>
@@ -275,7 +274,7 @@
               *ngSwitchCase="CalendarView.Month"
               [locale]="'fr'"
               [viewDate]="viewDate"
-              [events]="events"
+              [events]="this.userInfo.events"
               [refresh]="refresh"
               [activeDayIsOpen]="activeDayIsOpen"
               (dayClicked)="dayClicked($event.day)"
@@ -287,7 +286,7 @@
               *ngSwitchCase="CalendarView.Week"
               [locale]="'fr'"
               [viewDate]="viewDate"
-              [events]="events"
+              [events]="this.userInfo.events"
               [refresh]="refresh"
               (eventClicked)="handleEvent('Clicked', $event.event)"
               (eventTimesChanged)="eventTimesChanged($event)"
@@ -297,7 +296,7 @@
               *ngSwitchCase="CalendarView.Day"
               [locale]="'fr'"
               [viewDate]="viewDate"
-              [events]="events"
+              [events]="this.userInfo.events"
               [refresh]="refresh"
               (eventClicked)="handleEvent('Clicked', $event.event)"
               (eventTimesChanged)="eventTimesChanged($event)"

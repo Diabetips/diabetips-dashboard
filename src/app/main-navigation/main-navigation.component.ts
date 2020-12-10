@@ -13,7 +13,9 @@ import { HttpParams } from '@angular/common/http';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { ConvAdapter } from '../patients-service/conv-adapter';
+import { ChatParticipantStatus, ChatParticipantType, ParticipantResponse } from 'ng-chat';
 
+import * as moment from 'moment';
 export interface DialogData {
   email: any;
 }
@@ -49,23 +51,14 @@ export class MainNavigationComponent implements OnInit {
   token;
   searchText: string = "";
 
-  signinUrl = 'http://api.dev.diabetips.fr/v1/auth/authorize'
+  signinUrl = 'http://api.diabetips.fr/v1/auth/authorize'
     + '?response_type=token'
     + '&client_id=diabetips-dashboard'
     + '&scope=profile:write connections:read connections:invite connections:write biometrics:read biometrics:write meals:read notes:read notes:write notifications chat predictions:new predictions:settings';
 
   isLoading = true;
 
-  notificationsList = [
-    {
-      title: "test",
-      description: "this is a test notification"
-    },
-    {
-      title: "test2",
-      description: "this is a second test notification"
-    },
-  ];
+  notificationsList = [];
   
   public adapter: ConvAdapter;
 
@@ -96,6 +89,60 @@ export class MainNavigationComponent implements OnInit {
       // this.getPictureForProfile(this.me)
       this.getConnections();
       this.getNotifications();
+
+      this.patientsService.messaging.onMessage(payload => {
+        console.log('Message received. ', payload);
+        
+        if (payload.data.type == "chat_message") {
+          // Pass the new message to the conversation adapter for things
+          this.adapter.onMessageReceived({
+            participantType: ChatParticipantType.User,
+            id: payload.data.from_uid,
+            status: ChatParticipantStatus.Online,
+            avatar: null,
+            displayName: payload.notification.title
+          }, {
+            fromId: payload.data.from_uid,
+            toId: me.uid,
+            message: payload.notification.body
+          })
+        } else if (payload.data.type == "user_invite_accepted") {
+          payload.data.time = moment(payload.data.time).utc().format('DD/MM/YYYY HH:mm')
+          payload.data.description = "Invitation acceptée"
+          this.notificationsList.push(payload.data)
+        }
+      });
+
+      // this.patientsService.messaging.onBackgroundMessage(payload => {
+      //   console.log('BACKGROUND Message received. ', payload);
+        
+      //   if (payload.data.type == "chat_message") {
+      //     // Pass the new message to the conversation adapter for things
+      //     this.adapter.onMessageReceived({
+      //       participantType: ChatParticipantType.User,
+      //       id: payload.data.from_uid,
+      //       status: ChatParticipantStatus.Online,
+      //       avatar: null,
+      //       displayName: payload.notification.title
+      //     }, {
+      //       fromId: payload.data.from_uid,
+      //       toId: me.uid,
+      //       message: payload.notification.body
+      //     })
+      //   } else if (payload.data.type == "user_invite_accepted") {
+      //     payload.data.time = moment(payload.data.time).utc().format('DD/MM/YYYY HH:mm')
+      //     payload.data.description = "Invitation acceptée"
+      //     this.notificationsList.push(payload.data)
+      //   }
+
+      //   const notificationTitle = payload.data.description;
+      //   const notificationOptions = {
+      //     body: payload.data.notification,
+      //     icon: '/firebase-logo.png'
+      //   };
+
+      //   return this.patientsService.messaging.registration.showNotification(notificationTitle, notificationOptions);
+      // })
     });
   }
 
@@ -112,7 +159,19 @@ export class MainNavigationComponent implements OnInit {
   getNotifications(): void {
     this.patientsService.getAllNotifications()
       .subscribe(notificationsList => {
-        console.log(notificationsList)
+        notificationsList = notificationsList.filter(notification => !notification.read)
+
+        notificationsList.forEach(notification => {
+          notification.time = moment(notification.time).utc().format('DD/MM/YYYY HH:mm')
+
+          if (notification.type == "chat_message") {
+            notification.description = "Nouveau message"
+          } else if (notification.type == "user_invite_accepted") {
+            notification.description = "Invitation acceptée"
+          } else {
+            notification.description = "Inconnu"
+          }
+        });
         this.notificationsList = notificationsList
       })
   }
@@ -195,11 +254,13 @@ export class MainNavigationComponent implements OnInit {
   }
 
   markNotifAsRead(notification, index) {
-    this.notificationsList.splice(index, 1)
+    console.log(notification.id)
+    
+    this.patientsService.markNotifAsRead(notification.id)
+    .subscribe(response => {
+      console.log(response)
+    })
 
-    // TODO: mark notif as read
-
-    // We return false so the mat-menu doesn't close
     return false
   }
 

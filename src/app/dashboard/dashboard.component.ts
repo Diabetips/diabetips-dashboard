@@ -37,6 +37,7 @@ import {
   isSameDay,
   isSameMonth,
   addHours,
+  parseISO,
 } from 'date-fns';
 import { Subject } from 'rxjs';
 import {
@@ -48,6 +49,7 @@ import {
 
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { catchError } from 'rxjs/operators';
 
 moment.locale('fr')
 
@@ -140,6 +142,7 @@ export interface EventData {
   description: string;
   dateStart: any;
   dateEnd: any;
+  eventId: any;
 }
 
 @Component({
@@ -156,21 +159,6 @@ export class AddEventComponent {
     this.dialogRef.close();
   }
 }
-
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};
 
 @Component({
   selector: 'app-dashboard',
@@ -199,7 +187,7 @@ export class DashboardComponent implements OnInit {
       }],
       xAxes: [{
         ticks: {
-          autoSkip: false
+          maxTicksLimit: 24
         }
       }]
     }
@@ -250,6 +238,7 @@ export class DashboardComponent implements OnInit {
 
   public insulinChartData: ChartDataSets[] = [
     { data: [] },
+    { data: [] },
   ];
   public insulinChartLabels: Label[] = [];
   public insulinChartOptions: (ChartOptions) = {
@@ -263,13 +252,21 @@ export class DashboardComponent implements OnInit {
     }
   };
   public insulinChartColors: Color[] = [
-    { // grey
+    { // blue
       backgroundColor: 'rgba(0,161,224,0.2)',
       borderColor: 'rgba(0,161,224,1)',
       pointBackgroundColor: 'rgba(0,161,224,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(0,161,224,0.8)'
+    },
+    { // orange
+      backgroundColor: 'rgba(255,162,0,0.2)',
+      borderColor: 'rgba(255,162,0,1)',
+      pointBackgroundColor: 'rgba(255,162,0,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(255,162,0,0.8)'
     },
   ];
   public insulinChartLegend = false;
@@ -302,52 +299,7 @@ export class DashboardComponent implements OnInit {
     event: CalendarEvent;
   };
 
-  actions: CalendarEventAction[] = [
-    // {
-    //   label: '<mat-icon>create</mat-icon>',
-    //   a11yLabel: 'Edit',
-    //   onClick: ({ event }: { event: CalendarEvent }): void => {
-    //     this.handleEvent('Edited', event);
-    //   },
-    // }
-  ];
-
   refresh: Subject<any> = new Subject();
-
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'Evenement de 3 jours',
-      color: colors.red,
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'Evenement sur 2 mois',
-      color: colors.blue,
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'Evenement modifiable',
-      color: colors.yellow,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
 
   activeDayIsOpen: boolean = true;
 
@@ -399,6 +351,8 @@ export class DashboardComponent implements OnInit {
     this.source = null;
   }
 
+  private me = {}
+
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {
       let uid = params.patient
@@ -424,7 +378,6 @@ export class DashboardComponent implements OnInit {
           meal.ingredients = ingredients.join(", ")
         });
         this.userInfo.meals = meals;
-        console.log(this.userInfo.meals)
       });
       this.patientsService.getPatientBiometrics(uid).subscribe(biometrics => {
         this.userInfo.biometrics = biometrics;
@@ -433,7 +386,33 @@ export class DashboardComponent implements OnInit {
         this.userInfo.notes = notes
       })
       this.patientsService.getAllPlanningEvents().subscribe(events => {
-        console.log(events)
+        this.userInfo.events = []
+        
+        events.filter(event => {
+          let containsPatient = false
+          event.members.forEach(member => {
+            if (member.uid == uid) {
+              containsPatient = true
+            }
+          })
+          return containsPatient
+        })
+        .forEach(event => {
+          this.userInfo.events.push({
+            start: parseISO(event.start),
+            end: parseISO(event.end),
+            title: event.title,
+            color: {
+              primary: '#e3bc08',
+              secondary: '#FDF1BA',
+            },
+            meta: {
+              description: event.description,
+              id: event.id
+            }
+          })
+        })
+        this.refresh.next()
       })
       this.patientsService.getPredictionSettings(uid).subscribe(settings => {
         this.userInfo.prediction_enabled = settings.enabled
@@ -480,6 +459,10 @@ export class DashboardComponent implements OnInit {
     return moment(time).utc().format('DD/MM/YYYY')
   }
 
+  timestampHour(time) {
+    return moment(time).utc().format('HH:mm')
+  }
+
   changePredictionSettings() {
     this.patientsService.setPredictionSettings(this.userInfo.uid, this.userInfo.prediction_enabled)
   }
@@ -511,47 +494,73 @@ export class DashboardComponent implements OnInit {
       tmpDate.subtract(1, 'year').toISOString()
     }
 
-    this.patientsService.getPatientBsLimit(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(blood_sugar => {
+    let tmpDateOneDay = moment(this.selectedDateLimit).subtract(1, 'day').toISOString()
+
+    this.patientsService.getPatientBsLimitPage(uid, tmpDateOneDay, this.selectedDateLimit.toISOString(), 2).subscribe(blood_sugar => {
       this.userInfo.blood_sugar = blood_sugar;
 
       this.bsChartLabels.length = 0
       this.bsChartData[0].data.length = 0
 
       blood_sugar.reverse().forEach(measure => {
-        this.bsChartLabels.push(this.timestampAsDateNoHour(measure.time))
+        this.bsChartLabels.push(this.timestampHour(measure.time))
         this.bsChartData[0].data.push(measure.value)
       });
 
-      this.charts.toArray()[0].update()
+      this.patientsService.getPatientBsLimit(uid, tmpDateOneDay, this.selectedDateLimit.toISOString()).subscribe(blood_sugar => {
+        this.userInfo.blood_sugar = blood_sugar.concat(this.userInfo.blood_sugar);
+  
+        blood_sugar.reverse().forEach(measure => {
+          this.bsChartLabels.push(this.timestampHour(measure.time))
+          this.bsChartData[0].data.push(measure.value)
+        });
+  
+        this.charts.toArray()[0].update()
+      });
     });
 
-    this.patientsService.getPatientBsTarget(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(targets => {
+    this.patientsService.getPatientBsTarget(uid, tmpDateOneDay, this.selectedDateLimit.toISOString()).subscribe(targets => {
       this.userInfo.targets = targets;
     });
     
-    this.patientsService.getPatientInsulinLimit(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString(), 1).subscribe(insulin => {
+    this.patientsService.getPredictionComparisonLimit(uid, tmpDateOneDay, this.selectedDateLimit.toISOString()).subscribe(insulin => {
       this.userInfo.insulin = insulin;
 
       this.insulinChartLabels.length = 0
       this.insulinChartData[0].data.length = 0
+      this.insulinChartData[1].data.length = 0
 
-      const insulinTypes = ["slow", "fast", "very_fast"];
+      let comparisonsArray = []
 
       insulin.reverse().forEach(measure => {
         this.insulinChartLabels.push(this.timestampAsDate(measure.time))
 
         this.insulinChartData[0].data.push(measure.quantity)
 
-        // if (measure.type == insulinTypes[0]) {
-        //   this.insulinChartData[0].data.push(measure.quantity)
-        // } else if (measure.type == insulinTypes[1]) {
-        //   this.insulinChartData[1].data.push(measure.quantity)
-        // } else if (measure.type == insulinTypes[2]) {
-        //   this.insulinChartData[2].data.push(measure.quantity)
-        // }
+        console.log("what the fuck am i drunk or smth")
+        if (measure.prediction) {
+          if (this.userInfo.last_prediction_confidence == 0 && measure.prediction.insulin != -1) {
+            console.log(this.userInfo.last_prediction_confidence)
+            console.log(measure.prediction.insulin)
+            this.userInfo.last_prediction_confidence = measure.prediction.insulin
+          }
+
+          this.insulinChartData[1].data.push(measure.prediction.insulin)
+
+          comparisonsArray.push((Math.abs(measure.quantity - measure.prediction.insulin) / measure.quantity))
+        }
       });
 
+      let errorRate = 0
+
+      comparisonsArray.forEach(elem => errorRate += elem)
+
+      this.userInfo.predictions_precision = errorRate
+
       this.charts.toArray()[1].update()
+
+      console.log(this.userInfo.last_prediction_confidence)
+      console.log(this.userInfo.predictions_precision)
     })
 
     this.patientsService.getPatientHbLimit(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(hba1c => {
@@ -705,29 +714,85 @@ export class DashboardComponent implements OnInit {
     const dialogRef = this.dialog.open(AddEventComponent, {
       width: '25%',
       data: {
-        title: undefined,
-        description: undefined,
+        title: "",
+        description: "",
         dateStart: (new Date()).toISOString().slice(0, -8),
         dateEnd: undefined,
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (!result || !result.title || !result.description) {
+      if (!result || !result.title) {
         return
       }
 
-      let newEvent = {
-        title: result.title,
-        description: result.description,
-        dateStart: result.dateStart,
-        dateEnd: result.dateEnd
+      this.patientsService.createPlanningEvent(result.title, result.description, result.dateStart, result.dateEnd, this.userInfo.uid)
+      .subscribe(newEvent => {
+        this.userInfo.events.push({
+        start: parseISO(newEvent.start),
+        end: parseISO(newEvent.end),
+        title: newEvent.title,
+        color: {
+          primary: '#e3bc08',
+          secondary: '#FDF1BA',
+        },
+        meta: {
+          description: newEvent.description,
+          id: newEvent.id
+        }})
+        this.refresh.next()
+      })
+    });
+  }
+
+  handleEvent(action: string, event: CalendarEvent): void {
+    const dialogRef = this.dialog.open(AddEventComponent, {
+      width: '25%',
+      data: {
+        title: event.title,
+        description: event.meta.description,
+        dateStart: (event.start).toISOString().slice(0, -8),
+        dateEnd: (event.end).toISOString().slice(0, -8),
+        eventId: event.meta.id
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        return
       }
 
-      console.log(newEvent)
+      if (result.delete) {
+        this.patientsService.deletePlanningEvent(result.eventId)
+        .subscribe(response => {})
+        
+        this.userInfo.events = this.userInfo.events.filter(event => {
+          return event.meta.id != result.eventId
+        })
+        
+        return
+      }
 
-      // this.userInfo.notes.push(newNote)
-      // this.patientsService.addPatientNote(this.userInfo.uid, newNote)
+      if (!result.title || !result.description || !result.dateStart || !result.dateEnd) {
+        return
+      }
+
+      this.patientsService.editPlanningEvent(result.eventId, result.title, result.description, result.dateStart, result.dateEnd, this.userInfo.uid)
+      .subscribe(editedEvent => {
+        event.title = editedEvent.title
+        event.start = parseISO(editedEvent.start)
+        event.end = parseISO(editedEvent.end)
+        event.title = editedEvent.title
+        event.color = {
+          primary: '#e3bc08',
+          secondary: '#FDF1BA',
+        }
+        event.meta = {
+          description: editedEvent.description,
+          id: editedEvent.id
+        }
+        this.refresh.next()
+      })
     });
   }
   
@@ -750,7 +815,7 @@ export class DashboardComponent implements OnInit {
     newStart,
     newEnd,
   }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map((iEvent) => {
+    this.userInfo.events = this.userInfo.events.map((iEvent) => {
       if (iEvent === event) {
         return {
           ...event,
@@ -763,40 +828,8 @@ export class DashboardComponent implements OnInit {
     this.handleEvent('Dropped or resized', event);
   }
 
-  handleEvent(action: string, event: CalendarEvent): void {
-    console.log(action)
-    console.log(event)
-    const dialogRef = this.dialog.open(AddEventComponent, {
-      width: '25%',
-      data: {
-        title: event.title,
-        description: undefined,
-        dateStart: (event.start).toISOString().slice(0, -8),
-        dateEnd: (event.end).toISOString().slice(0, -8),
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result || !result.title || !result.description) {
-        return
-      }
-
-      let newEvent = {
-        title: result.title,
-        description: result.description,
-        dateStart: result.dateStart,
-        dateEnd: result.dateEnd
-      }
-
-      console.log(newEvent)
-
-      // this.userInfo.notes.push(newNote)
-      // this.patientsService.addPatientNote(this.userInfo.uid, newNote)
-    });
-  }
-
   deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter((event) => event !== eventToDelete);
+    this.userInfo.events = this.userInfo.events.filter((event) => event !== eventToDelete);
   }
 
   setView(view: CalendarView) {

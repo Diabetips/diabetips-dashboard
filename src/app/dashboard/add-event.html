@@ -20,7 +20,8 @@
       <div style="display: flex; justify-content: flex-end;">
   
         <button class="waves-effect waves-light btn no-button" style="margin-right: 10px;" (click)="onNoClick()">Annuler</button>
-        <button class="waves-effect waves-light btn topbar-button" [mat-dialog-close]="data" cdkFocusInitial>Ajouter</button>
+        <button class="waves-effect waves-light btn topbar-button" style="background-color: red; margin-right: 10px;" [mat-dialog-close]="{delete: true, eventId: data.eventId}" *ngIf="data.eventId">Supprimer</button>
+        <button class="waves-effect waves-light btn topbar-button" [mat-dialog-close]="data" cdkFocusInitial>Valider</button>
   
       </div>
     </div>

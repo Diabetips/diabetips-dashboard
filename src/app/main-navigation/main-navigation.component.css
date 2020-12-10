@@ -54,3 +54,9 @@ h4 {
   background-color: #00000023;
   margin-bottom: 10px;
 }
+
+.notification-picture {
+  height: inherit;
+  margin-right: 10px;
+  padding: 5px 0
+}

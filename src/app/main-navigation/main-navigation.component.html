@@ -20,7 +20,7 @@
         </a>
       </div>
       <a *ngFor="let patient of searchPatient()" mat-list-item >
-        <img [src]="patient.profile_picture" class="circle responsive-img" style="height: 65%; margin-right: 10px;"/>
+        <app-profile-picture [uid]="patient.uid" *ngIf="patient.uid != 'ph'" style="height: 65%; margin-right: 10px;"></app-profile-picture>
         <h4 routerLink="/dashboard" [queryParams]="{ patient: patient.uid }" class="patient-name">
           {{patient.first_name}}
           {{patient.last_name.toUpperCase()}}
@@ -30,13 +30,12 @@
   </mat-sidenav>
   <mat-sidenav-content style="background-color: #f0f0f0;">
     <mat-toolbar style="background: #ffffff; box-shadow: 0px 1px 5px #B3B3B3; flex-direction: row-reverse">
-      <button mat-icon-button [matMenuTriggerFor]="patientOptionsMenu" style="width: 140px; flex-direction: row;" [disableRipple]="true">
-        Dr. {{ this.me.last_name }}
+      <app-profile-picture [uid]="me.uid" *ngIf="me.uid != 'ph'" style="height: 65%"></app-profile-picture>
+      <button mat-icon-button [matMenuTriggerFor]="patientOptionsMenu" style="width: 100px; flex-direction: row;" [disableRipple]="true">
+        <span>Dr. {{ this.me.last_name }}</span>
         <mat-icon style="margin-bottom: 3px;">keyboard_arrow_down</mat-icon>
-        <img src="../../assets/default_user_picture.svg" class="circle responsive-img" style="height: 40px; width: 40px;"/>
       </button>
       <mat-menu #patientOptionsMenu="matMenu" xPosition="before">
-        <button mat-menu-item (click)="sendTestNotif()">test notif.</button>
         <button mat-menu-item (click)="goToOptions()">Options</button>
         <button mat-menu-item (click)="signOut()">Deconnexion</button>
       </mat-menu>
@@ -50,10 +49,13 @@
           (click)="$event.stopPropagation()"
           (contextmenu)="markNotifAsRead(notification, indexOfelement)"
         >
-          <div style="display: flex; flex-direction: column;">
-            <span style="line-height: 23px;">{{notification.time}}</span>
-            <span style="line-height: 23px;">{{notification.type}}</span>
-            <div *ngIf="!last" class="simple-small-div"></div>
+          <div style="display: flex; flex-direction: row; height: inherit;">
+            <app-profile-picture [uid]="notification.data.from_uid" *ngIf="notification.data" class="notification-picture"></app-profile-picture>
+            <div style="display: flex; flex-direction: column;">
+              <span style="line-height: 23px;">{{notification.time}}</span>
+              <span style="line-height: 23px;">{{notification.description}}</span>
+              <div *ngIf="!last" class="simple-small-div"></div>
+            </div>
           </div>
         </button>
       </mat-menu>
