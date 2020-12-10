@@ -537,11 +537,8 @@ export class DashboardComponent implements OnInit {
 
         this.insulinChartData[0].data.push(measure.quantity)
 
-        console.log("what the fuck am i drunk or smth")
         if (measure.prediction) {
           if (this.userInfo.last_prediction_confidence == 0 && measure.prediction.insulin != -1) {
-            console.log(this.userInfo.last_prediction_confidence)
-            console.log(measure.prediction.insulin)
             this.userInfo.last_prediction_confidence = measure.prediction.insulin
           }
 
@@ -558,9 +555,6 @@ export class DashboardComponent implements OnInit {
       this.userInfo.predictions_precision = errorRate
 
       this.charts.toArray()[1].update()
-
-      console.log(this.userInfo.last_prediction_confidence)
-      console.log(this.userInfo.predictions_precision)
     })
 
     this.patientsService.getPatientHbLimit(uid, tmpDate.toISOString(), this.selectedDateLimit.toISOString()).subscribe(hba1c => {
