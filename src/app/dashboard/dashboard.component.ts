@@ -716,7 +716,7 @@ export class DashboardComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (!result || !result.title) {
+      if (!result || !result.title || !result.dateStart || !result.dateEnd) {
         return
       }
 
@@ -767,8 +767,12 @@ export class DashboardComponent implements OnInit {
         return
       }
 
-      if (!result.title || !result.description || !result.dateStart || !result.dateEnd) {
+      if (!result.title || !result.dateStart || !result.dateEnd) {
         return
+      }
+
+      if (!result.description) {
+        result.description = ""
       }
 
       this.patientsService.editPlanningEvent(result.eventId, result.title, result.description, result.dateStart, result.dateEnd, this.userInfo.uid)
@@ -789,7 +793,7 @@ export class DashboardComponent implements OnInit {
       })
     });
   }
-  
+
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (

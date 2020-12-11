@@ -254,9 +254,9 @@ export class MainNavigationComponent implements OnInit {
   }
 
   markNotifAsRead(notification, index) {
+    this.notificationsList.splice(index, 1)
     this.patientsService.markNotifAsRead(notification.id)
     .subscribe(response => {
-      this.notificationsList.splice(index, 1)
     })
 
     return false
