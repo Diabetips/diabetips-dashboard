@@ -254,11 +254,9 @@ export class MainNavigationComponent implements OnInit {
   }
 
   markNotifAsRead(notification, index) {
-    console.log(notification.id)
-    
     this.patientsService.markNotifAsRead(notification.id)
     .subscribe(response => {
-      console.log(response)
+      this.notificationsList.splice(index, 1)
     })
 
     return false
