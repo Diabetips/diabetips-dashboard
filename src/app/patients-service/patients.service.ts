@@ -148,12 +148,10 @@ export class PatientsService {
   }
 
   setPredictionSettings(patientUid: string, enabled: boolean) {
-    console.log("setting prediction settings to " + enabled)
     const url = `${this.patientsUrl}/${patientUid}/predictions/settings`;
     this.http.put(url, { 'enabled': enabled })
       .subscribe(response => {
         console.log(response);
-        location.reload()
       })
   }
 
